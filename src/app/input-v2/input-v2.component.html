@@ -1,34 +1,24 @@
 <div class="input-v2 border {{errorStatus}}">
-  <input
-    type="text" required [(ngModel)]="ngModelMask"
-    (ngModelChange)="onChange()"
-    *ngIf="mask == '' && type == 'phone'"
+
+  <input type="text" required 
+    [ngClass]="{'input-button': type=='file'}"
+    [(ngModel)]="ngModelMask"
+    (ngModelChange)="onchange.next('')"
+    [mask]="getMask()"
+    thousandSeparator="." 
+    [leadZero]="true" 
+    [allowNegativeNumbers]="allowNegative"
+    [leadZeroDateTime]="true"
   >
-  <input
-    type="text" required [(ngModel)]="ngModelMask"
-    (ngModelChange)="onChange()"
-    *ngIf="mask == '' && type == 'cpf' || type == 'cnpj'"
-    mask="CPF_CNPJ"
-  >
-  <input [ngClass]="{'input-button': type=='file'}"
-    type="text" required [(ngModel)]="ngModelMask"
-    (ngModelChange)="onChange()"
-    *ngIf="type == 'text' || type == 'file'"
-    [mask]="mask"
-  >
-  <input
-    type="text" required [(ngModel)]="ngModelMask"
-    (ngModelChange)="onChange()"
-    *ngIf="mask == '' && type == 'money' || type == 'number' || type == 'percent'"
-    mask="separator.{{decimals}}" thousandSeparator="." [leadZero]="true"
-    [allowNegativeNumbers]="allowNegative" 
-  >
-  <div class="money-icon">
+
+  <div class="input-icon">
     {{type == 'money' ? 'R$' : ''}}
     {{type == 'percent' ? '%' : ''}}
   </div>
+
   <div class="title {{errorStatus}}">{{errorMessageView != "" ? errorMessageView : title }}</div>
-  <button class="border">
+
+  <button class="border" *ngIf="type=='file'">
     <svg
       viewBox="-3 -3 30 30">
       <path 
@@ -36,4 +26,5 @@
         [attr.d]="drawPathIcon"/>
     </svg>
   </button>
+
 </div>
