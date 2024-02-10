@@ -1,0 +1,65 @@
+.lote-box-wrapper{
+  position: relative;
+  width: 100%;
+  .border-box{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    .left-border, .right-border{
+      min-width: 10px;
+      border-style: solid;
+      border-width: 2px;
+    }
+    .left-border{
+      border-right: 0px;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+    .middle-border{
+      border-bottom-style: solid;
+      border-width: 2px;
+      border-left: 0px;
+      border-right: 0px;
+      border-radius: 0px;
+      .box-title{
+        user-select: none;
+        display: flex;
+        font-size: 14px;
+        font-weight: bold;
+        gap: 5px;
+        margin: -12px 4px;
+        &:empty{
+          margin: 0px;
+        }
+      }
+    }
+    .right-border{
+      flex-grow: 1;
+      border-left: 0px;
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+  }
+  .content{
+    padding: 6px 8px;
+    padding-top: 12px;
+    transition: grid-template-rows ease-in-out;
+    grid-template-rows: 0fr;
+    display: grid;
+    &.show{
+      grid-template-rows: 1fr;
+    }
+  }
+
+  .info-box-content{
+    padding: 30px 15px;
+    transition: grid-template-rows ease-in-out;
+    display: grid;
+    grid-template-rows: 0fr;
+
+    &.show-animation {
+      grid-template-rows: 1fr;
+    }
+  }
+}

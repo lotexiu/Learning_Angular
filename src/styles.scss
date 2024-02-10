@@ -89,6 +89,7 @@ html{
     border-radius: 8px;
     border-color: var(--highlight);
     color: var(--highlightText);
+    fill: var(--highlightText);
 
     transition: all 0.5s;
   }
@@ -131,10 +132,13 @@ html{
   }
 }
 
+
+.fas-icon{
+  width: 18px;
+}
 .center{
   margin: auto;
 }
-
 .error{
   color: red;
   &.border{
