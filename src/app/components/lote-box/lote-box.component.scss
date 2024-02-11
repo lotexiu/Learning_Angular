@@ -1,11 +1,23 @@
 .lote-box-wrapper{
+  margin: 16px 0px;
   position: relative;
-  width: 100%;
   .border-box{
     width: 100%;
     height: 100%;
     position: absolute;
     top: 0;
+    &.blur{
+      .left-border,
+      .middle-border,
+      .right-border{
+        filter: blur(4px) brightness(2);
+      }
+      .middle-border{
+        .box-title{
+          opacity: 0;
+        }
+      }
+    }
     .left-border, .right-border{
       min-width: 10px;
       border-style: solid;
@@ -23,7 +35,7 @@
       border-right: 0px;
       border-radius: 0px;
       .box-title{
-        user-select: none;
+        // user-select: none;
         display: flex;
         font-size: 14px;
         font-weight: bold;
@@ -50,16 +62,14 @@
     &.show{
       grid-template-rows: 1fr;
     }
-  }
-
-  .info-box-content{
-    padding: 30px 15px;
-    transition: grid-template-rows ease-in-out;
-    display: grid;
-    grid-template-rows: 0fr;
-
-    &.show-animation {
-      grid-template-rows: 1fr;
+    .box-content{
+      z-index: 1;
+      &.hide{
+        overflow:hidden;
+      }
+      &.show{
+        overflow: visible;
+      }
     }
   }
 }

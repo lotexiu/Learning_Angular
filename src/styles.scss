@@ -134,7 +134,9 @@ html{
 
 
 .fas-icon{
-  width: 18px;
+  svg{
+    height: 14px;
+  }
 }
 .center{
   margin: auto;
