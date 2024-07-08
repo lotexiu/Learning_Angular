@@ -1,0 +1,6 @@
+.frame{
+  background: linear-gradient(#e66465, #9198e5);
+  width: 100px;
+  height: 100px;
+  clip-path: polygon(25% 0, 25% 25%, 75% 25%, 75% 75%, 25% 75%, 25% 0, 0 0, 0 100%, 100% 100%, 100% 0);
+}

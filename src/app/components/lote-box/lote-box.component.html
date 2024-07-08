@@ -1,17 +1,8 @@
 <div class="lote-box-wrapper">
-  <div class="border-box d-flex {{border}}" *ngFor="let border of ['blur','']">
-    <div class="left-border"></div>
-    <div class="middle-border">
-      <div class="box-title">
-        <label *ngIf="title" [write]="title"></label>
-        <div *ngIf="allowMinimize" [icon]="getIcon()" (click)="switchMinimization()"></div>
-      </div>
-    </div>
-    <div class="right-border"></div>
-  </div>
-  <div class="content {{statusContent}}" [ngStyle]="{'transition-duration': delay+'ms'}">
-    <div class="box-content {{statusBox}}" (click)="random()">
-      <ng-content></ng-content>
+  
+  <!-- <div class="lote-border {{swapBlendMode?'swap-blend-mode':''}}" (observe)="changeColor($event)">
+    <div class="fake-bg">
     </div>
   </div>
+  <ng-content></ng-content> -->
 </div>

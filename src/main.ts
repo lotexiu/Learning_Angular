@@ -16,15 +16,15 @@ declare global {
   }
 }
 
-Number.prototype.hasDecimals = function(): boolean {
+Number.prototype.hasDecimals = function (): boolean {
   return this.toFixed(0) != this.toString()
 }
 
-Number.prototype.getDecimals = function(): string{
+Number.prototype.getDecimals = function (): string {
   let decimals = this.toString().split('.')[1]
   return decimals || ''
 }
 
-String.prototype.toUpperCaseFirstLetter = function(): string {
+String.prototype.toUpperCaseFirstLetter = function (): string {
   return this.charAt(0).toUpperCase() + this.slice(1);
 }

@@ -11,4 +11,29 @@ type InputFields<T> = {
   [K in keyof T]-?: T[K] extends Function ? never : K
 }[keyof T];
 
-export { LockType, InputFields, KeysOfType }
+type OptionalType<Type=string> = Type|undefined
+
+interface StateElement {
+  attributes?: any
+  style?: CSSStyleDeclaration
+  html?: string
+}
+
+interface RGBAColor {
+  r: number
+  g: number
+  b: number
+  a: number
+  isBlack: (min?:number)=>boolean
+  isWhite: ()=>boolean
+  isTransparent: ()=>boolean
+}
+
+export { 
+  LockType,
+  InputFields,
+  KeysOfType,
+  OptionalType,
+  StateElement,
+  RGBAColor,
+}

@@ -1,184 +1,59 @@
-// FUNCTIONS
-// FUNCTIONS
+@use "@angular/material" as mat;
+mat.$theme-ignore-duplication-warnings: true;
+@include mat.core();
 
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: mat.define-palette(mat.$cyan-palette, 300),
+      accent: mat.define-palette(mat.$green-palette, 400),
+      warn: mat.define-palette(mat.$red-palette, 500),
+    ),
+  )
+);
+$dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: mat.define-palette(mat.$purple-palette, 700),
+      accent: mat.define-palette(mat.$cyan-palette, 700),
+      warn: mat.define-palette(mat.$yellow-palette, 700),
+    ),
+  )
+);
 
-// GLOBAL ANIMATIONS
-// GLOBAL ANIMATIONS
+@import "./app/app.component";
 
-@keyframes Rainbow {
-  0%, 100% { color: rgb(255, 0, 0); }
-  8%, 91% { color: rgb(255, 127, 0); }
-  16%, 83% { color: rgb(255, 255, 0); }
-  25%, 75% { color: rgb(127, 255, 0); }
-  33%, 66% { color: rgb(0, 255, 0); }
-  41%, 58% { color: rgb(0, 255, 127); }
-  50% { color: rgb(0, 255, 255); }
-}
-.rainbow{
-  animation: Rainbow 6s 0s infinite alternate ease-in-out;
-}
-
-@keyframes RainbowTextAnimation {
-  to {background-position:200% 0}
-}
-.rainbow-text {
-  width: fit-content;
-  background: linear-gradient(90deg, violet, indigo, blue, green, yellow, orange, red, violet);  
-  background-size: 200%;
-  -webkit-background-clip: text;
-  color: transparent;
-  animation: RainbowTextAnimation 6s linear infinite;
-}
-
-@mixin Shake($intensity){
-	@keyframes Shake{
-	  0% { transform: rotate(0deg); }
-	  25% { transform: rotate($intensity); }
-	  50% { transform: rotate(0eg); }
-	  75% { transform: rotate(-$intensity); }
-	  100% { transform: rotate(0deg); }
-	}
-}
-.shake{
-  transition: all 0.1s ease-in-out;
-	transform: scale(0.95);	
-  @include Shake(1deg);
-  &:hover{
-		transform: scale(1);
-    animation: Shake 0.2s 0.2s infinite ease-in-out;
-  }
-}
-
-@keyframes Rotate {
-  0%   { transform: rotate(0deg) }
-  100%  { transform: rotate(-360deg) }
-}
-.rotate{
-  &:hover{
-    animation: Rotate 2s infinite ease-in-out;
-  }
-}
-
-@keyframes MoveDrag {
-  0%   { 
-    transform: translate(0px) rotate(0deg)
-  }
-  100%  { 
-    transform: translate(200px) rotate(360deg)
-  }
-}
-.moveDrag{
-  &:hover{
-    animation: MoveDrag 2s infinite alternate ease-in-out;
-  }
-}
-
-// GLOBAL CONFIG STYLE
-// GLOBAL CONFIG STYLE
-
-:root{
-  --bg: #f3f3f3;
-  --text: gray;
-  --highlightText: #333333;
-  --highlight: #f700ff; 
+html,
+body {
+  height: 100%;
 }
 
 html{
   *{
     border-width: 2px;
     border-radius: 8px;
-    border-color: var(--highlight);
-    color: var(--highlightText);
-    fill: var(--highlightText);
-
-    transition: all 0.5s;
   }
-  body{
-    margin: 15px;
-    background-color: var(--bg);
-    &.dark{ // DARK
-      --bg: #1a1a1a;
-      --text: lightgray;
-      --highlightText: #ffffff;
-      --highlight: #ffcc00;
-    }
-  }
-
   a{
     text-decoration: none;
-    &:hover{
-      color: var(--highlight);
-      *{ color: var(--highlight); }
+  }
+  body {
+    margin: 0;
+    padding: 15px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+  
+    &.light {
+      // @include mat.all-component-themes($light-theme);
+      @include lote-components($light-theme);
+    }
+    &.dark {
+      // @include mat.all-component-themes($dark-theme);
+      @include lote-components($dark-theme);
     }
   }
-
-  h1,h2,h3,h4,h5,h6{
-    width: fit-content;
-    margin: 15px 0px;
-  }
-  img{
-    object-position: 50%;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-  }
-  p{
-    color: var(--text);
-    font-weight: bold;
-  }
-  span{
-    font-weight: bold;
-    font-family: monospace;
-  }
 }
-
 
 .fas-icon{
   svg{
     height: 14px;
-  }
-}
-.center{
-  margin: auto;
-}
-.error{
-  color: red;
-  &.border{
-    box-shadow: inset 0px 0px 12px 0px red;
-    border-color: red !important;
-  }
-}
-.warn{
-  color: orange;
-  &.border{
-    box-shadow: inset 0px 0px 12px 0px orange;
-    border-color: orange !important;
-  }
-}
-.success{
-  color: rgb(0, 255, 0);
-  &.border{
-    box-shadow: inset 0px 0px 12px 0px rgb(0, 255, 0);
-    border-color: rgb(0, 255, 0) !important;
-  }
-}
-
-.border{
-  border-width: 2px !important;
-  border-color: var(--highlight) !important;
-  box-shadow: inset 0px 0px 12px 0px var(--highlight);
-  border-style: solid;
-  &:focus-within{
-    border-color: var(--highlightText) !important;
-    box-shadow: inset 0px 0px 12px 0px var(--highlightText);
-  }
-}
-button{
-  &:hover{
-    border-color: var(--highlightText) !important;
-    box-shadow: inset 0px 0px 12px 0px var(--highlightText);
-    path{
-      fill: var(--highlight) !important;
-    }
   }
 }

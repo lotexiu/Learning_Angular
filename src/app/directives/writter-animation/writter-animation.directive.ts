@@ -1,29 +1,44 @@
-import { Directive, ElementRef, HostBinding, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core'
-import { componentUtils } from '../../utils/utils'
+import { AfterViewInit, Directive, ElementRef, HostBinding, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
+import { ComponentUtils } from '../../utils/utils'
 
 @Directive({
   selector: '[write]',
   standalone: true
 })
-export class WritterAnimationDirective implements OnChanges, OnDestroy {
+export class WritterAnimationDirective implements OnChanges, OnInit, OnDestroy, AfterViewInit {
   @HostBinding('attr.id') get elementId(): string { return this.id }
   @Input() writeComplete?: Function;
   @Input() write?: string
   @Input() writeSpeed?: number = 25
   @Input() speedBySize?: boolean = false
-
+  
+  observer?: MutationObserver;
   previousText?: string
-  id: string = componentUtils.generateUniqueId()
+  id: string = ComponentUtils.generateUniqueId()
 
   constructor(private el: ElementRef<HTMLElement>) { }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.write && this.write.trim() != '') {
-      this.doWriteAnimation()
-    }
+  ngAfterViewInit(): void {
+  }
+  
+  ngOnInit(): void {
+    this.observer = new MutationObserver(mutations =>{
+      // console.log(mutations)
+    })
+    const config = { childList: true, subtree: true, characterData: true, attributes: true, };
+    this.observer.observe(this.el.nativeElement, config);
   }
 
-  private doWriteAnimation() {
+  ngOnDestroy(): void {
+    this.observer?.disconnect()
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // if (this.write && this.write.trim() != '') {
+    // }
+  }
+
+  private doWriteAnimationV1() {
     let nativeEle = this.el.nativeElement
     nativeEle.textContent = nativeEle.textContent || ''
     let pos = nativeEle.textContent.length
@@ -50,8 +65,5 @@ export class WritterAnimationDirective implements OnChanges, OnDestroy {
         }
       }
     }, this.speedBySize ? (380 / this.previousText.length) : this.writeSpeed)
-  }
-
-  ngOnDestroy(): void {
   }
 }

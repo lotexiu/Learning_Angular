@@ -47,7 +47,7 @@ OnInit()
 // executado após quando o componente não é mais chamado no html.
 OnDestroy()
 
-//Executa quando propriedades do componente sôo verificadas (alguma alteração ocorre)
+//Executa quando propriedades do componente são verificadas (alguma alteração ocorre)
 1 ngDoCheck()
 
 //executa quando Angular realiza qualquer projeção de conteúdo em seus componentes -- CONTEUDO
