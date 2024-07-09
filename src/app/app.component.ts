@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { componentImports } from './imports/import';
 import { Meta } from '@angular/platform-browser';
@@ -11,7 +11,10 @@ import { Meta } from '@angular/platform-browser';
   imports: [
     RouterOutlet,
     ...componentImports,
-  ]
+  ],
+  // schemas:[
+  //   NO_ERRORS_SCHEMA,
+  // ]
 
 })
 export class AppComponent implements OnInit {
