@@ -15,8 +15,11 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() widthChange: EventEmitter<number> = new EventEmitter<number>();
   @Input() width: number = 5;
 
-  @Output() titleChange = new EventEmitter<string>();
-  @Input() title: string = 'Gengar | Backwards long jump';
+  @Output() titleChange: EventEmitter<string> = new EventEmitter<string>();
+  @Input() title: string = '';
+
+  @Output() radiusChange: EventEmitter<number> = new EventEmitter<number>();
+  @Input() radius: number = 2;
 
   public id: string = ComponentUtils.generateUniqueId()
 
@@ -24,22 +27,22 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
   private spacing: number = 5;
   private frameElement!: HTMLElement;
   private parentElement!: HTMLElement;
-  private titleElement!: HTMLElement;
+  private titleBoxElement!: HTMLElement;
   private contentElement!: HTMLElement;
   watchMain!: MutationObserver;
 
   constructor(
     private renderer: Renderer2,
-    private el: ElementRef
+    private el: ElementRef<HTMLElement>
   ) { }
 
 
   ngAfterViewInit(): void {
     let mainElement: HTMLElement = this.el.nativeElement
-    this.frameElement = mainElement.querySelector(`#frame`)!
-    this.titleElement = mainElement.querySelector(`#title-box`)!
-    this.contentElement = mainElement.querySelector(`#content`)!
     this.parentElement = mainElement.querySelector(`#parent-effect`)!
+    this.frameElement = mainElement.querySelector(`#frame`)!
+    this.titleBoxElement = mainElement.querySelector(`#title-box`)!
+    this.contentElement = mainElement.querySelector(`#content`)!
     this.updateView()
     this.watchMain.observe(mainElement, {attributes: true, subtree: true})
   }
@@ -93,16 +96,21 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
 
   private updateTitle(): void{
     const titleSpacing: number = this.title.length > 0 ? this.spacing : 0
-    if (this.titleElement){
+    if (this.titleBoxElement){
       this.renderer.setStyle(
-        this.titleElement,
+        this.titleBoxElement,
         'marginLeft',
         `${this.width+titleSpacing}px`
       )
       this.renderer.setStyle(
-        this.titleElement,
+        this.titleBoxElement,
         'transform',
         `translateY(calc(-55% + ${this.width/2}px))`
+      )
+      this.renderer.setStyle(
+        this.titleBoxElement,
+        'maxWidth',
+        `${this.el.nativeElement.offsetWidth-(this.width*2)-(this.spacing*2)}px`
       )
     }
   }
@@ -116,7 +124,7 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
         'none'
       )
       let frameWidth: number = this.frameElement.offsetWidth
-      this.opening = this.titleElement.offsetWidth + this.width + frameWidth
+      this.opening = this.titleBoxElement.offsetWidth + this.width + frameWidth
       this.opening += this.title.length > 0 ? this.spacing*2 : 0 
       this.renderer.setStyle(
         this.frameElement,
@@ -140,7 +148,7 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
           `url(#goo)`
         )        
         this.watchMain.observe(this.el.nativeElement)
-      })
+      },1)
     }
   }
 }

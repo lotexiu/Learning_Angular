@@ -14,7 +14,7 @@ export class WritterAnimationDirective implements OnChanges, OnInit, OnDestroy, 
   
   observer?: MutationObserver;
   previousText?: string
-  id: string = ComponentUtils.generateUniqueId()
+  id!: string //= ComponentUtils.generateUniqueId()
 
   constructor(private el: ElementRef<HTMLElement>) { }
 
