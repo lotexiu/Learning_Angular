@@ -16,16 +16,17 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() width: number = 5;
 
   @Output() titleChange = new EventEmitter<string>();
-  @Input() title: string = 'My Title';
+  @Input() title: string = 'Gengar | Backwards long jump';
 
   public id: string = ComponentUtils.generateUniqueId()
 
   private opening: number = 0;
   private spacing: number = 5;
   private frameElement!: HTMLElement;
+  private parentElement!: HTMLElement;
   private titleElement!: HTMLElement;
   private contentElement!: HTMLElement;
-  observer!: MutationObserver;
+  watchMain!: MutationObserver;
 
   constructor(
     private renderer: Renderer2,
@@ -35,12 +36,12 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngAfterViewInit(): void {
     let mainElement: HTMLElement = this.el.nativeElement
-    this.observer.observe(mainElement, {attributes: true, subtree: true})
-
     this.frameElement = mainElement.querySelector(`#frame`)!
     this.titleElement = mainElement.querySelector(`#title-box`)!
     this.contentElement = mainElement.querySelector(`#content`)!
+    this.parentElement = mainElement.querySelector(`#parent-effect`)!
     this.updateView()
+    this.watchMain.observe(mainElement, {attributes: true, subtree: true})
   }
   
   ngOnChanges(changes: SimpleChanges): void {
@@ -50,17 +51,19 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.observer = new MutationObserver(mutations =>{
+    this.watchMain = new MutationObserver(mutations =>{
       this.updateView()
     })
   }
 
   @HostListener('window:resize', ['$event'])  
   private onResize(): void{
-    this.setTransition(`none`)
-    this.updateView()
-    setTimeout((): void=>{
-      this.setTransition(`all 500ms`)
+    setTimeout(()=>{
+      this.setTransition(`none`)
+      this.updateView()
+      setTimeout((): void=>{
+        this.setTransition(`all 250ms`)
+      })
     })
   }
 
@@ -89,11 +92,12 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   private updateTitle(): void{
+    const titleSpacing: number = this.title.length > 0 ? this.spacing : 0
     if (this.titleElement){
       this.renderer.setStyle(
         this.titleElement,
         'marginLeft',
-        `${this.width+this.spacing}px`
+        `${this.width+titleSpacing}px`
       )
       this.renderer.setStyle(
         this.titleElement,
@@ -105,9 +109,15 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
 
   private updateFrame() {
     if (this.frameElement) {
+      this.watchMain.disconnect()
+      this.renderer.setStyle(
+        this.parentElement,
+        'filter',
+        'none'
+      )
       let frameWidth: number = this.frameElement.offsetWidth
-      this.opening = this.titleElement.offsetWidth
-      this.opening += this.spacing*2 + this.width + frameWidth
+      this.opening = this.titleElement.offsetWidth + this.width + frameWidth
+      this.opening += this.title.length > 0 ? this.spacing*2 : 0 
       this.renderer.setStyle(
         this.frameElement,
         'clipPath',
@@ -123,6 +133,14 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
           100% 100%, 
           100% 0)`
       )
+      setTimeout((): void=>{
+        this.renderer.setStyle(
+          this.parentElement,
+          'filter',
+          `url(#goo)`
+        )        
+        this.watchMain.observe(this.el.nativeElement)
+      })
     }
   }
 }
