@@ -4,9 +4,7 @@
     </div>
   </div>
   <div id="title-box" class="title-box">
-    <div id="title">
-      {{title}}
-    </div>
+    <div [write]="title" id="title"></div>
     <ng-content select="[ngtitle]"></ng-content>
   </div>
   <div id="content" class="content">
