@@ -4,7 +4,10 @@ main{
 }
 
 @import 'components/lote-box/lote-box.component';
+@import 'components/lote-border/lote-border.component';
 
 @mixin lote-components($theme){
-  @include test($theme)
+  // @include test($theme)
+  @include loteBorder($theme)
+
 }
