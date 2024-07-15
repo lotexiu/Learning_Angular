@@ -1,12 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { componentImports } from '../../imports/import';
+import { LoteBorderComponent } from '../lote-border/lote-border.component';
 
 @Component({
-  selector: 'app-lote-input',
+  selector: 'lote-input',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    ...componentImports,
+    LoteBorderComponent,
+  ],
   templateUrl: './lote-input.component.html',
-  styleUrl: './lote-input.component.scss'
+  styleUrl: './lote-input.component.scss',
 })
 export class LoteInputComponent {
 

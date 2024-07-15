@@ -76,10 +76,8 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
         'filter',
         'none'
       )      
-      this.setTransition(`none`)
       this.updateView()
       setTimeout((): void=>{
-        this.setTransition(`all 25ms`)
         this.renderer.setStyle(
           this.parentElement,
           'filter',
@@ -89,21 +87,18 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
     },1)
   }
 
-  private setTransition(value: string): void{
-    this.renderer.setStyle(
-      this.frameElement,
-      'transition',
-      value
-    )   
-  }
-
   private updateView(): void{
     if (!this.viewUpdating) {
       this.viewUpdating = true
-      setTimeout(()=>{
+      setTimeout(()=>{   
         this.updateTitle()
         this.updateContent()
         this.updateFrame()
+        this.renderer.setStyle(
+          this.el.nativeElement.firstElementChild,
+          'marginTop',
+          `${Math.max(this.titleBoxElement.offsetHeight/2, 12)}px`
+        )             
         setTimeout(()=>{
           this.viewUpdating = false
         },1)
