@@ -5,24 +5,27 @@
       <mat-slide-toggle (click)="switchTheme()">{{darkTheme ? 'Light':'Dark'}}</mat-slide-toggle>
     </div>
   </div>
-  
-  <div style="width: 300px;">
-    <lote-border 
-      [radius]="2"
-      [width]="10" 
-      [title]="'Backwards long jump'">
-      <div>My Content</div>
-      <div>My Content</div>
-      <div>My Content</div>
-      <div>My Content</div>
-      <div>My Content</div>
-      <div>My Content</div>
-      <div>My Content</div>      
-    </lote-border>
+
+  <div class="row">
+    <div class="col-md-6">
+      <lote-border 
+        [radius]="2"
+        [width]="10" 
+        [title]="'Backwards long jump'">
+        <div>My Content</div>
+        <div>My Content</div>
+        <div>My Content</div>
+        <div>My Content</div>
+        <div>My Content</div>
+        <div>My Content</div>
+        <div>My Content</div>      
+      </lote-border>
+    </div>
+    <div class="col-md-6">
+      <lote-input></lote-input>
+    </div>
   </div>
-
-  <lote-input></lote-input>
-
+  
   <!-- <lote-box [(title)]="title">
     <div [write]>
       <div>
@@ -35,7 +38,7 @@
     </div>
   </lote-box> -->
 
-  <!-- <br><br>
+  <br><br>
   <section>
     <div class="example-label">Basic</div>
     <div class="example-button-row">
@@ -145,7 +148,7 @@
     </div>
   </section>
 </main>
-<router-outlet></router-outlet> -->
+<router-outlet></router-outlet>
 
 <!-- <div>
   Lorem ipsum dolor sit amet, consectetur adipiscing elit.

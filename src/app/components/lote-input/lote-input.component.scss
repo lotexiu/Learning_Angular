@@ -3,3 +3,11 @@ lote-border{
     width: 100%;
   }
 }
+
+.box{
+  >.parent-effect{
+    >.frame{
+      background: blue !important
+    }
+  }
+}    

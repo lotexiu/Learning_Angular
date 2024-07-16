@@ -1,0 +1,37 @@
+@import './../components/lote-box/lote-box.component';
+@import './../components/lote-border/lote-border.component';
+  
+$-primary: purple;
+$-accent: orange;
+$-warn: red;
+$-border: linear-gradient(135deg, $-primary, $-warn);
+$-background: darkslateblue;
+
+@mixin lote-theme($theme){
+  $primary: map-get($theme, primary, default);
+  $accent: map-get($theme, accent, default);
+  $warn: map-get($theme, warn, default);
+  $border: map-get($theme, border, default);
+  $background: map-get($theme, background);
+
+  @if $primary {
+    $-primary: $primary !global;
+  }
+  @if $accent {
+    $-accent: $accent !global;
+  }
+  @if $warn {
+    $-warn: $warn !global;
+  }
+  @if $border {
+    $-border: $border !global;
+  }
+  @if $background {
+    $-background: $background !global;
+  }
+
+
+  
+
+
+}

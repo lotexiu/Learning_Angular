@@ -1,0 +1,17 @@
+$primary: purple;
+$accent: orange;
+$warn: red;
+$border: linear-gradient(135deg, $-primary, $-warn);
+$background: darkslateblue;
+
+@mixin lote-theme($theme){
+  $primary: map-get($theme, primary, default) !global;
+  $accent: map-get($theme, accent, default) !global;
+  $warn: map-get($theme, warn, default) !global;
+  $border: map-get($theme, border, default) !global;
+  $background: map-get($theme, background) !global;
+}
+
+@function test(){
+  
+}

@@ -12,6 +12,7 @@ import { LoteBorderComponent } from '../lote-border/lote-border.component';
   ],
   templateUrl: './lote-input.component.html',
   styleUrl: './lote-input.component.scss',
+  // encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class LoteInputComponent {
 
