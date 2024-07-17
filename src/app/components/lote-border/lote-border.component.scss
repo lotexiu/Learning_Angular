@@ -1,3 +1,5 @@
+@use "@angular/material" as mat;
+
 .box{
   margin-top: 12px;
   transition: all 250ms;
@@ -12,7 +14,7 @@
       width: 100%;
       height: 100%;
       position: absolute;
-      background: red;
+      background: rgb(128, 129, 211);
     } 
   }
   >.title-box{
@@ -36,27 +38,34 @@
   }
 }
 
-// @mixin loteBorder($theme){
-//   $primary: map-get($theme, primary, default);
-//   $accent: map-get($theme, accent, default);
-//   $warn: map-get($theme, warn, default);
+@mixin lote-border($theme){
+  $primary: none;
+  $tertiary: none;
 
-//   .box{
-//     >.parent-effect{
-//       >.frame{
-//         background: linear-gradient(135deg, $primary, $warn);
-//         // background: linear-gradient(135deg, $primary 60%, $warn);
-//       }
-//     }
-//   }
+  @if mat.get-theme-type($theme) == dark {
+    $primary: mat.get-theme-color($theme, primary, 30);
+    $tertiary: mat.get-theme-color($theme, tertiary, 50);
+  } @else {
+    $primary: mat.get-theme-color($theme, primary, 80);
+    $tertiary: mat.get-theme-color($theme, tertiary, 50);    
+  }
 
-//   lote-input{
-//     .box{
-//       >.parent-effect{
-//         >.frame{
-//           background: linear-gradient(135deg, $accent 60%, $warn);
-//         }
-//       }
-//     }    
-//   }
-// }
+  .box{
+    >.parent-effect{
+      >.frame{
+        background: linear-gradient(135deg, $primary, $tertiary) !important;
+        // background: linear-gradient(135deg, $primary 60%, blue);
+      }
+    }
+  }
+
+  lote-input{
+    .box{
+      >.parent-effect{
+        >.frame{
+          background: linear-gradient(135deg, $primary, $tertiary) !important;
+        }
+      }
+    }    
+  }
+}
