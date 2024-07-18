@@ -99,4 +99,7 @@ utilizando a tag SELECT pode ser citado o elemento que deve ficar dentro do ng-c
 select="p"  exibira apenas os elementos p
 select="[p]" exibirra apenas os elementos que contem a tag p
  */
+
+// https://github.com/JsDaddy/ngx-mask/blob/develop/USAGE.md
+// https://material.angular.io/guide/theming-your-components
 ```
