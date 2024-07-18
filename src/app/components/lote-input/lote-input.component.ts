@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { componentImports } from '../../imports/import';
 import { LoteBorderComponent } from '../lote-border/lote-border.component';
@@ -15,5 +15,7 @@ import { LoteBorderComponent } from '../lote-border/lote-border.component';
   // encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class LoteInputComponent {
-
+  @Input() title = "";
+  @Input() type:InputTypes = "text";
+  @Input() ngModel:any = "";
 }
