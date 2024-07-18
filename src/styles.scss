@@ -10,7 +10,7 @@ $light-theme: mat.define-theme((
  color: (
     theme-type: light,
     primary: mat.$cyan-palette,
-    tertiary: mat.$azure-palette,
+    tertiary: mat.$blue-palette,
   ),
 ));
 $dark-theme: mat.define-theme((

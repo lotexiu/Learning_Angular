@@ -14,7 +14,7 @@
       width: 100%;
       height: 100%;
       position: absolute;
-      background: rgb(128, 129, 211);
+      background: rgb(128, 129, 211);  
     } 
   }
   >.title-box{
@@ -47,25 +47,45 @@
     $tertiary: mat.get-theme-color($theme, tertiary, 50);
   } @else {
     $primary: mat.get-theme-color($theme, primary, 80);
-    $tertiary: mat.get-theme-color($theme, tertiary, 50);    
+    $tertiary: mat.get-theme-color($theme, tertiary, 40);    
   }
-
   .box{
     >.parent-effect{
       >.frame{
-        background: linear-gradient(135deg, $primary, $tertiary) !important;
-        // background: linear-gradient(135deg, $primary 60%, blue);
+        background: linear-gradient(145deg, $primary 0%, $tertiary) !important;
       }
     }
   }
 
   lote-input{
-    .box{
-      >.parent-effect{
-        >.frame{
-          background: linear-gradient(135deg, $primary, $tertiary) !important;
+    lote-border{
+      input{
+        background: none;
+        border: none;
+        outline: 0;
+      }
+      .box{
+        >.parent-effect{
+          >.frame::after{
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 250ms;
+            background: linear-gradient(145deg, $primary 75%, $tertiary) !important;
+          }
         }
       }
-    }    
+      &:focus-within{
+        .box{
+          >.parent-effect{
+            >.frame::after{
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
   }
 }

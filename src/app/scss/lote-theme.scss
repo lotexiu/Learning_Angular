@@ -8,32 +8,5 @@ $-border: linear-gradient(135deg, #606060, #a9a9a9);
 
 @mixin components($theme){
   // https://material.angular.io/guide/theming-your-components
-
-
   @include lote-border($theme)
-
-  // $accent: map-get($theme, accent, default);
-  // $warn: map-get($theme, warn, default);
-  // $border: map-get($theme, border, default);
-  // $background: map-get($theme, background);
-  // @if $primary {
-  //   $-primary: $primary !global;
-  // }
-  // @if $accent {
-  //   $-accent: $accent !global;
-  // }
-  // @if $warn {
-  //   $-warn: $warn !global;
-  // }
-  // @if $border {
-  //   $-border: $border !global;
-  // }
-  // @if $background {
-  //   $-background: $background !global;
-  // }
-
-  
-  
-
-
 }
