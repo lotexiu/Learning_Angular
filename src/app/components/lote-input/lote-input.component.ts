@@ -2,6 +2,7 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { componentImports } from '../../imports/import';
 import { LoteBorderComponent } from '../lote-border/lote-border.component';
+import { InputTypes } from './interfaces/input-types.interface';
 
 @Component({
   selector: 'lote-input',
@@ -16,6 +17,6 @@ import { LoteBorderComponent } from '../lote-border/lote-border.component';
 })
 export class LoteInputComponent {
   @Input() title = "";
-  @Input() type:InputTypes = "text";
+  @Input() type: InputTypes = "text";
   @Input() ngModel:any = "";
 }

@@ -5,3 +5,7 @@ type InputTypes =
 "number"|"percent"|"money"|
 "color"|"slider"|"checkbox"|
 "file"|"image"|"text"
+
+export {
+  InputTypes
+}
