@@ -41,9 +41,21 @@ type InputFields<Target> = {
   [K in keyof Target]-?: Target[K] extends Function ? never : K
 }[keyof Target];
 
-
-
-
+/**
+ * @example
+ * type InputDataReturn<Type extends InputTypes> = CustomReturn<Type,[
+ *  [["text","cnpj","cpf","email","pass","phone","ip"],InputDataText],
+ *  [["money","number","percent"],InputDataNumbers],
+ *  [["time","date","datetime"],InputDataDigits],
+ *  [["slider"],InputDataSlider],
+ * ]>
+*/
+type CustomReturn <Value, ReturnConfigList extends [any|Value[], any][]=[any[], any][]> = {
+  [Config in keyof ReturnConfigList]: {
+    [ValueInList in keyof ReturnConfigList[Config][0]]: 
+      Value extends ReturnConfigList[Config][0][ValueInList] ? ReturnConfigList[Config][1] : never
+  }[number]
+}[number]
 
 type OptionalType<Type=string> = Type|undefined
 
@@ -64,7 +76,8 @@ interface RGBAColor {
 }
 
 export { 
-  LockedParams as LockType,
+  CustomReturn,
+  LockedParams,
   KeysOfType,
   InputFields,
 

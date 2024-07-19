@@ -1,65 +1,14 @@
-import { InputTypes } from "../interfaces/input-types.interface"
+import { CustomReturn } from "../../../interfaces/interfaces"
+import { InputDataDigits, InputDataNumbers, InputDataSlider, InputDataText, InputTypes } from "../interfaces/input-types.interface"
 
-interface InputDataTemplate {
-  debounce: number,
-  type: string,
-}
-
-// interface InputData2 extends InputData {
-//   type:"money"|"number"|"percent"|"time"|"date"|"datetime"
-//   min:number
-//   max:number
-// }
-// interface InputData3 extends InputData {
-// }
-
-// interface InputData4 extends InputData {
-// }
-
-// interface InputData {
-//   mask?: string 
-//   min: number|Date
-//   max: number|Date
-//   invalidNumbers: number[]
-//   decimals: number
-//   values?: any[]
-//   step?: number
-// }
-
-// type InputData<T extends InputTypes> = 
-//   T extends "number"|"s" ? { type: T; step: number } : 
-//   InputDataTemplate;
-
-
-// type MyMappings = [
-//   [["number", "money"], string],
-//   [["text"], number]
-// ];
-
-// type IsInArray<T, A extends any[]> = T extends A[number] ? true : false;
-
-// type TReturn<T, A extends [any]> =
-//   T extends A ? string : number
-
-// type Test = TReturn<"number", [[["number"]]]>
-
-
-// type Test1 = TReturn<"number", [[["number"],string],[["text"],number]]>;
-
-
-type TReturn<T, L extends [[...any], any][] > = {
-  [K in keyof L]: //L[K] //extends [T, infer R] ? R : never
-  L[K][0] extends [T] ? string: number
-  // {
-  //   [J in keyof L[K]]: L[K][J] extends [T]? "X": "Y"
-  // }[number]
-}[number];
-
-// Exemplo de uso
-type Result = TReturn<"y", [[["y"],string],[["n"],number]]>; // string
-
+type InputDataReturn<Type extends InputTypes> = CustomReturn<Type,[
+  [["text","cnpj","cpf","email","pass","phone","ip"],InputDataText],
+  [["money","number","percent"],InputDataNumbers],
+  [["time","date","datetime"],InputDataDigits],
+  [["slider"],InputDataSlider],
+]>
 namespace InputUtils{
-  export function getInputData<T extends InputTypes>(type:T): InputData<T> {
+  export function getInputData<T extends InputTypes>(type:T): InputDataReturn<T> {
     let list: InputTypes[] = []
     let InputData: any = {
       debounce: 250
@@ -165,10 +114,6 @@ namespace InputUtils{
     ]
   }
 }
-
-let test = InputUtils.getInputData("text")
-
-test.step
 
 export {
   InputUtils

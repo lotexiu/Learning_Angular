@@ -1,7 +1,7 @@
-import { LockType, RGBAColor } from "../interfaces/interfaces";
+import { LockedParams, RGBAColor } from "../interfaces/interfaces";
 
 class ComponentUtils {
-  static digitToLetterMap: LockType<string, string> = {
+  static digitToLetterMap: LockedParams<string, string> = {
     1: 'AKU',
     2: 'BLV',
     3: 'CMW',
