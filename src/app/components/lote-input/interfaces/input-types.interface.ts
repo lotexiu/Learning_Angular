@@ -1,6 +1,6 @@
 type InputTypes =
 "email"|"phone"|"cpf"|"cnpj"|
-"ip"|"password"|"pass"|
+"ip"|"pass"|
 "time"|"date"|"datetime"|
 "number"|"percent"|"money"|
 "color"|"slider"|"checkbox"|

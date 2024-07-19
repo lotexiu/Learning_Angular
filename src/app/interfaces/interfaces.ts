@@ -41,6 +41,10 @@ type InputFields<Target> = {
   [K in keyof Target]-?: Target[K] extends Function ? never : K
 }[keyof Target];
 
+
+
+
+
 type OptionalType<Type=string> = Type|undefined
 
 interface StateElement {
@@ -61,8 +65,9 @@ interface RGBAColor {
 
 export { 
   LockedParams as LockType,
-  InputFields,
   KeysOfType,
+  InputFields,
+
   OptionalType,
   StateElement,
   RGBAColor,
