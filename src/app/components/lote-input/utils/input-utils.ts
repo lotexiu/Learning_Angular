@@ -35,8 +35,6 @@ namespace InputUtils{
       InputData.step = 1
     }
 
-    list = []
-
     return InputData
   }
 
