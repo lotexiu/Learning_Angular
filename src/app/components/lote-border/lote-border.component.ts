@@ -1,7 +1,8 @@
 import { AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, EventEmitter, HostListener, Input, NO_ERRORS_SCHEMA, OnChanges, OnInit, Output, Renderer2, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ComponentUtils } from '../../utils/utils';
 import { componentBaseImports } from '../../imports/import';
+import { ComponentUtils } from '../../utils/component-utils';
+import { DefaultImplements } from '../../interfaces/angular.interfaces';
 
 @Component({
   selector: 'lote-border',
@@ -10,7 +11,7 @@ import { componentBaseImports } from '../../imports/import';
   templateUrl: './lote-border.component.html',
   styleUrl: './lote-border.component.scss',
 })
-export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
+export class LoteBorderComponent implements DefaultImplements {
 
   @Output() widthChange: EventEmitter<number> = new EventEmitter<number>();
   @Input() width: number = 5;
@@ -38,6 +39,15 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
     private el: ElementRef<HTMLElement>
   ) { }
 
+  ngOnInit(): void {
+    this.watchMain = new MutationObserver(mutations =>{
+      this.updateView()
+    })
+  }
+  
+  ngOnDestroy(): void {
+      this.watchMain.disconnect()
+  }
 
   ngAfterViewInit(): void {
     let mainElement: HTMLElement = this.el.nativeElement
@@ -47,25 +57,10 @@ export class LoteBorderComponent implements OnInit, OnChanges, AfterViewInit {
     this.contentElement = mainElement.querySelector(`#content`)!
     this.updateView()
     this.watchMain.observe(mainElement, {attributes: true, subtree: true, childList:true, characterData: true})
-
-    setTimeout(()=>{
-      this.title = 'Gengar'
-      this.updateView()
-      setTimeout(()=>{
-        this.title = 'Reimu And Sakuya'
-        this.updateView()
-      },1000)      
-    },1000)
   }
   
   ngOnChanges(changes: SimpleChanges): void {
     this.updateView()
-  }
-
-  ngOnInit(): void {
-    this.watchMain = new MutationObserver(mutations =>{
-      this.updateView()
-    })
   }
 
   @HostListener('window:resize', ['$event'])  

@@ -10,13 +10,18 @@ import { IconDirective } from "../directives/icon/icon.directive";
 import { ObserveDirective } from "../directives/observe/observe.directive";
 import { WritterAnimationDirective } from "../directives/writter-animation/writter-animation.directive";
 import { LoteBorderComponent } from "../components/lote-border/lote-border.component";
+import { FormsModule } from "@angular/forms";
+import { NgxMaskDirective, NgxMaskPipe } from "ngx-mask";
 
 const componentBaseImports = [
-  CommonModule,
-  MatButtonModule,
-  MatIconModule,
-  MatDividerModule,
-  MatSlideToggleModule,
+  CommonModule, // Basico para criação do componente
+  FormsModule, // Utilização de parametros,validações e funções de formulario (ngmodel) 
+  NgxMaskDirective, // Criação de mascara
+  NgxMaskPipe, // Criação de mascara
+  MatButtonModule, // Uso de componentes do angular
+  MatIconModule, // Uso de componentes do angular
+  MatDividerModule, // Uso de componentes do angular
+  MatSlideToggleModule, // Uso de componentes do angular
   IconDirective,
   ClickDirective,
   WritterAnimationDirective,
@@ -25,7 +30,7 @@ const componentBaseImports = [
 
 const componentImports = [
   ...componentBaseImports,
-  LoteBoxComponent,
+  // LoteBoxComponent,
   LoteInputComponent,
   LoteBorderComponent
 ]

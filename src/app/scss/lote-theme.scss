@@ -1,5 +1,6 @@
 @import './../components/lote-box/lote-box.component';
 @import './../components/lote-border/lote-border.component';
+@import './../components/lote-input/lote-input.component';
 
 $-border: linear-gradient(135deg, #606060, #a9a9a9);
 @function configure($border: linear-gradient(135deg, #606060, #a9a9a9)){
@@ -7,5 +8,6 @@ $-border: linear-gradient(135deg, #606060, #a9a9a9);
 }
 
 @mixin components($theme){
-  @include lote-border($theme)
+  @include lote-border($theme);
+  @include lote-input($theme);
 }

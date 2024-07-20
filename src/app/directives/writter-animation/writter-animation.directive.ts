@@ -1,5 +1,4 @@
 import { Directive, ElementRef, HostBinding, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core'
-import { ComponentUtils } from '../../utils/utils';
 
 @Directive({
   selector: '[write]',

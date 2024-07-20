@@ -1,4 +1,4 @@
-export class String {
+export class StringUtils {
 
 
   static onlyDigits(value: string): string {

@@ -1,5 +1,7 @@
 import { CustomReturn } from "../../../interfaces/interfaces"
-import { InputDataDigits, InputDataNumbers, InputDataSlider, InputDataText, InputTypes } from "../interfaces/input-types.interface"
+import { StringUtils } from "../../../utils/string-utils"
+import { InputData, InputDataDigits, InputDataNumbers, InputDataSlider, InputDataText, InputTypes } from "../interfaces/input-types.interface"
+import { LoteInputComponent } from "../lote-input.component"
 
 type InputDataReturn<Type extends InputTypes> = CustomReturn<Type,[
   [["text","cnpj","cpf","email","pass","phone","ip"],InputDataText],
@@ -8,10 +10,12 @@ type InputDataReturn<Type extends InputTypes> = CustomReturn<Type,[
   [["slider"],InputDataSlider],
 ]>
 namespace InputUtils{
-  export function getInputData<T extends InputTypes>(type:T): InputDataReturn<T> {
+  export function getInputData<T extends InputTypes>(type:T, input?:LoteInputComponent): InputDataReturn<T> {
     let list: InputTypes[] = []
-    let InputData: any = {
-      debounce: 250
+    let InputData: InputData & any = {
+      debounce: 250,
+      dropMaskChars: false,
+      isValid: ():any=>{return true}
     }
 
     if(getNotInputTypes().includes(type)){
@@ -22,17 +26,20 @@ namespace InputUtils{
     }
     list = ["money","number","percent","time","date","datetime"]
     if(list.includes(type)){
-      InputData.min = null
-      InputData.max = null
+      InputData.min = input?.min
+      InputData.max = input?.max
     }
     list = ["money","number","percent"]
     if(list.includes(type)){
-      InputData.invalidNumbers = []
-      InputData.decimals = 2
+      InputData.invalidNumbers = input?.invalidNumbers ||  []
+      InputData.decimals = input?.decimals ||  2
     }
     if(type == "slider"){
-      InputData.values = []
-      InputData.step = 1
+      InputData.values = input?.values || []
+      InputData.step = input?.step || 1
+    }
+    if(type == "email"){
+      InputData.isValid = StringUtils.isValidEmail
     }
 
     return InputData

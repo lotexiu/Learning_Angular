@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { iconsName } from '../../icons/svg/svg-icons';
 import { componentBaseImports } from '../../imports/import';
 import { OptionalType, StateElement } from '../../interfaces/interfaces';
-import { ColorUtils, ComponentUtils } from '../../utils/utils';
+import { ComponentUtils } from '../../utils/component-utils';
+import { ColorUtils } from '../../utils/color-utils';
 
 type Status = "hide" | "show"
 

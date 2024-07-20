@@ -1,5 +1,50 @@
+@use "@angular/material" as mat;
+
 lote-border{
   input{
     width: 100%;
+  }
+}
+
+@mixin lote-input($theme){
+  $primary: none;
+  $tertiary: none;
+  @if mat.get-theme-type($theme) == dark {
+    $primary: mat.get-theme-color($theme, primary, 30);
+    $tertiary: mat.get-theme-color($theme, tertiary, 50);
+  } @else {
+    $primary: mat.get-theme-color($theme, primary, 80);
+    $tertiary: mat.get-theme-color($theme, tertiary, 40);    
+  }
+  lote-input{
+    lote-border{
+      input{
+        background: none;
+        border: none;
+        outline: 0;
+      }
+      .box{
+        >.parent-effect{
+          >.frame::after{
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 250ms;
+            background: linear-gradient(145deg, $primary 75%, $tertiary) !important;
+          }
+        }
+      }
+      &:focus-within{
+        .box{
+          >.parent-effect{
+            >.frame::after{
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
   }
 }
