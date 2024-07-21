@@ -6,6 +6,7 @@ import { InputData, InputTypes } from './interfaces/input-types.interface';
 import { InputUtils } from './utils/input-utils';
 import { DefaultImplements } from '../../interfaces/angular.interfaces';
 import { provideNgxMask } from 'ngx-mask';
+import { ObjectUtils } from '../../utils/object-utils';
 
 @Component({
   selector: 'lote-input',
@@ -31,7 +32,8 @@ export class LoteInputComponent implements DefaultImplements {
   @Input() step?: number;
 
   @Output() ngModelChange = new EventEmitter<any>();
-  @Input() ngModel!: any;
+  @Input() ngModel: any = null;
+  private lastValue: any = null;
 
   inputData!: InputData;
   
@@ -50,11 +52,17 @@ export class LoteInputComponent implements DefaultImplements {
   
   updateSettings(): void{
     this.inputData = InputUtils.getInputData(this.type, this)
+    this.inputData.required = true
   }
 
   onNgModelChange(): void {
     if (this.inputData.isValid(this.ngModel)){
-      this.ngModelChange.emit(this.ngModel)
+      if(!ObjectUtils.equals(this.ngModel, this.lastValue)){
+        this.lastValue = this.ngModel
+        this.ngModelChange.emit(this.ngModel)
+      }
+    }else{
+      this.ngModelChange.emit(null)
     }
   }
 

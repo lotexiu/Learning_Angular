@@ -10,6 +10,7 @@ interface InputData {
   debounce: number
   type: string
   dropMaskChars: boolean
+  required: boolean
   isValid: (ngModel:any)=>boolean
 }
 interface InputDataText extends InputData{
