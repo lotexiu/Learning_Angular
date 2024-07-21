@@ -1,7 +1,7 @@
 <lote-border [title]="title">
   <input type="text" 
     [(ngModel)]="ngModel"
-    (ngModelChange)="onNgModelChange()"
+    (ngModelChange)="onInputValueChange.next('')"
     [mask]="getMask()"
     [dropSpecialCharacters]="inputData.dropMaskChars"
     >

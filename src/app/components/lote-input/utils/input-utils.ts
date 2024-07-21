@@ -15,7 +15,7 @@ namespace InputUtils{
   export function getInputData<T extends InputTypes>(type:T, input?:LoteInputComponent): InputDataReturn<T> {
     let list: InputTypes[] = []
     let InputData: InputData & any = {
-      debounce: 250,
+      debounce: input?.debounce,
       dropMaskChars: false,
       required: false,
       isValid: (ngModel: any):any=> !(ObjectUtils.isNull(ngModel) && InputData.required)

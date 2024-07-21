@@ -7,6 +7,7 @@ import { InputUtils } from './utils/input-utils';
 import { DefaultImplements } from '../../interfaces/angular.interfaces';
 import { provideNgxMask } from 'ngx-mask';
 import { ObjectUtils } from '../../utils/object-utils';
+import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'lote-input',
@@ -23,6 +24,8 @@ import { ObjectUtils } from '../../utils/object-utils';
 export class LoteInputComponent implements DefaultImplements {
   @Input() title = "";
   @Input() type: InputTypes = "text";
+  @Input() required: boolean = false;
+  @Input() debounce: number = 300;
 
   @Input() min?: number|Date;
   @Input() max?: number|Date;
@@ -34,14 +37,19 @@ export class LoteInputComponent implements DefaultImplements {
   @Output() ngModelChange = new EventEmitter<any>();
   @Input() ngModel: any = null;
   private lastValue: any = null;
-
+  
+  onInputValueChange = new Subject<string>();
   inputData!: InputData;
   
   ngOnInit(): void {
-    
+    this.onInputValueChange
+    .pipe(debounceTime(this.debounce))
+    .subscribe((): void => {
+      this.onNgModelChange();
+    });
   }
   ngOnDestroy(): void {
-    
+    this.onInputValueChange.unsubscribe()
   }
   ngAfterViewInit(): void {
     
@@ -52,7 +60,7 @@ export class LoteInputComponent implements DefaultImplements {
   
   updateSettings(): void{
     this.inputData = InputUtils.getInputData(this.type, this)
-    this.inputData.required = true
+    this.inputData.required = false
   }
 
   onNgModelChange(): void {
