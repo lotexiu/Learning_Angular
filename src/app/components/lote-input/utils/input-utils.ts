@@ -13,12 +13,18 @@ type InputDataReturn<Type extends InputTypes> = CustomReturn<Type,[
 namespace InputUtils{
 
   export function getInputData<T extends InputTypes>(type:T, input?:LoteInputComponent): InputDataReturn<T> {
+    let InputData: InputData & any; 
     let list: InputTypes[] = []
-    let InputData: InputData & any = {
+
+    let doValidation: Function = (ngModel:any): boolean => {
+      return makeValidation(ngModel, InputData)
+    }
+
+    InputData = {
       debounce: input?.debounce,
       dropMaskChars: false,
-      required: false,
-      isValid: (ngModel: any):any=> !(ObjectUtils.isNull(ngModel) && InputData.required)
+      required: input?.required || false,
+      isValid: doValidation
     }
     if(getNotInputTypes().includes(type)){
       InputData.type = type
@@ -43,17 +49,24 @@ namespace InputUtils{
       InputData.values = input?.values || []
       InputData.step = input?.step || 1
     }
+    return InputData
+  }
 
-    if(type == "email"){
-      InputData.isValid = (ngModel: any): boolean => {
-        let result: boolean = !(InputData.required && ObjectUtils.isNull(ngModel))
-        if (result && ngModel){
-          result = StringUtils.isValidEmail(ngModel)
-        }
-        return result
+  function makeValidation(ngModel:any, inputData: InputData): boolean{
+    let result: boolean = !(inputData.required && ObjectUtils.isNull(ngModel))
+    if (result && ngModel){
+      let list;
+      list = ["money","number","percent","time","date","datetime"]
+      if(list.includes(inputData.type)){
+      }
+      list = ["money","number","percent"]
+      if(list.includes(inputData.type)){
+      }
+      if(inputData.type == 'email'){
+        result = StringUtils.isValidEmail(ngModel)
       }
     }
-    return InputData
+    return result
   }
 
   // shownMaskExpression == placeholder

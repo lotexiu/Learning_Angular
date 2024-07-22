@@ -8,7 +8,7 @@ type InputTypes =
 
 interface InputData {
   debounce: number
-  type: string
+  type: InputTypes
   dropMaskChars: boolean
   required: boolean
   isValid: (ngModel:any)=>boolean

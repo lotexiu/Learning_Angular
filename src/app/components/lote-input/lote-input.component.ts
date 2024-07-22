@@ -60,17 +60,18 @@ export class LoteInputComponent implements DefaultImplements {
   
   updateSettings(): void{
     this.inputData = InputUtils.getInputData(this.type, this)
-    this.inputData.required = false
   }
 
   onNgModelChange(): void {
     if (this.inputData.isValid(this.ngModel)){
+      console.log('valido')
       if(!ObjectUtils.equals(this.ngModel, this.lastValue)){
         this.lastValue = this.ngModel
         this.ngModelChange.emit(this.ngModel)
       }
     }else{
       this.ngModelChange.emit(null)
+      console.log('invalido')
     }
   }
 
