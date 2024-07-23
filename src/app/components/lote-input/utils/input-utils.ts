@@ -21,15 +21,16 @@ namespace InputUtils{
     }
 
     InputData = {
+      type,
+      isValid: doValidation,
+      required: input?.required || false,
       debounce: input?.debounce,
       dropMaskChars: false,
-      required: input?.required || false,
-      isValid: doValidation
     }
     if(getNotInputTypes().includes(type)){
-      InputData.type = type
+      InputData.inputType = type
     }else{
-      InputData.type = 'text'
+      InputData.inputType = 'text'
       InputData.mask = getMask(type)
     }
 

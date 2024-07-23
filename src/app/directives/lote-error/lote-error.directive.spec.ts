@@ -1,8 +1,8 @@
-import { ObserveDirective } from './observe.directive';
+import { LoteError } from './lote-error.directive';
 
 describe('ObserveDirective', () => {
   it('should create an instance', () => {
-    const directive = new ObserveDirective();
+    const directive = new LoteError();
     expect(directive).toBeTruthy();
   });
 });

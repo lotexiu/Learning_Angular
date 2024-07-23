@@ -19,7 +19,9 @@ import { debounceTime, Subject } from 'rxjs';
   templateUrl: './lote-input.component.html',
   styleUrl: './lote-input.component.scss',
   // encapsulation: ViewEncapsulation.ShadowDom,
-  providers: [provideNgxMask()]
+  providers: [
+    provideNgxMask(),
+  ]
 })
 export class LoteInputComponent implements DefaultImplements {
   @Input() title = "";
@@ -40,6 +42,7 @@ export class LoteInputComponent implements DefaultImplements {
   
   onInputValueChange = new Subject<string>();
   inputData!: InputData;
+  valid: boolean = false;
   
   ngOnInit(): void {
     this.onInputValueChange
@@ -48,30 +51,33 @@ export class LoteInputComponent implements DefaultImplements {
       this.onNgModelChange();
     });
   }
+
   ngOnDestroy(): void {
     this.onInputValueChange.unsubscribe()
   }
+
   ngAfterViewInit(): void {
     
   }
+  
   ngOnChanges(changes: SimpleChanges): void {
     this.updateSettings()
   }
   
   updateSettings(): void{
     this.inputData = InputUtils.getInputData(this.type, this)
+    this.valid = this.inputData.isValid(this.ngModel)
   }
 
   onNgModelChange(): void {
-    if (this.inputData.isValid(this.ngModel)){
-      console.log('valido')
+    this.valid = this.inputData.isValid(this.ngModel)
+    if (this.valid){
       if(!ObjectUtils.equals(this.ngModel, this.lastValue)){
         this.lastValue = this.ngModel
         this.ngModelChange.emit(this.ngModel)
       }
     }else{
       this.ngModelChange.emit(null)
-      console.log('invalido')
     }
   }
 

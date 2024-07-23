@@ -8,6 +8,7 @@ type InputTypes =
 
 interface InputData {
   debounce: number
+  inputType: string
   type: InputTypes
   dropMaskChars: boolean
   required: boolean
