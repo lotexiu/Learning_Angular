@@ -68,7 +68,12 @@
               "buildTarget": "Learning_Angular:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "publicHost": "doesnt'work 192.168.3.31",
+            "host": "127.0.0.1",
+            "port": 4200
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

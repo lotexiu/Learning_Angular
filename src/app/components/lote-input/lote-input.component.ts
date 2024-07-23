@@ -1,20 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { componentImports } from '../../imports/import';
-import { LoteBorderComponent } from '../lote-border/lote-border.component';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { provideNgxMask } from 'ngx-mask';
+import { Subject, debounceTime } from 'rxjs';
+import { componentBaseImports, componentImports } from '../../imports/import';
+import { DefaultImplements } from '../../interfaces/angular.interfaces';
+import { ObjectUtils } from '../../utils/object-utils';
 import { InputData, InputTypes } from './interfaces/input-types.interface';
 import { InputUtils } from './utils/input-utils';
-import { DefaultImplements } from '../../interfaces/angular.interfaces';
-import { provideNgxMask } from 'ngx-mask';
-import { ObjectUtils } from '../../utils/object-utils';
-import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'lote-input',
   standalone: true,
   imports: [
+    ...componentBaseImports,
     ...componentImports,
-    LoteBorderComponent,
   ],
   templateUrl: './lote-input.component.html',
   styleUrl: './lote-input.component.scss',

@@ -4,7 +4,10 @@
     (ngModelChange)="onInputValueChange.next('')"
     [mask]="getMask()"
     [dropSpecialCharacters]="inputData.dropMaskChars"
-    >
-    <!-- test
-    [loteError]="true" -->
+    [loteError]="!valid"
+  >
+  <!-- <div>
+    test
+  </div> -->
+  {{valid}}
 </lote-border>

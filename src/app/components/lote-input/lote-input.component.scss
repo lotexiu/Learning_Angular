@@ -48,3 +48,11 @@ lote-border{
     }
   }
 }
+
+.tooltip{
+  position: absolute;
+  min-width: 10%;
+  max-width: 100%;
+  background: gray;
+  padding: 3px;
+}
