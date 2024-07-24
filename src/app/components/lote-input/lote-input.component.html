@@ -1,4 +1,4 @@
-<lote-border [title]="title">
+<lote-border [title]="title" [ngClass]="{'ng-invalid':!valid}">
   <input [type]=inputData.inputType
     [(ngModel)]="ngModel"
     (ngModelChange)="onInputValueChange.next('')"
@@ -6,8 +6,4 @@
     [dropSpecialCharacters]="inputData.dropMaskChars"
     [loteError]="!valid"
   >
-  <!-- <div>
-    test
-  </div> -->
-  {{valid}}
 </lote-border>

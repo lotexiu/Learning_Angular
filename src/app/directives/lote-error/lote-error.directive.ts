@@ -14,7 +14,7 @@ import { LoteTooltipComponent } from '../../components/lote-tooltip/lote-tooltip
 export class LoteError implements Validator, OnInit, OnDestroy, OnChanges {
   @Input() disabled: boolean = false;
   @Input() loteError?: boolean = false;
-  @Input() loteErrorMessage: string = 'campo inválido';
+  @Input() loteErrorMessage: string = 'Campo inválido!';
 
   private loteTooltip: ComponentRef<LoteTooltipComponent> | null = null;
 
@@ -40,22 +40,21 @@ export class LoteError implements Validator, OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if(this.control) this.control.control?.updateValueAndValidity()
+    this.LoteTooltip()
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    if (this.disabled) {
-      return null;
-    }
-    if (this.loteError) {
-      return { 'loteError': this.loteErrorMessage };
-    } else {
-      return null;
-    }
+    return (
+      this.disabled ? null : 
+      this.loteError ? { 'loteError': this.loteErrorMessage } :
+      null
+    )
   }
 
   private LoteTooltip(){
     if(this.loteError && !this.loteTooltip){
       this.loteTooltip = this.viewContainerRef.createComponent(LoteTooltipComponent)
+      this.loteTooltip.instance.text = this.loteErrorMessage
     }else if(!this.loteError && this.loteTooltip){
       this.loteTooltip!.destroy();
       this.loteTooltip = null;

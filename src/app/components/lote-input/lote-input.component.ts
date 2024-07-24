@@ -11,7 +11,6 @@ import { InputUtils } from './utils/input-utils';
   selector: 'lote-input',
   standalone: true,
   imports: [
-    ...componentBaseImports,
     ...componentImports,
   ],
   templateUrl: './lote-input.component.html',
@@ -48,6 +47,9 @@ export class LoteInputComponent implements DefaultImplements {
     .subscribe((): void => {
       this.onNgModelChange();
     });
+    this.ngModel = 'a'
+    this.updateSettings()
+    this.onNgModelChange()
   }
 
   ngOnDestroy(): void {

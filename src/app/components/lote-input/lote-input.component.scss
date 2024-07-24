@@ -9,12 +9,15 @@ lote-border{
 @mixin lote-input($theme){
   $primary: none;
   $tertiary: none;
+  $error: none;
   @if mat.get-theme-type($theme) == dark {
     $primary: mat.get-theme-color($theme, primary, 30);
     $tertiary: mat.get-theme-color($theme, tertiary, 50);
+    $error: mat.get-theme-color($theme, error, 50);
   } @else {
     $primary: mat.get-theme-color($theme, primary, 80);
-    $tertiary: mat.get-theme-color($theme, tertiary, 40);    
+    $tertiary: mat.get-theme-color($theme, tertiary, 40);
+    $error: mat.get-theme-color($theme, error, 40);
   }
   lote-input{
     lote-border{
@@ -36,6 +39,16 @@ lote-border{
           }
         }
       }
+      &.ng-invalid{
+        .box{
+          >.parent-effect{
+            >.frame{
+              background: linear-gradient(145deg, $error 75%, $tertiary) !important;
+              opacity: 1;
+            }
+          }
+        }
+      }      
       &:focus-within{
         .box{
           >.parent-effect{
@@ -47,12 +60,4 @@ lote-border{
       }
     }
   }
-}
-
-.tooltip{
-  position: absolute;
-  min-width: 10%;
-  max-width: 100%;
-  background: gray;
-  padding: 3px;
 }

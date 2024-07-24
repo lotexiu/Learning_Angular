@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip'
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { LoteInputComponent } from "../components/lote-input/lote-input.component";
@@ -22,6 +23,7 @@ const componentBaseImports = [
   MatIconModule, // Uso de componentes do angular
   MatDividerModule, // Uso de componentes do angular
   MatSlideToggleModule, // Uso de componentes do angular
+  MatTooltipModule,
   IconDirective,
   ClickDirective,
   WritterAnimationDirective,
