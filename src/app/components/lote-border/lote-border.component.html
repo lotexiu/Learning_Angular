@@ -7,7 +7,14 @@
     <div [write]="title" id="title"></div>
     <ng-content select="[ngtitle]"></ng-content>
   </div>
-  <div id="content" class="content">
+  <div id="content" class="content" [ngStyle]="{
+    'grid-auto-columns': getFromGrid('column', 'defaultSize'),
+    'grid-auto-rows': getFromGrid('column', 'defaultSize'),
+    'grid-template-columns': getFromGrid('column', 'size'),
+    'grid-template-rows': getFromGrid('row', 'size'),
+    'column-gap':getFromGrid('column', 'gap'),
+    'row-gap':getFromGrid('column', 'gap')
+  }">
     <ng-content></ng-content>
   </div>
 </div>

@@ -1,6 +1,6 @@
-import { ComponentRef, Directive, ElementRef, Injector, Input, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges, ViewContainerRef } from '@angular/core';
-import { AbstractControl, FormControl, NG_VALIDATORS, NgControl, ValidationErrors, Validator } from '@angular/forms';
-import { LoteTooltipComponent } from '../../components/lote-tooltip/lote-tooltip.component';
+import { Directive, ElementRef, Injector, Input, OnChanges, OnDestroy, OnInit, Renderer2, SimpleChanges, ViewContainerRef } from '@angular/core';
+import { AbstractControl, NG_VALIDATORS, NgControl, ValidationErrors, Validator } from '@angular/forms';
+// import { LoteTooltipComponent } from '../../components/lote-tooltip/lote-tooltip.component';
 
 @Directive({
   selector: '[loteError]',
@@ -14,9 +14,9 @@ import { LoteTooltipComponent } from '../../components/lote-tooltip/lote-tooltip
 export class LoteError implements Validator, OnInit, OnDestroy, OnChanges {
   @Input() disabled: boolean = false;
   @Input() loteError?: boolean = false;
-  @Input() loteErrorMessage: string = 'Campo inválido!';
+  @Input() loteErrorMessage?: string;
 
-  private loteTooltip: ComponentRef<LoteTooltipComponent> | null = null;
+  // private loteTooltip: ComponentRef<LoteTooltipComponent> | null = null;
 
   private control!: NgControl
 
@@ -32,10 +32,10 @@ export class LoteError implements Validator, OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
-    if(this.loteTooltip){
-      this.loteTooltip.destroy()
-      this.loteTooltip = null
-    }
+    // if(this.loteTooltip){
+    //   this.loteTooltip.destroy()
+    //   this.loteTooltip = null
+    // }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -46,18 +46,18 @@ export class LoteError implements Validator, OnInit, OnDestroy, OnChanges {
   validate(control: AbstractControl): ValidationErrors | null {
     return (
       this.disabled ? null : 
-      this.loteError ? { 'loteError': this.loteErrorMessage } :
+      this.loteError ? { 'loteError': this.loteErrorMessage || 'Campo inválido!' } :
       null
     )
   }
 
   private LoteTooltip(){
-    if(this.loteError && !this.loteTooltip){
-      this.loteTooltip = this.viewContainerRef.createComponent(LoteTooltipComponent)
-      this.loteTooltip.instance.text = this.loteErrorMessage
-    }else if(!this.loteError && this.loteTooltip){
-      this.loteTooltip!.destroy();
-      this.loteTooltip = null;
-    }
+    // if(this.loteError && !this.loteTooltip){
+    //   this.loteTooltip = this.viewContainerRef.createComponent(LoteTooltipComponent)
+    //   this.loteTooltip.instance.text = this.loteErrorMessage
+    // }else if(!this.loteError && this.loteTooltip){
+    //   this.loteTooltip!.destroy();
+    //   this.loteTooltip = null;
+    // }
   }
 }

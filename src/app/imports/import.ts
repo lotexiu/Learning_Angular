@@ -12,7 +12,6 @@ import { WritterAnimationDirective } from "../directives/writter-animation/writt
 import { LoteBorderComponent } from "../components/lote-border/lote-border.component";
 import { FormsModule } from "@angular/forms";
 import { NgxMaskDirective, NgxMaskPipe } from "ngx-mask";
-import { LoteTooltipComponent } from "../components/lote-tooltip/lote-tooltip.component";
 
 const componentBaseImports = [
   CommonModule, // Basico para criação do componente
@@ -35,7 +34,6 @@ const componentImports = [
   // LoteBoxComponent,
   LoteBorderComponent,
   LoteInputComponent,
-  LoteTooltipComponent,
 ]
 
 const otherImports = [

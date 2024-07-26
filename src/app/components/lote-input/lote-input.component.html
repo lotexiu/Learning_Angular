@@ -1,9 +1,16 @@
-<lote-border [title]="title" [ngClass]="{'ng-invalid':!valid}">
+<lote-border [title]="title" 
+  [ngClass]="{'ng-invalid':!valid}"
+  [gridTemplate]="gridTemplate"
+>
   <input [type]=inputData.inputType
     [(ngModel)]="ngModel"
     (ngModelChange)="onInputValueChange.next('')"
     [mask]="getMask()"
     [dropSpecialCharacters]="inputData.dropMaskChars"
     [loteError]="!valid"
+    [loteErrorMessage]="errorMessage"
   >
+  <div id="lote-input-message">
+    {{inputData.invalidMessage || errorMessage || '‎'}}
+  </div>
 </lote-border>

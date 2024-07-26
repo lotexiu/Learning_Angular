@@ -13,6 +13,7 @@ interface InputData {
   dropMaskChars: boolean
   required: boolean
   isValid: (ngModel:any)=>boolean
+  invalidMessage?: string
 }
 interface InputDataText extends InputData{
   type: "text"

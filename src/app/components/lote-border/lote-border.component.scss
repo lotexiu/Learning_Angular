@@ -31,10 +31,18 @@
     >#title{
       text-wrap: nowrap;
       text-overflow: ellipsis;
+      font-size: 16px;
     }
   }
   >.content{
     position: relative;
+    transition: grid-template-rows 250ms, grid-template-columns 250ms;
+    display: grid;
+    *{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-wrap: nowrap;
+    }
   }
 }
 

@@ -55,6 +55,7 @@ namespace InputUtils{
 
   function makeValidation(ngModel:any, inputData: InputData): boolean{
     let result: boolean = !(inputData.required && ObjectUtils.isNull(ngModel))
+    inputData.invalidMessage = result ? undefined : 'Campo obrigatório!'
     if (result && ngModel){
       let list;
       list = ["money","number","percent","time","date","datetime"]
@@ -65,6 +66,7 @@ namespace InputUtils{
       }
       if(inputData.type == 'email'){
         result = StringUtils.isValidEmail(ngModel)
+        if (!result) inputData.invalidMessage = 'Email inválido!'
       }
     }
     return result

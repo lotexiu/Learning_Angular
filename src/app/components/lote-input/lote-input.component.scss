@@ -26,6 +26,10 @@ lote-border{
         border: none;
         outline: 0;
       }
+      div#lote-input-message{
+        color: $error;
+        font-weight: 500;
+      }
       .box{
         >.parent-effect{
           >.frame::after{
