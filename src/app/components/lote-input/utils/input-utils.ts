@@ -68,7 +68,7 @@ namespace InputUtils{
       case "time":
         return 'Hh:m0||Hh:m0:s0'
       case "date":
-        return 'd0/M0/0000'
+        return '00/00/0000'
       case "ip":
         return "IP"
       case "phone":
@@ -93,46 +93,6 @@ namespace InputUtils{
       case "text":
       default:
         return '';
-    }
-  }
-
-  export function getTextRequired(type: InputTypes): string {
-    switch(type){
-      case "file":
-        return 'Arquivo'
-      case "image":
-        return 'Imagem'
-      case "text":
-        return 'Texto'
-      case "email":
-        return 'Email'
-      case "phone":
-        return 'Telefone/Celular'
-      case "cpf":
-        return 'CPF'
-      case "cnpj":
-        return 'CNPJ'
-      case "ip":
-        return 'IP'
-      case "pass":
-        return 'Senha'
-      case "time":
-        return 'Hora'
-      case "date":
-        return 'Data'
-      case "datetime":
-        return 'Data e Hora'
-      case "percent":
-        return 'Porcentagem'
-      case "money":
-      case "number":
-        return 'Valor'        
-      case "color":
-        return 'Cor'
-      case "slider":
-      case "checkbox":
-      default:
-        return '' 
     }
   }
 

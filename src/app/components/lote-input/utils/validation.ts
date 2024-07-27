@@ -1,5 +1,5 @@
 import { Compare, LockedParams } from "../../../interfaces/interfaces";
-import { Time } from "../../../utils/date-utils";
+import { LocalDate, Time } from "../../../utils/date-utils";
 import { betweenMinMax } from "../../../utils/math-utils";
 import { isNull } from "../../../utils/object-utils";
 import { isValidCNPJ, isValidCPF, isValidEmail } from "../../../utils/string-utils";
@@ -61,12 +61,12 @@ function pass(ngModel: any, inputData: InputData): boolean {
 }
 function time(ngModel: string, inputData: InputDataDigits<string>): boolean {
   if (ngModel.split(':').length < 2) {
-    inputData.invalidMessage = 'Horá invalida!'
+    inputData.invalidMessage = 'Hora inválida!'
     return false
   } else {
+    const ngModelTime: number = new Time(ngModel || "").castTimeTo('seconds')
     const minTime = new Time(inputData.min || "")
     const maxTime = new Time(inputData.max || "")
-    const ngModelTime: number = new Time(ngModel || "").castTimeTo('seconds')
     const c: Compare = betweenMinMax(ngModelTime, minTime.castTimeTo('seconds'), maxTime.castTimeTo('seconds'))
     if (c != 0) {
       inputData.invalidMessage = getInvalidMessageByCompare(c, minTime.toString(), maxTime.toString(), 'Hora')
@@ -76,8 +76,20 @@ function time(ngModel: string, inputData: InputDataDigits<string>): boolean {
   return true
 }
 function date(ngModel: string, inputData: InputDataDigits<string>): boolean {
-  let result: boolean = true
-  return result
+  if(ngModel.split('/').length < 3){
+    inputData.invalidMessage = 'Data inválida!'
+    return false
+  }else{
+    const ngModelLocalDate: number = new LocalDate(ngModel||"").toDate().getTime()
+    const minLocalDate = new LocalDate(inputData.min || "")
+    const maxLocalDate = new LocalDate(inputData.max || "")
+    const c: Compare = betweenMinMax(ngModelLocalDate, minLocalDate.toDate().getTime(), maxLocalDate.toDate().getTime())
+    if (c != 0) {
+      inputData.invalidMessage = getInvalidMessageByCompare(c, minLocalDate.toString(), maxLocalDate.toString(), 'Data')
+      return false
+    }
+  }
+  return true
 }
 function datetime(ngModel: Date, inputData: InputDataDigits<Date>): boolean {
   let result: boolean = true
@@ -116,7 +128,7 @@ function image(ngModel: any, inputData: InputData): boolean {
 function input_validation(ngModel: any, inputData: InputData): boolean {
   let result: boolean = !(inputData.required && isNull(ngModel, ''))
   inputData.invalidMessage =
-    result ? undefined : `${InputUtils.getTextRequired(inputData.type)} obrigatório!`
+    result ? undefined : `Campo é obrigatório!`
 
   let obj: LockedParams<InputTypes, (ngModel: any, inputData: any) => boolean> = {
     text: text,
