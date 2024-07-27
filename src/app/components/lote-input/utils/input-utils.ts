@@ -6,20 +6,20 @@ import { input_validation } from "./validation";
 namespace InputUtils{
 
   export function getInputData<T extends InputTypes>(type:T, input?:LoteInputComponent): InputDataReturn<T> {
-    let InputData: InputData & any; 
+    let inputData: InputData & any; 
     let list: InputTypes[] = []
 
     let _validation: Function = (ngModel:any): boolean => {
-      return input_validation(ngModel, InputData)
+      return input_validation(ngModel, inputData)
     }
     let _maskAdjust: Function = (ngModel:any): any => {
-      return input_maskAdjust(ngModel, InputData)
+      return input_maskAdjust(ngModel, inputData)
     }
     let _ngModelAdjust: Function = (ngModel:any): any => {
-      return input_ngModelAdjust(ngModel, InputData)
+      return input_ngModelAdjust(ngModel, inputData)
     }
 
-    InputData = {
+    inputData = {
       type,
       isValid: _validation,
       maskAdjust: _maskAdjust,
@@ -31,29 +31,32 @@ namespace InputUtils{
 
     list = ["money","number","percent","time","date","datetime","text"]
     if(list.includes(type)){
-      InputData.min = input?.min
-      InputData.max = input?.max
+      inputData.min = input?.min
+      inputData.max = input?.max
     }
 
     list = ["money","number","percent"]
     if(list.includes(type)){
-      InputData.invalidNumbers = input?.invalidNumbers ||  []
-      InputData.decimals = input?.decimals ||  2
+      inputData.dropMaskChars = true
+      inputData.invalidNumbers = input?.invalidNumbers ||  []
+      inputData.decimals = input?.decimals ||  2
+      inputData.sufix = type == 'percent' ? input?.suffix || '%':''
+      inputData.prefix = type == 'money' ? input?.prefix || 'R$ ':''
     }
 
     if(type == "slider"){
-      InputData.values = input?.values || []
-      InputData.step = input?.step || 1
+      inputData.values = input?.values || []
+      inputData.step = input?.step || 1
     } 
 
     if(getTypes('others').includes(type)){
-      InputData.inputType = type
+      inputData.inputType = type
     }else{
-      InputData.inputType = 'text'
-      InputData.mask = getMask(type, InputData.decimals)
+      inputData.inputType = 'text'
+      inputData.mask = getMask(type, inputData.decimals)
     }
 
-    return InputData
+    return inputData
   }
 
   export function getMask(type: string, decimals: number): string{

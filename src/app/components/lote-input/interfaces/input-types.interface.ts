@@ -53,6 +53,8 @@ interface InputDataDigits<T=number|Date> extends InputDataText {
   max?: T
 }
 interface InputDataNumbers extends InputDataDigits<number>{
+  prefix: string
+  suffix: string
   type: "money"|"number"|"percent"
   decimals: number
   invalidNumbers: number[]

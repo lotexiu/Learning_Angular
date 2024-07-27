@@ -4,13 +4,16 @@
 >
 <!-- [inputTransformFn]="makeSomeFixes" -->
   <input [type]=inputData.inputType
+    [prefix]="prefix||''"
+    [suffix]="suffix||''"
+    [dropSpecialCharacters]="inputData.dropMaskChars"
+    [allowNegativeNumbers]="true"
     [leadZeroDateTime]="true"
     thousandSeparator="."
     decimalMarker=","
     [(ngModel)]="ngModel"
     (ngModelChange)="onNgModelChange()"
     [mask]="getMask()"
-    [dropSpecialCharacters]="inputData.dropMaskChars"
     [loteError]="!valid"
     [loteErrorMessage]="errorMessage"
   >

@@ -31,6 +31,8 @@ export class LoteInputComponent implements DefaultImplements {
   @Input() debounce: number = 300;
   @Input() errorMessage?: string
 
+  @Input() suffix?: string
+  @Input() prefix?: string
   @Input() min?: number | Date;
   @Input() max?: number | Date;
   @Input() invalidNumbers: number[] = [];
@@ -80,6 +82,10 @@ export class LoteInputComponent implements DefaultImplements {
 
   updateSettings(): void {
     this.inputData = InputUtils.getInputData(this.type, this)
+    if(['percent','money'].includes(this.type)){
+      this.suffix = this.getInputData('number').suffix
+      this.prefix = this.getInputData('number').prefix
+    }
     this.valid = this.inputData.isValid(this.ngModel)
   }
 
