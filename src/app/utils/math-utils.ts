@@ -9,7 +9,7 @@ namespace MathUtils {
   export function betweenMinMax(value: number, min?: number, max?: number): Compare {
     return (
       !isNull(min) && value < min! ? -1 :
-      !isNull(min) && value > max! ? 1 : 0
+      !isNull(max) && value > max! ? 1 : 0
     )
   }
   export function minMax(value: number, min: number, max: number): number{

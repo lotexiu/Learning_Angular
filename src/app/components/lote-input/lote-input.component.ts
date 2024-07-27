@@ -3,7 +3,7 @@ import { provideNgxMask } from 'ngx-mask';
 import { Subject, debounceTime } from 'rxjs';
 import { componentImports } from '../../imports/import';
 import { DefaultImplements } from '../../interfaces/angular.interfaces';
-import { InputDataReturn, InputDataTypes, InputTypes } from './interfaces/input-types.interface';
+import { InputDataDigits, InputDataReturn, InputDataTypes, InputTypes } from './interfaces/input-types.interface';
 import { InputUtils } from './utils/input-utils';
 import { GridConfig } from '../lote-border/interfaces/grid-template.interface';
 import { equals, isNull } from '../../utils/object-utils';
@@ -31,8 +31,8 @@ export class LoteInputComponent implements DefaultImplements {
 
   @Input() suffix?: string
   @Input() prefix?: string
-  @Input() min?: number | Date;
-  @Input() max?: number | Date;
+  @Input() min?: string | number | Date;
+  @Input() max?: string | number | Date;
   @Input() invalidNumbers: number[] = [];
   @Input() decimals: number = 2;
   @Input() values: any[] = [];

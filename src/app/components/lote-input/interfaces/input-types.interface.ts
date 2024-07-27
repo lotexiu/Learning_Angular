@@ -47,7 +47,7 @@ interface InputData {
 interface InputDataText extends InputData{
   mask: string
 }
-interface InputDataDigits<T=number|Date> extends InputDataText {
+interface InputDataDigits<T=number|string|Date> extends InputDataText {
   type: "money"|"number"|"percent"|"time"|"date"|"datetime"|"text"
   min?: T
   max?: T
