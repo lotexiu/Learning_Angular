@@ -1,7 +1,7 @@
 namespace ObjectUtils {
 
-  export function isNull(value: any, emptyStringIsNull: boolean = true): boolean {
-    if (value == '' && !emptyStringIsNull) {
+  export function isNull(value: any, emptyStringAndZeroIsNull: boolean = true): boolean {
+    if ((value === '' || value === 0)  && !emptyStringAndZeroIsNull) {
       return false
     }
     return value !== false && !value
@@ -11,8 +11,8 @@ namespace ObjectUtils {
     return value == null || value == undefined
   }
 
-  export function equals(a: any, b: any, emptyStringIsNull: boolean = true): boolean {
-    let result: boolean = isNull(a, emptyStringIsNull) && isNull(b, emptyStringIsNull)
+  export function equals(a: any, b: any, emptyStringAndZeroIsNull: boolean = true): boolean {
+    let result: boolean = isNull(a, emptyStringAndZeroIsNull) && isNull(b, emptyStringAndZeroIsNull)
     if (!result) {
       result = JSON.stringify(a) == JSON.stringify(b)
     }

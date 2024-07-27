@@ -65,23 +65,11 @@ interface StateElement {
   html?: string
 }
 
-interface RGBAColor {
-  r: number
-  g: number
-  b: number
-  a: number
-  isBlack: (min?:number)=>boolean
-  isWhite: ()=>boolean
-  isTransparent: ()=>boolean
-}
-
 export { 
   CustomReturn,
   LockedParams,
   KeysOfType,
   InputFields,
-
   OptionalType,
   StateElement,
-  RGBAColor,
 }
