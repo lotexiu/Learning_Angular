@@ -4,7 +4,7 @@ import { Subject, debounceTime } from 'rxjs';
 import { componentImports } from '../../imports/import';
 import { DefaultImplements } from '../../interfaces/angular.interfaces';
 import { ObjectUtils } from '../../utils/object-utils';
-import { InputData, InputTypes } from './interfaces/input-types.interface';
+import { InputData, InputDataNumbers, InputDataReturn, InputDataTypes, InputTypes } from './interfaces/input-types.interface';
 import { InputUtils } from './utils/input-utils';
 import { GridConfig } from '../lote-border/interfaces/grid-template.interface';
 
@@ -21,6 +21,9 @@ import { GridConfig } from '../lote-border/interfaces/grid-template.interface';
     provideNgxMask(),
   ]
 })
+
+// type FieldType =
+
 export class LoteInputComponent implements DefaultImplements {
   @Input() title = "";
   @Input() type: InputTypes = "text";
@@ -30,17 +33,17 @@ export class LoteInputComponent implements DefaultImplements {
 
   @Input() min?: number | Date;
   @Input() max?: number | Date;
-  @Input() invalidNumbers?: number[];
-  @Input() decimals?: number;
-  @Input() values?: any[];
-  @Input() step?: number;
+  @Input() invalidNumbers: number[] = [];
+  @Input() decimals: number = 2;
+  @Input() values: any[] = [];
+  @Input() step: number = 1;
 
   @Output() ngModelChange = new EventEmitter<any>();
   @Input() ngModel: any = null;
   private lastValue: any = null;
 
-  onInputValueChange = new Subject<string>();
-  inputData!: InputData;
+  debounceTrigger = new Subject<string>();
+  inputData!: InputDataTypes;
   valid: boolean = false;
 
   gridTemplate: GridConfig = {
@@ -54,10 +57,10 @@ export class LoteInputComponent implements DefaultImplements {
   };
 
   ngOnInit(): void {
-    this.onInputValueChange
+    this.debounceTrigger
       .pipe(debounceTime(this.debounce))
       .subscribe((): void => {
-        this.onNgModelChange();
+        this.onDebounce()
       });
     this.ngModel = 'a'
     this.updateSettings()
@@ -65,7 +68,7 @@ export class LoteInputComponent implements DefaultImplements {
   }
 
   ngOnDestroy(): void {
-    this.onInputValueChange.unsubscribe()
+    this.debounceTrigger.unsubscribe()
   }
 
   ngAfterViewInit(): void {
@@ -82,8 +85,13 @@ export class LoteInputComponent implements DefaultImplements {
   }
 
   onNgModelChange(): void {
+    this.debounceTrigger.next('')
+    // this.ngModel = this.inputData.adjust(this.ngModel)
     this.valid = this.inputData.isValid(this.ngModel) && ObjectUtils.isNull(this.errorMessage)
     this.gridTemplate.row!.size![1] = this.valid ? '0fr' : '1fr'
+  }
+
+  onDebounce(): void{
     if (this.valid) {
       if (!ObjectUtils.equals(this.ngModel, this.lastValue)) {
         this.lastValue = this.ngModel
@@ -94,8 +102,12 @@ export class LoteInputComponent implements DefaultImplements {
     }
   }
 
+  getInputData<T extends InputTypes>(type: T): InputDataReturn<T>{
+    return this.inputData as InputDataReturn<T>
+  }
+  
   getMask(): string {
-    return InputUtils.getMask(this.type)
+    return InputUtils.getMask(this.type, this.decimals)
   }
 
 }

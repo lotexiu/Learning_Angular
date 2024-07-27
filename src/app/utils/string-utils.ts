@@ -1,12 +1,11 @@
-export class StringUtils {
+namespace StringUtils {
 
-
-  static onlyDigits(value: string): string {
+  export function onlyDigits(value: string): string {
     return value.replace(/\D/g, '')
   }
 
-  static formatPhone(phone: string) {
-    let phoneOnlyDigits = this.onlyDigits(phone).slice(0, 13)
+  export function formatPhone(phone: string) {
+    let phoneOnlyDigits = onlyDigits(phone).slice(0, 13)
     let phoneSize = phoneOnlyDigits.length
 
     function dynamicPhoneMask() {
@@ -15,7 +14,6 @@ export class StringUtils {
         `${phoneOnlyDigits.slice(0, 4)}${maskPart}${phoneOnlyDigits.slice(4, 8)}`
       )
     }
-
     return (
       phoneSize < 9 ? dynamicPhoneMask() :
       phoneSize == 9 ? phoneOnlyDigits.replace(/(\d{5})(\d{4})$/, '$1-$2') :
@@ -26,7 +24,7 @@ export class StringUtils {
     )
   }
 
-  static isValidCPF(cpf: string): boolean {
+  export function isValidCPF(cpf: string): boolean {
     cpf = cpf.replace(/[\s.-]*/g, '');
     if (!cpf || cpf.length !== 11 || /^(.)\1+$/.test(cpf)) {
       return false;
@@ -54,9 +52,9 @@ export class StringUtils {
     );
   }
 
-  static isValidCNPJ(cnpj: string): boolean {
+  export function isValidCNPJ(cnpj: string): boolean {
     const weights: number[] = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-    const digits: string = this.onlyDigits(cnpj);
+    const digits: string = onlyDigits(cnpj);
     let n = 0;
 
     for (let i = 0; i < 12; i++) {
@@ -83,10 +81,25 @@ export class StringUtils {
     return true;
   }
 
-  static isValidEmail(email: string): boolean {
+  export function isValidEmail(email: string): boolean {
     const emailRegex: RegExp = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/;
     return emailRegex.test(email);
   }
+}
 
+const {
+  formatPhone,
+  isValidCNPJ,
+  isValidCPF,
+  isValidEmail,
+  onlyDigits,
+} = StringUtils
 
+export {
+  StringUtils,
+  formatPhone,
+  isValidCNPJ,
+  isValidCPF,
+  isValidEmail,
+  onlyDigits,
 }

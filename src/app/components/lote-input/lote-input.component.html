@@ -2,9 +2,13 @@
   [ngClass]="{'ng-invalid':!valid}"
   [gridTemplate]="gridTemplate"
 >
+<!-- [inputTransformFn]="makeSomeFixes" -->
   <input [type]=inputData.inputType
+    [leadZeroDateTime]="true"
+    thousandSeparator="."
+    decimalMarker=","
     [(ngModel)]="ngModel"
-    (ngModelChange)="onInputValueChange.next('')"
+    (ngModelChange)="onNgModelChange()"
     [mask]="getMask()"
     [dropSpecialCharacters]="inputData.dropMaskChars"
     [loteError]="!valid"

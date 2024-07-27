@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, SimpleChanges } from '@angular/core';
 import { componentBaseImports } from '../../imports/import';
-import { ComponentUtils } from '../../utils/component-utils';
 import { DefaultImplements } from '../../interfaces/angular.interfaces';
 import { GridConfig, GridDimension } from './interfaces/grid-template.interface';
 import { InputFields } from '../../interfaces/interfaces';
@@ -26,7 +25,7 @@ export class LoteBorderComponent implements DefaultImplements {
 
   @Input() gridTemplate?: GridConfig
 
-  public id: string = ComponentUtils.generateUniqueId()
+  public id: string = ''
 
   private opening: number = 0;
   private spacing: number = 5;

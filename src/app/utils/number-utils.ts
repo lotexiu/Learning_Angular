@@ -1,5 +1,5 @@
-class NumberUtils {
-  static random(min: number, max: number): number {
+namespace NumberUtils {
+  export function random(min: number, max: number): number {
     let decimalsSize = Math.max(min.getDecimals().length, max.getDecimals().length)
     const range: number = max - min;
     const randomNumber: number = Math.random() * range + min;
@@ -7,6 +7,11 @@ class NumberUtils {
   }
 }
 
+const {
+  random,
+} = NumberUtils
+
 export {
-  NumberUtils
+  NumberUtils,
+  random,
 }

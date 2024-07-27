@@ -1,15 +1,6 @@
-import { CustomReturn } from "../../../interfaces/interfaces"
-import { ObjectUtils } from "../../../utils/object-utils"
-import { StringUtils } from "../../../utils/string-utils"
-import { InputData, InputDataDigits, InputDataNumbers, InputDataSlider, InputDataText, InputTypes } from "../interfaces/input-types.interface"
-import { LoteInputComponent } from "../lote-input.component"
-
-type InputDataReturn<Type extends InputTypes> = CustomReturn<Type,[
-  [["text","cnpj","cpf","email","pass","phone","ip"],InputDataText],
-  [["money","number","percent"],InputDataNumbers],
-  [["time","date","datetime"],InputDataDigits],
-  [["slider"],InputDataSlider],
-]>
+import { InputData, InputDataReturn, InputTypes } from "../interfaces/input-types.interface";
+import { LoteInputComponent } from "../lote-input.component";
+import { validation } from "./validation";
 namespace InputUtils{
 
   export function getInputData<T extends InputTypes>(type:T, input?:LoteInputComponent): InputDataReturn<T> {
@@ -17,7 +8,7 @@ namespace InputUtils{
     let list: InputTypes[] = []
 
     let doValidation: Function = (ngModel:any): boolean => {
-      return makeValidation(ngModel, InputData)
+      return validation(ngModel, InputData)
     }
 
     InputData = {
@@ -26,12 +17,6 @@ namespace InputUtils{
       required: input?.required || false,
       debounce: input?.debounce,
       dropMaskChars: false,
-    }
-    if(getNotInputTypes().includes(type)){
-      InputData.inputType = type
-    }else{
-      InputData.inputType = 'text'
-      InputData.mask = getMask(type)
     }
 
     list = ["money","number","percent","time","date","datetime"]
@@ -49,34 +34,23 @@ namespace InputUtils{
     if(type == "slider"){
       InputData.values = input?.values || []
       InputData.step = input?.step || 1
-    }
-    return InputData
-  }
+    } 
 
-  function makeValidation(ngModel:any, inputData: InputData): boolean{
-    let result: boolean = !(inputData.required && ObjectUtils.isNull(ngModel))
-    inputData.invalidMessage = result ? undefined : 'Campo obrigatório!'
-    if (result && ngModel){
-      let list;
-      list = ["money","number","percent","time","date","datetime"]
-      if(list.includes(inputData.type)){
-      }
-      list = ["money","number","percent"]
-      if(list.includes(inputData.type)){
-      }
-      if(inputData.type == 'email'){
-        result = StringUtils.isValidEmail(ngModel)
-        if (!result) inputData.invalidMessage = 'Email inválido!'
-      }
+    if(getNotInputTypes().includes(type)){
+      InputData.inputType = type
+    }else{
+      InputData.inputType = 'text'
+      InputData.mask = getMask(type, InputData.decimals)
     }
-    return result
+
+    return InputData
   }
 
   // shownMaskExpression == placeholder
   // dropSpecialCharacters mantem os caracteres da mascara
   // hiddenInput
 
-  export function getMask(type: InputTypes): string{
+  export function getMask(type: string, decimals: number): string{
     switch(type){
       case "cpf":
         return 'CPF_CNPJ';
@@ -91,11 +65,11 @@ namespace InputUtils{
       case "phone":
         return '0000-0000||(00) 0000-0000||(00) 00000-0000||+00 (00) 0000-0000||+00 (00) 00000-0000'
       case "number":
-        return 'separator.';
+        return `separator.${decimals}`;
       case "percent":
-        return 'separator.';
+        return `separator.${decimals}`;
       case "money":
-        return 'separator.';
+        return `separator.${decimals}`;
       case "email":
         return 'A*@A*.S*.S*'
       case "pass":

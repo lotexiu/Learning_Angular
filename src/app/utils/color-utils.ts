@@ -1,8 +1,8 @@
 import { RGBAColor } from "../interfaces/interfaces"
 
-class ColorUtils {
+namespace ColorUtils {
 
-  static newColor<T=number|string>(r:T=255 as T,
+  export function newColor<T=number|string>(r:T=255 as T,
                                   g:T=255 as T,
                                   b:T=255 as T,
                                   a:T=1 as T): RGBAColor{
@@ -24,13 +24,13 @@ class ColorUtils {
     }
   }
 
-  static checkForBlackColor(backgroundStyle: string): boolean {
+  export function checkForBlackColor(backgroundStyle: string): boolean {
     // Expressão para encontrar preto em RGB ou RGBA
     const blackColorRegex = /rgba?\(0,\s*0,\s*0(?:,\s*1)?\)/;
     return blackColorRegex.test(backgroundStyle);
   }
 
-  static getRGBAColorFromString(colorString: string): RGBAColor[] {
+  export function getRGBAColorFromString(colorString: string): RGBAColor[] {
     const rgbaColors: RGBAColor[] = [];
     // Função para extrair o valor RGBA de uma string
     function extractRGBAFromString(colorString: string): RGBAColor | null {
@@ -60,6 +60,15 @@ class ColorUtils {
 
 }
 
+const {
+  checkForBlackColor,
+  getRGBAColorFromString,
+  newColor
+} = ColorUtils
+
 export {
-  ColorUtils
+  ColorUtils,
+  checkForBlackColor,
+  getRGBAColorFromString,
+  newColor,
 }

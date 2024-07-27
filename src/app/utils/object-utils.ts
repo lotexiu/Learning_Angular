@@ -20,7 +20,16 @@ namespace ObjectUtils {
   }
 }
 
+const {
+  equals,
+  isNull,
+  isNullOrUndefined,
+} = ObjectUtils
+
 export {
-  ObjectUtils
+  ObjectUtils,
+  isNull,
+  isNullOrUndefined,
+  equals,
 }
 
