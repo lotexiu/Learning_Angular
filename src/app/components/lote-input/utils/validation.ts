@@ -1,4 +1,5 @@
 import { Compare, LockedParams } from "../../../interfaces/interfaces";
+import { compareTime, Time } from "../../../utils/date-utils";
 import { betweenMinMax } from "../../../utils/math-utils";
 import { isNull } from "../../../utils/object-utils";
 import { capitalize, isValidCNPJ, isValidCPF, isValidEmail } from "../../../utils/string-utils";
@@ -7,15 +8,23 @@ import { InputUtils } from "./input-utils";
 
 function minMaxValidation(value: number, inputData: InputDataDigits<number>, fieldName: string = 'Campo'){
   const {min, max} = inputData
-  const result: Compare = betweenMinMax(value, min, max)
-  if (result == -1){
-    inputData.invalidMessage = `${capitalize(fieldName)} precisa ser maior que ${min}`
-    return false
-  } else if (result == 1){
-    inputData.invalidMessage = `${capitalize(fieldName)} precisa ser menor que ${max}`
+  const compare: Compare = betweenMinMax(value, min, max)
+  if (compare != 0){
+    inputData.invalidMessage = getInvalidMessageByCompare(compare, min!, max!, fieldName)
     return false
   }
   return true
+}
+
+function getInvalidMessageByCompare(compare: Compare, 
+                                    min: number|string, 
+                                    max: number|string,  
+                                    fieldName: string = 'Campo'): string{                                  
+  const value: any = compare == -1 ? min : max
+  const direction: string = compare == -1 ? 'maior' : 'menor'
+  return (
+    compare == 0 ? '' : `${fieldName.capitalize()} precisa ser ${direction} que ${value}!`
+  )
 }
 
 function text(ngModel: string, inputData: InputDataDigits<number>): boolean { 
@@ -50,9 +59,21 @@ function pass(ngModel: any, inputData: InputData): boolean {
   let result: boolean = true
   return result
 }
-function time(ngModel: Date, inputData: InputDataDigits<Date>): boolean {
-  let result: boolean = true
-  return result
+function time(ngModel: string, inputData: InputDataDigits<string>): boolean {
+  if(ngModel.split(':').length < 2){
+    inputData.invalidMessage = 'Horá invalida!'
+    return false
+  }else{
+    const minTime: number = new Time(inputData.min||"").castTimeTo('seconds')
+    const maxTime: number = new Time(inputData.max||"").castTimeTo('seconds')
+    const ngModelTime: number = new Time(inputData.max||"").castTimeTo('seconds')
+    const c: Compare = betweenMinMax(ngModelTime, minTime, maxTime)
+    if (c != 0){
+      inputData.invalidMessage = getInvalidMessageByCompare(c, minTime, maxTime, 'Hora')
+      return false
+    }
+  }
+  return true
 }
 function date(ngModel: Date, inputData: InputDataDigits<Date>): boolean {
   let result: boolean = true
@@ -95,7 +116,7 @@ function image(ngModel: any, inputData: InputData): boolean {
 function input_validation(ngModel: any, inputData: InputData): boolean {
   let result: boolean = !(inputData.required && isNull(ngModel, ''))
   inputData.invalidMessage =
-    result ? undefined : `${InputUtils.getField(inputData.type)} obrigatório!`
+    result ? undefined : `${InputUtils.getTextRequired(inputData.type)} obrigatório!`
 
   let obj: LockedParams<InputTypes, (ngModel: any, inputData: any) => boolean> = {
     text: text,

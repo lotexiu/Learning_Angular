@@ -3,10 +3,10 @@ import { provideNgxMask } from 'ngx-mask';
 import { Subject, debounceTime } from 'rxjs';
 import { componentImports } from '../../imports/import';
 import { DefaultImplements } from '../../interfaces/angular.interfaces';
-import { equals, isNull, ObjectUtils } from '../../utils/object-utils';
-import { InputData, InputDataNumbers, InputDataReturn, InputDataTypes, InputTypes } from './interfaces/input-types.interface';
+import { InputDataReturn, InputDataTypes, InputTypes } from './interfaces/input-types.interface';
 import { InputUtils } from './utils/input-utils';
 import { GridConfig } from '../lote-border/interfaces/grid-template.interface';
+import { equals, isNull } from '../../utils/object-utils';
 
 @Component({
   selector: 'lote-input',
@@ -21,8 +21,6 @@ import { GridConfig } from '../lote-border/interfaces/grid-template.interface';
     provideNgxMask(),
   ]
 })
-
-// type FieldType =
 
 export class LoteInputComponent implements DefaultImplements {
   @Input() title = "";
@@ -90,15 +88,15 @@ export class LoteInputComponent implements DefaultImplements {
   }
 
   onNgModelChange(): void {
-    this.debounceTrigger.next('')
-    // this.ngModel = this.inputData.adjust(this.ngModel)
-    this.valid = this.inputData.isValid(this.ngModel) && ObjectUtils.isNull(this.errorMessage, '')
+    this.debounceTrigger.next('');
+    // this.ngModel = this.inputData.adjust(this.ngModel)(
+    this.valid = this.inputData.isValid(this.ngModel) && isNull(this.errorMessage, '')
     this.gridTemplate.row!.size![1] = this.valid ? '0fr' : '1fr'
   }
 
   onDebounce(): void{
     if (this.valid) {
-      if (!ObjectUtils.equals(this.ngModel, this.lastValue)) {
+      if (!equals(this.ngModel, this.lastValue)) {
         this.lastValue = this.ngModel
         this.ngModelChange.emit(this.ngModel)
         console.log(this.ngModel)

@@ -96,7 +96,7 @@ namespace InputUtils{
     }
   }
 
-  export function getField(type: InputTypes): string {
+  export function getTextRequired(type: InputTypes): string {
     switch(type){
       case "file":
         return 'Arquivo'
@@ -104,8 +104,6 @@ namespace InputUtils{
         return 'Imagem'
       case "text":
         return 'Texto'
-      case "number":
-        return 'Valor'
       case "email":
         return 'Email'
       case "phone":
@@ -127,7 +125,8 @@ namespace InputUtils{
       case "percent":
         return 'Porcentagem'
       case "money":
-        return 'Dinheiro'
+      case "number":
+        return 'Valor'        
       case "color":
         return 'Cor'
       case "slider":
