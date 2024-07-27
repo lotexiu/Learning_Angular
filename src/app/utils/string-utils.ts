@@ -85,6 +85,14 @@ namespace StringUtils {
     const emailRegex: RegExp = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/;
     return emailRegex.test(email);
   }
+
+  export function capitalize(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1)
+  }
+
+  export function capitalizeAll(str: string, splitStr: string): string {
+    return str.split(splitStr).map((strPart: string): string => capitalize(strPart)).join(splitStr)
+  }
 }
 
 const {
@@ -93,6 +101,8 @@ const {
   isValidCPF,
   isValidEmail,
   onlyDigits,
+  capitalize,
+  capitalizeAll,
 } = StringUtils
 
 export {
@@ -102,4 +112,6 @@ export {
   isValidCPF,
   isValidEmail,
   onlyDigits,
+  capitalize,
+  capitalizeAll,
 }

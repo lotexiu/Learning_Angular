@@ -69,9 +69,9 @@ export class LoteBorderComponent implements DefaultImplements {
   getFromGrid(dimension: InputFields<GridConfig>, param: InputFields<GridDimension>): string {
     if (this.gridTemplate && this.gridTemplate![dimension] && this.gridTemplate![dimension]![param]) {
       if (param == 'size') {
-        let defaultSize: string = this.gridTemplate![dimension]!.defaultSize || "fit-content"
+        let defaultSize: string = this.gridTemplate![dimension]!.defaultSize || "auto"
         const result: string = this.gridTemplate![dimension]![param]!
-          .map((v: string): string => ObjectUtils.isNull(v) ? defaultSize : v)
+          .map((v: string): string => ObjectUtils.isNull(v, '') ? defaultSize : v)
           .join(' ')
         return result
       }

@@ -1,21 +1,37 @@
 import { CustomReturn } from "../../../interfaces/interfaces"
 
 type InputTypes =
-"email"|"phone"|"cpf"|"cnpj"|
-"ip"|"pass"|
-"time"|"date"|"datetime"|
-"number"|"percent"|"money"|
-"color"|"slider"|"checkbox"|
-"file"|"image"|"text"
+"text"|
+"email"|
+"phone"|
+"cpf"|
+"cnpj"|
+"ip"|
+"pass"|
+"time"|
+"date"|
+"datetime"|
+"number"|
+"percent"|
+"money"|
+"color"|
+"slider"|
+"checkbox"|
+"file"|
+"image"
 
 type InputDataReturn<Type extends InputTypes> = CustomReturn<Type,[
-  [["text","cnpj","cpf","email","pass","phone","ip"],InputDataText],
+  [["cnpj","cpf","email","pass","phone","ip"],InputDataText],
   [["money","number","percent"],InputDataNumbers],
-  [["time","date","datetime"],InputDataDigits],
+  [["time","date","datetime","text"],InputDataDigits],
   [["slider"],InputDataSlider],
 ]>
 
-type InputDataTypes = InputData|InputDataText|InputDataDigits|InputDataNumbers|InputDataSlider
+type InputDataTypes = InputData|
+InputDataText|
+InputDataDigits|
+InputDataNumbers|
+InputDataSlider
 
 interface InputData {
   debounce: number
@@ -31,12 +47,12 @@ interface InputData {
 interface InputDataText extends InputData{
   mask: string
 }
-interface InputDataDigits extends InputDataText {
-  type: "money"|"number"|"percent"|"time"|"date"|"datetime"
-  min: number|Date
-  max: number|Date
+interface InputDataDigits<T=number|Date> extends InputDataText {
+  type: "money"|"number"|"percent"|"time"|"date"|"datetime"|"text"
+  min?: T
+  max?: T
 }
-interface InputDataNumbers extends InputDataDigits{
+interface InputDataNumbers extends InputDataDigits<number>{
   type: "money"|"number"|"percent"
   decimals: number
   invalidNumbers: number[]

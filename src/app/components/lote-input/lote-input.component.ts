@@ -3,7 +3,7 @@ import { provideNgxMask } from 'ngx-mask';
 import { Subject, debounceTime } from 'rxjs';
 import { componentImports } from '../../imports/import';
 import { DefaultImplements } from '../../interfaces/angular.interfaces';
-import { ObjectUtils } from '../../utils/object-utils';
+import { equals, isNull, ObjectUtils } from '../../utils/object-utils';
 import { InputData, InputDataNumbers, InputDataReturn, InputDataTypes, InputTypes } from './interfaces/input-types.interface';
 import { InputUtils } from './utils/input-utils';
 import { GridConfig } from '../lote-border/interfaces/grid-template.interface';
@@ -62,7 +62,6 @@ export class LoteInputComponent implements DefaultImplements {
       .subscribe((): void => {
         this.onDebounce()
       });
-    this.ngModel = 'a'
     this.updateSettings()
     this.onNgModelChange()
   }
@@ -87,7 +86,7 @@ export class LoteInputComponent implements DefaultImplements {
   onNgModelChange(): void {
     this.debounceTrigger.next('')
     // this.ngModel = this.inputData.adjust(this.ngModel)
-    this.valid = this.inputData.isValid(this.ngModel) && ObjectUtils.isNull(this.errorMessage)
+    this.valid = this.inputData.isValid(this.ngModel) && ObjectUtils.isNull(this.errorMessage, '')
     this.gridTemplate.row!.size![1] = this.valid ? '0fr' : '1fr'
   }
 
@@ -96,9 +95,12 @@ export class LoteInputComponent implements DefaultImplements {
       if (!ObjectUtils.equals(this.ngModel, this.lastValue)) {
         this.lastValue = this.ngModel
         this.ngModelChange.emit(this.ngModel)
+        console.log(this.ngModel)
       }
     } else {
+      this.lastValue = this.ngModel
       this.ngModelChange.emit(null)
+      console.log(null)
     }
   }
 

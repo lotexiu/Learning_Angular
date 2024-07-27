@@ -1,18 +1,16 @@
 namespace ObjectUtils {
 
-  export function isNull(value: any, emptyStringAndZeroIsNull: boolean = true): boolean {
-    if ((value === '' || value === 0)  && !emptyStringAndZeroIsNull) {
-      return false
-    }
-    return value !== false && !value
+  export function isNull(value: any, ...customNullValues: any[]): boolean {
+    if (customNullValues.includes(value)) return true
+    return ![0,'',false].includes(value) && !value
   }
 
   export function isNullOrUndefined(value: any): boolean {
     return value == null || value == undefined
   }
 
-  export function equals(a: any, b: any, emptyStringAndZeroIsNull: boolean = true): boolean {
-    let result: boolean = isNull(a, emptyStringAndZeroIsNull) && isNull(b, emptyStringAndZeroIsNull)
+  export function equals(a: any, b: any, ...customNullValues: any[]): boolean {
+    let result: boolean = isNull(a, ...customNullValues) && isNull(b, ...customNullValues)
     if (!result) {
       result = JSON.stringify(a) == JSON.stringify(b)
     }

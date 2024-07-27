@@ -1,25 +1,35 @@
 import { InputData, InputDataReturn, InputTypes } from "../interfaces/input-types.interface";
 import { LoteInputComponent } from "../lote-input.component";
-import { validation } from "./validation";
+import { input_maskAdjust } from "./mask-adjust";
+import { input_ngModelAdjust } from "./ngmodel-adjust";
+import { input_validation } from "./validation";
 namespace InputUtils{
 
   export function getInputData<T extends InputTypes>(type:T, input?:LoteInputComponent): InputDataReturn<T> {
     let InputData: InputData & any; 
     let list: InputTypes[] = []
 
-    let doValidation: Function = (ngModel:any): boolean => {
-      return validation(ngModel, InputData)
+    let _validation: Function = (ngModel:any): boolean => {
+      return input_validation(ngModel, InputData)
+    }
+    let _maskAdjust: Function = (ngModel:any): any => {
+      return input_maskAdjust(ngModel, InputData)
+    }
+    let _ngModelAdjust: Function = (ngModel:any): any => {
+      return input_ngModelAdjust(ngModel, InputData)
     }
 
     InputData = {
       type,
-      isValid: doValidation,
+      isValid: _validation,
+      maskAdjust: _maskAdjust,
+      ngModelAdjust: _ngModelAdjust,
       required: input?.required || false,
       debounce: input?.debounce,
       dropMaskChars: false,
     }
 
-    list = ["money","number","percent","time","date","datetime"]
+    list = ["money","number","percent","time","date","datetime","text"]
     if(list.includes(type)){
       InputData.min = input?.min
       InputData.max = input?.max
@@ -36,7 +46,7 @@ namespace InputUtils{
       InputData.step = input?.step || 1
     } 
 
-    if(getNotInputTypes().includes(type)){
+    if(getTypes('others').includes(type)){
       InputData.inputType = type
     }else{
       InputData.inputType = 'text'
@@ -45,10 +55,6 @@ namespace InputUtils{
 
     return InputData
   }
-
-  // shownMaskExpression == placeholder
-  // dropSpecialCharacters mantem os caracteres da mascara
-  // hiddenInput
 
   export function getMask(type: string, decimals: number): string{
     switch(type){
@@ -87,37 +93,61 @@ namespace InputUtils{
     }
   }
 
-  export function getTypes(): InputTypes[] {
-    return [
-      "email",
-      "phone",
-      "cpf",
-      "cnpj",
-      "ip",
-      "pass",
-      "time",
-      "date",
-      "datetime",
-      "number",
-      "percent",
-      "money",
-      "color",
-      "slider",
-      "checkbox",
-      "file",
-      "image",
-      "text"
-    ]
+  export function getField(type: InputTypes): string {
+    switch(type){
+      case "file":
+        return 'Arquivo'
+      case "image":
+        return 'Imagem'
+      case "text":
+        return 'Texto'
+      case "number":
+        return 'Valor'
+      case "email":
+        return 'Email'
+      case "phone":
+        return 'Telefone/Celular'
+      case "cpf":
+        return 'CPF'
+      case "cnpj":
+        return 'CNPJ'
+      case "ip":
+        return 'IP'
+      case "pass":
+        return 'Senha'
+      case "time":
+        return 'Hora'
+      case "date":
+        return 'Data'
+      case "datetime":
+        return 'Data e Hora'
+      case "percent":
+        return 'Porcentagem'
+      case "money":
+        return 'Dinheiro'
+      case "color":
+        return 'Cor'
+      case "slider":
+      case "checkbox":
+      default:
+        return '' 
+    }
   }
 
-  export function getNotInputTypes(): InputTypes[] {
-    return [
-      'image',
-      'file',
-      'checkbox',
-      'slider',
-      'color',      
-    ]
+  export function getTypes(type:'digits'|'number'|'text'|'others'|'all'): InputTypes[]{
+    switch(type){
+      case "all":
+        return ["email","phone","cpf","cnpj","ip","pass","time","date","datetime","number","percent","money","color",
+          "slider","checkbox","file","image","text"]
+      case "text":
+        return ["email","phone","cpf","cnpj","ip","pass","time","date","datetime","number","percent","money","text"]
+      case "digits":
+        return ["money","number","percent","time","date","datetime","text"]
+      case "number":
+        return ["money","number","percent"]
+      case "others":
+        return ['image','file','checkbox','slider','color',]
+    }
   }
 }
 

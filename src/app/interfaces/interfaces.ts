@@ -57,6 +57,8 @@ type CustomReturn <Value, ReturnConfigList extends [any|Value[], any][]=[any[], 
   }[number]
 }[number]
 
+type Compare = -1|0|1
+
 type OptionalType<Type=string> = Type|undefined
 
 interface StateElement {
@@ -70,6 +72,7 @@ export {
   LockedParams,
   KeysOfType,
   InputFields,
+  Compare,
   OptionalType,
   StateElement,
 }
