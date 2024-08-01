@@ -108,6 +108,10 @@ export class LoteInputComponent implements DefaultImplements {
     }
   }
 
+  maskAdjustment(RawNgModel: any): any{
+    this.inputData.maskAdjust(RawNgModel)
+  }
+
   getInputData<T extends InputTypes>(type: T): InputDataReturn<T>{
     return this.inputData as InputDataReturn<T>
   }

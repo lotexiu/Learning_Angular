@@ -1,9 +1,19 @@
 namespace StringUtils {
 
+    /**
+   * Removes all non-digit characters from a string.
+   * @param value - The input string.
+   * @returns The string with only digits.
+   */
   export function onlyDigits(value: string): string {
     return value.replace(/\D/g, '')
   }
 
+    /**
+   * Formats a phone number according to the Brazilian standard.
+   * @param phone - The input phone number as a string.
+   * @returns The formatted phone number.
+   */
   export function formatPhone(phone: string) {
     let phoneOnlyDigits = onlyDigits(phone).slice(0, 13)
     let phoneSize = phoneOnlyDigits.length
@@ -24,6 +34,11 @@ namespace StringUtils {
     )
   }
 
+    /**
+   * Validates a CPF (Brazilian Individual Taxpayer Registry Number).
+   * @param cpf - The input CPF as a string.
+   * @returns True if the CPF is valid, false otherwise.
+   */
   export function isValidCPF(cpf: string): boolean {
     cpf = cpf.replace(/[\s.-]*/g, '');
     if (!cpf || cpf.length !== 11 || /^(.)\1+$/.test(cpf)) {
@@ -52,6 +67,11 @@ namespace StringUtils {
     );
   }
 
+    /**
+   * Validates a CNPJ (Brazilian Business Taxpayer Registry Number).
+   * @param cnpj - The input CNPJ as a string.
+   * @returns True if the CNPJ is valid, false otherwise.
+   */
   export function isValidCNPJ(cnpj: string): boolean {
     const weights: number[] = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
     const digits: string = onlyDigits(cnpj);
@@ -81,15 +101,31 @@ namespace StringUtils {
     return true;
   }
 
+    /**
+   * Validates an email address using a simple regex pattern.
+   * @param email - The input email address as a string.
+   * @returns True if the email is valid, false otherwise.
+   */
   export function isValidEmail(email: string): boolean {
     const emailRegex: RegExp = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/;
     return emailRegex.test(email);
   }
 
+    /**
+   * Capitalizes the first letter of a string.
+   * @param str - The input string.
+   * @returns The string with the first letter capitalized.
+   */
   export function capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1)
   }
 
+    /**
+   * Capitalizes the first letter of each word in a string.
+   * @param str - The input string.
+   * @param splitStr - The delimiter used to split the string into words.
+   * @returns The string with the first letter of each word capitalized.
+   */
   export function capitalizeAll(str: string, splitStr: string): string {
     return str.split(splitStr).map((strPart: string): string => capitalize(strPart)).join(splitStr)
   }

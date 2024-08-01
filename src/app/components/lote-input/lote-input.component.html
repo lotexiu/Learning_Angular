@@ -2,8 +2,8 @@
   [ngClass]="{'ng-invalid':!valid}"
   [gridTemplate]="gridTemplate"
 >
-<!-- [inputTransformFn]="makeSomeFixes" -->
-  <input [type]=inputData.inputType
+<input [type]=inputData.inputType
+    [inputTransformFn]="maskAdjustment"
     [prefix]="prefix||''"
     [suffix]="suffix||''"
     [dropSpecialCharacters]="inputData.dropMaskChars"

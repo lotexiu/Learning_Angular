@@ -41,18 +41,29 @@ class Time {
   toString(): string {
     return [this.hour, this.minutes, this.seconds].map((v: number): string => v.toString().padStart(2,'0')).join(':')
   }
-  castTimeTo(type: 'hour' | 'minutes' | 'seconds'): number {
-    switch (type) {
-      case "hour":
-        return ((this.hour)).plus((this.minutes).divide(60)).plus((this.seconds).divide(60, 60))
-      case "minutes":
-        return ((this.hour).multiply(60)).plus((this.minutes)).plus((this.seconds).divide(60))
-      case "seconds":
-        return ((this.hour).multiply(60, 60)).plus((this.minutes).multiply(60)).plus((this.seconds))
-      default:
-        return -1
-    }
+  /**
+ * Converts the current time instance to a specific time unit.
+ *
+ * @param type - The time unit to convert to. Can be either 'hour', 'minutes', or 'seconds'.
+ *
+ * @returns The converted time value.
+ *  - If `type` is 'hour', returns the total hours as a floating-point number.
+ *  - If `type` is 'minutes', returns the total minutes as a floating-point number.
+ *  - If `type` is 'seconds', returns the total seconds as a floating-point number.
+ *  - If `type` is not recognized, returns -1.
+ */
+castTimeTo(type: 'hour' | 'minutes' | 'seconds'): number {
+  switch (type) {
+    case "hour":
+      return ((this.hour)).plus((this.minutes).divide(60)).plus((this.seconds).divide(60, 60))
+    case "minutes":
+      return ((this.hour).multiply(60)).plus((this.minutes)).plus((this.seconds).divide(60))
+    case "seconds":
+      return ((this.hour).multiply(60, 60)).plus((this.minutes).multiply(60)).plus((this.seconds))
+    default:
+      return -1
   }
+}
 }
 
 class LocalDate {
@@ -93,9 +104,24 @@ class LocalDate {
   setDay(day: number): void {
     this.day = minMax(day, 1, 31)
   }
-  toString(format='pt-br', options?: Intl.DateTimeFormatOptions): string {
-    return this.toDate().toLocaleDateString(format, options)
-  }
+  /**
+ * Converts the LocalDate instance to a string representation using the provided format and options.
+ *
+ * @param format - The format to use for the date string. Defaults to 'pt-br'.
+ * @param options - Additional options for the date formatting.
+ *
+ * @returns A string representation of the LocalDate instance in the specified format.
+ *
+ * @example
+ * const date = new LocalDate(20, 10, 2022);
+ * console.log(date.toString()); // Output: "20/10/2022"
+ * console.log(date.toString('en-US')); // Output: "10/20/2022"
+ * console.log(date.toString('pt-br', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
+ * // Output: "quarta-feira, 20 de outubro de 2022"
+ */
+toString(format='pt-br', options?: Intl.DateTimeFormatOptions): string {
+  return this.toDate().toLocaleDateString(format, options)
+}
   toDate(): Date {
     let formatedYear: string
     const date = new Date()
