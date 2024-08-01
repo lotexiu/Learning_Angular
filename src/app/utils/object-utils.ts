@@ -1,7 +1,7 @@
 namespace ObjectUtils {
 
   export function isNull(value: any, ...customNullValues: any[]): boolean {
-    if (customNullValues.includes(value)) return true
+    if (customNullValues.map((v: any): string=>JSON.stringify(v)).includes(JSON.stringify(value))) return true
     return ![0,'',false].includes(value) && !value
   }
 
