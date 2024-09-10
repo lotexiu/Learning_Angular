@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "update": "rm -rf node_modules && npm upgrade && npm install",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

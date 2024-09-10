@@ -7,13 +7,14 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <lote-input
-        [required]="true"
-        [min]="'2/2/2002'"
-        [max]="'20/10/2020'"
-        type="date"
-        title="Teste de input">        
+      <lote-input 
+        ngDefaultControl
+        type="email" 
+        title="Teste de input"
+        [(ngModel)]="ngModel"
+      >
       </lote-input>
+      {{ngModel}}
     </div>
   </div>
   <div class="row">

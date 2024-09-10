@@ -19,6 +19,7 @@ import { Meta } from '@angular/platform-browser';
 })
 export class AppComponent implements OnInit {
   darkTheme: boolean = true
+  ngModel: any;
 
   constructor(private meta: Meta) { }
 

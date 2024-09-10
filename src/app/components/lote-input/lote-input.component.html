@@ -2,7 +2,13 @@
   [ngClass]="{'ng-invalid':!valid}"
   [gridTemplate]="gridTemplate"
 >
-<input [type]=inputData.inputType
+<input [loteError]="!valid" [loteErrorMessage]="errorMessage"
+  [type]=inputData.inputType
+  [(ngModel)]="ngModel"
+  (ngModelChange)="onNgModelChange()"
+>
+
+<!-- <input [type]=inputData.inputType
     [inputTransformFn]="maskAdjustment"
     [prefix]="prefix||''"
     [suffix]="suffix||''"
@@ -14,9 +20,7 @@
     [(ngModel)]="ngModel"
     (ngModelChange)="onNgModelChange()"
     [mask]="getMask()"
-    [loteError]="!valid"
-    [loteErrorMessage]="errorMessage"
-  >
+  > -->
   <div id="lote-input-message">
     {{inputData.invalidMessage || errorMessage || '‎'}}
   </div>
