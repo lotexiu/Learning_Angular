@@ -1,31 +1,41 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ComponentUtils } from '../../utils/component-utils';
 
 @Directive({
   selector: '[mask]',
-  standalone: true
+  standalone: true,
+  providers: [
+    ComponentUtils.ngValueAcessor(LoteMaskDirective)
+  ]
 })
-export class LoteMaskDirective {
+export class LoteMaskDirective implements ControlValueAccessor {
   @Input() ngModelChange?: Function;
   
   constructor(
     private el: ElementRef<HTMLElement>
   ) {
-    el.nativeElement.onkeydown = this.onInput
+    el.nativeElement.onkeydown = ComponentUtils.λ(this, 'onInput')
+  }
+  registerOnChange(fn: any): void {}
+  setDisabledState?(isDisabled: boolean): void {}
+  registerOnTouched(fn: any): void {}
+
+  writeValue(obj: any): void {
+    console.log(obj)
   }
 
-  onInput = (e: KeyboardEvent) =>{
-    console.log(e)
+  onInput(e: KeyboardEvent){    
     e.preventDefault()
-    console.log(this.el)
     let target: HTMLInputElement = this.el.nativeElement as HTMLInputElement;
     target.value = 's'
 
-    const newEvent = new InputEvent('input', {
+    const newEvent = new KeyboardEvent('input', {
+      ...e,
       bubbles: true,
       cancelable: true,
     });
-
-    target.dispatchEvent(newEvent)
+    // target.dispatchEvent(newEvent)
   }
 
 }

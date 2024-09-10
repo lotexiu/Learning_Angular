@@ -64,7 +64,6 @@ export class LoteInputComponent implements DefaultImplements {
         this.onDebounce()
       });
     this.updateSettings()
-    this.onNgModelChange()
   }
 
   ngAfterViewInit(): void {
@@ -72,8 +71,7 @@ export class LoteInputComponent implements DefaultImplements {
   }
 
   onNgModelChange(): void {
-    console.log('a')
-    this.updateSettings()    
+    console.log('b')
     this.valid = this.inputData.isValid(this.ngModel) && isNull(this.errorMessage, '')
     this.gridTemplate.row!.size![1] = this.valid ? '0fr' : '1fr'
   }
@@ -94,8 +92,9 @@ export class LoteInputComponent implements DefaultImplements {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('b')
+    console.log('a')
     this.updateSettings()
+    this.onNgModelChange()
   }
 
   updateSettings(): void {
