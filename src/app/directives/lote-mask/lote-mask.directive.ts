@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, HostBinding, HostListener, Input, output, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ComponentUtils } from '../../utils/component-utils';
 import { EventUtils, KeyboardEventData } from '../../utils/event/event-utils';
@@ -11,8 +11,8 @@ import { EventUtils, KeyboardEventData } from '../../utils/event/event-utils';
   ]
 })
 export class LoteMaskDirective implements ControlValueAccessor {
-  @HostBinding('ngModel')
-  private ngModel: any
+  @Input() ngModel: any = null;
+  @Output() ngModelChange = new EventEmitter<number>();
 
   private onChange!: (value: any)=> void;
   
@@ -20,25 +20,32 @@ export class LoteMaskDirective implements ControlValueAccessor {
   constructor(
     private el: ElementRef<HTMLElement>
   ) {
-    el.nativeElement.onkeydown = EventUtils.onKeyboardEvent(this,"onInput")
+    el.nativeElement.onbeforeinput = EventUtils.onKeyboardEvent(this,"onInput")
   }
   registerOnChange(fn: any): void {
     this.onChange = fn
   }
   setDisabledState?(isDisabled: boolean): void {}
   registerOnTouched(fn: any): void {
-    console.log('touch')
+    // console.log('touch')
   }
 
   writeValue(obj: any): void {
-    console.log('write')
+    // console.log('write')
   }
 
-  onInput(evt: KeyboardEventData){    
-    let target: HTMLInputElement = this.el.nativeElement as HTMLInputElement;
+  onInput(evt: InputEvent){    
+    console.log(evt)
+    // const test: any = navigator
+    // let target: HTMLInputElement = this.el.nativeElement as HTMLInputElement;
+    // test.keyboard.getLayoutMap().then((v: any)=>{
+    //   console.log(v.get(evt.code))
+    // })
+
+    // console.log(target)
     // target.dispatchEvent(new Event('keydown', {...evt}))
-    target.value = 's'
-    console.log(this.ngModel)
+    // target.value = 's'
+    // console.log(this.ngModel)
     // this.onChange('')
   }
 

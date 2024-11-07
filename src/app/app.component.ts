@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
     this.meta.addTag({ name: 'color-scheme', content: '' })
     this.setTheme()
 
-    setTimeout(()=>this.ngModel=1, 2000)
+    // setTimeout(()=>this.ngModel=1, 2000)
   }
 
   switchTheme() {

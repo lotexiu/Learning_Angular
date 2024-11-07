@@ -27,10 +27,10 @@ class KeyboardEventData{
   public get view(): Window|null {return this.event.view}
 
   public get code(): string {
-    if (this.event.code.length == 1){
-      return this.event.code
-    }
-    return ""
+    return this.event.code
+    // if (this.event.code.length == 1){
+    // }
+    // return ""
   }
   public preventDefault(): void {this.event.preventDefault()}
   public stopPropagation(): void {this.event.stopPropagation()}
@@ -38,11 +38,14 @@ class KeyboardEventData{
 }
 
 namespace EventUtils {
-  export function onKeyboardEvent<T>(_this: Class<T>, call: string): onKeyboardEvent {
-    return (evt: KeyboardEvent): void => {
-      evt.preventDefault()
-      _this[call](new KeyboardEventData(evt))
+  export function onKeyboardEvent<T, R>(_this: Class<T>, call: string): R {
+    const funcEvent: any = (evt: Event): void => {
+      if (evt.cancelable){
+        evt.preventDefault()
+      }
+      _this[call](evt)
     }
+    return funcEvent as R
   }
 }
 
