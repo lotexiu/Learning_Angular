@@ -117,5 +117,7 @@ export {
   Last,
   CompareResult,
   ArrayType,
-  Function
+  Function,
+  Capitalize,
+  ConcatStrIntoFunctions,
 }
