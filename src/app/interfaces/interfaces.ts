@@ -57,15 +57,52 @@ type CustomReturn <Value, ReturnConfigList extends [any|Value[], any][]=[any[], 
   }[number]
 }[number]
 
-type Compare = -1|0|1
+type Never<T extends null|never = null> = T
 
-type OptionalType<Type=string> = Type|undefined
+type TypeCompare = boolean|null;
 
-interface StateElement {
-  attributes?: any
-  style?: CSSStyleDeclaration
-  html?: string
-}
+type Nullable<Type=any> = Type|undefined|null
+
+type First<T extends any[], _nv extends Never=never> = T extends [infer Rest, ...infer Last] ? Rest : _nv;
+
+type Last<T extends any[], _nv extends Never=never> = T extends [...infer Rest, infer Last] ? Last : _nv;
+
+type CompareResult<T extends TypeCompare = Never> = 
+  T extends true ? 1 :
+  T extends false ? 0 :
+  -1
+
+type Compare = -1|0|1  
+
+type ArrayType<
+  Types = any[],
+  Inf extends boolean = false,
+  InfType = Never,
+  _nv extends Never = never
+> = [
+  ...Types extends any[] ? Types : [Types],
+  ...Inf extends true ? InfType extends Never ? Types extends any[] ? 
+    Last<Types, _nv>[] : Types[] : InfType[] : []
+]
+
+type Function<
+  Types extends any[] = any[],
+  Inf extends boolean = false,
+  InfType = any
+> = (...args: ArrayType<Types,Inf,InfType>) => void
+
+/** Coloca o primeiro caracter da string recebida em maiúsculo. */
+type Capitalize<S extends string> = 
+  S extends `${infer First}${infer Rest}` ? 
+    `${Uppercase<First>}${Rest}`: 
+    S;
+
+/** Concatena o prefixo e capitaliza a primeira letra dos métodos */
+type ConcatStrIntoFunctions<Base, Prefix extends string> = {
+  [Key in keyof Base as Key extends string
+    ? `${Prefix}${Capitalize<Key>}`
+    : never]: Base[Key];
+};
 
 export { 
   CustomReturn,
@@ -73,6 +110,12 @@ export {
   KeysOfType,
   InputFields,
   Compare,
-  OptionalType,
-  StateElement,
+  Never,
+  TypeCompare,
+  Nullable,
+  First,
+  Last,
+  CompareResult,
+  ArrayType,
+  Function
 }
