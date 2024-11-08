@@ -25,13 +25,8 @@ class KeyboardEventData{
   public get timeStamp(): number {return this.event.timeStamp}
   public get type(): string {return this.event.type}
   public get view(): Window|null {return this.event.view}
-
-  public get code(): string {
-    return this.event.code
-    // if (this.event.code.length == 1){
-    // }
-    // return ""
-  }
+  public get code(): string {return this.event.code}
+  
   public preventDefault(): void {this.event.preventDefault()}
   public stopPropagation(): void {this.event.stopPropagation()}
   public stopImmediatePropagation(): void {this.event.stopImmediatePropagation()}

@@ -71,7 +71,6 @@ export class LoteInputComponent implements DefaultImplements {
   }
 
   onNgModelChange(): void {
-    console.log('b')
     this.valid = this.inputData.isValid(this.ngModel) && isNull(this.errorMessage, '')
     this.gridTemplate.row!.size![1] = this.valid ? '0fr' : '1fr'
   }
@@ -92,7 +91,6 @@ export class LoteInputComponent implements DefaultImplements {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('a')
     this.updateSettings()
     this.onNgModelChange()
   }

@@ -2,6 +2,8 @@ import { Directive, ElementRef, EventEmitter, HostBinding, HostListener, Input, 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ComponentUtils } from '../../utils/component-utils';
 import { EventUtils, KeyboardEventData } from '../../utils/event/event-utils';
+import { transition } from '@angular/animations';
+import { deepCopy, isNull, json } from '../../utils/object-utils';
 
 @Directive({
   selector: '[mask]',
@@ -11,16 +13,14 @@ import { EventUtils, KeyboardEventData } from '../../utils/event/event-utils';
   ]
 })
 export class LoteMaskDirective implements ControlValueAccessor {
-  @Input() ngModel: any = null;
-  @Output() ngModelChange = new EventEmitter<number>();
-
+  // @Input() ngModel: any = null;
+  // @Output() ngModelChange = new EventEmitter<string>();
   private onChange!: (value: any)=> void;
-  
   
   constructor(
     private el: ElementRef<HTMLElement>
   ) {
-    el.nativeElement.onbeforeinput = EventUtils.onKeyboardEvent(this,"onInput")
+    // el.nativeElement.onbeforeinput = EventUtils.onKeyboardEvent(this,"onInput")
   }
   registerOnChange(fn: any): void {
     this.onChange = fn
@@ -31,22 +31,25 @@ export class LoteMaskDirective implements ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    // console.log('write')
+    this.applyMask(obj)
   }
 
   onInput(evt: InputEvent){    
-    console.log(evt)
-    // const test: any = navigator
-    // let target: HTMLInputElement = this.el.nativeElement as HTMLInputElement;
-    // test.keyboard.getLayoutMap().then((v: any)=>{
-    //   console.log(v.get(evt.code))
-    // })
+    if (evt.isTrusted){
+      const input = evt.target as HTMLInputElement
+      const newValue = `${input.value}${(evt.data || '')}`
+      this.applyMask(newValue, true)
+    }
+  }
 
-    // console.log(target)
-    // target.dispatchEvent(new Event('keydown', {...evt}))
-    // target.value = 's'
-    // console.log(this.ngModel)
-    // this.onChange('')
+  applyMask(value?: string, triggerOnChange: boolean = false): void{
+    const input = this.el.nativeElement as HTMLInputElement
+    if (!isNull(value)){
+      input.value = value
+    }
+    if (this.onChange && triggerOnChange){
+      this.onChange(value)
+    }
   }
 
 }

@@ -11,11 +11,14 @@ lote-border{
   $primary: none;
   $tertiary: none;
   $error: none;
+  $color: none;
   @if mat.get-theme-type($theme) == dark {
+    $color: white;
     $primary: mat.get-theme-color($theme, primary, 30);
     $tertiary: mat.get-theme-color($theme, tertiary, 50);
     $error: mat.get-theme-color($theme, error, 50);
   } @else {
+    $color: black;
     $primary: mat.get-theme-color($theme, primary, 80);
     $tertiary: mat.get-theme-color($theme, tertiary, 40);
     $error: mat.get-theme-color($theme, error, 40);
@@ -23,6 +26,7 @@ lote-border{
   lote-input{
     lote-border{
       input{
+        color: $color;
         background: none;
         border: none;
         outline: 0;

@@ -2,6 +2,7 @@ import { Component, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { componentImports } from './imports/import';
 import { Meta } from '@angular/platform-browser';
+import { themeUtils } from './utils/theme-utils';
 
 @Component({
   selector: 'app-root',
@@ -18,37 +19,41 @@ import { Meta } from '@angular/platform-browser';
 
 })
 export class AppComponent implements OnInit {
-  darkTheme: boolean = true
+  theme!: string
+  value!: boolean
   ngModel: any;
 
   constructor(private meta: Meta) { }
 
   ngOnInit(): void {
-    document.body.classList.add('mat-app-background', 'mat-typography')
-    this.meta.addTag({ name: 'theme-color', content: '' })
-    this.meta.addTag({ name: 'color-scheme', content: '' })
-    this.setTheme()
+    // setTimeout(()=>{
+      document.body.classList.add('mat-app-background', 'mat-typography')
+      // this.meta.addTag({ name: 'theme-color', content: '' })
+      // this.meta.addTag({ name: 'color-scheme', content: '' })
 
-    // setTimeout(()=>this.ngModel=1, 2000)
+      themeUtils.initTheme()
+      this.theme = themeUtils.getCurrentTheme()
+      if (this.theme == 'dark') {
+        this.value = true
+      }
+    // })
+    setTimeout(()=>this.ngModel=1, 2000)
   }
 
   switchTheme() {
-    this.darkTheme = !this.darkTheme
-    this.setTheme()
+    themeUtils.setTheme(this.value ? 'dark' : 'light')
+    // this.darkTheme = !this.darkTheme
+    // this.setTheme()
   }
 
   private setTheme() {
-    if (this.darkTheme) {
-      document.body.classList.add('dark')
-      document.body.classList.remove('light')
-    } else {
-      document.body.classList.add('light')
-      document.body.classList.remove('dark')
-    }
-    let hex = this.darkTheme ? '#000000' : '#ffffff'
-    let theme = this.darkTheme ? 'dark' : 'light'
-    this.meta.updateTag({ name: 'theme-color', content: hex });
-    this.meta.updateTag({ name: 'color-scheme', content: theme });
+    // if (this.darkTheme) {
+    //   document.body.classList.add('dark')
+    //   document.body.classList.remove('light')
+    // } else {
+    //   document.body.classList.add('light')
+    //   document.body.classList.remove('dark')
+    // }
   }
 
   title = 'Something About Poyo';

@@ -1,14 +1,14 @@
-import { ConcatStrIntoFunctions } from "../interfaces/interfaces"
+import { ConcatStrIntoFunctions, CustomReturn } from "../interfaces/interfaces"
 import { StringUtils } from "./string-utils"
 
 namespace ObjectUtils {
 
-  export function isNull(value: any, ...customNullValues: any[]): boolean {
-    if (customNullValues.map((v: any): string=>JSON.stringify(v)).includes(JSON.stringify(value))) return true
-    return ![0,'',false].includes(value) && !value
+  export function isNull<T>(value: T, ...customNullValues: any[]): value is T {
+    if (customNullValues.map((v: any): string=>JSON.stringify(v)).includes(JSON.stringify(value))) return true as any
+    return ![0,'',false].includes(value as any) && !value as any
   }
 
-  export function isNullOrUndefined(value: any): boolean {
+  export function isNullOrUndefined<T>(value: T): value is T {
     return value == null || value == undefined
   }
 
@@ -31,6 +31,20 @@ namespace ObjectUtils {
     return result;
   }
 
+  export function deepCopy(value: any) {
+    const newObj: any = {}
+    for (let key in value){
+      if (value[key] && 
+          typeof value[key] == 'object' &&
+          !Object.keys(value[key]).includes('__ngContext__')){
+        newObj[key] = deepCopy(value[key])
+      }else{
+        newObj[key] = value[key]
+      }
+    }
+    return newObj
+  }
+
   export function json(obj: any): string {
     return JSON.stringify(obj)
   }
@@ -42,6 +56,7 @@ const {
   isNullOrUndefined,
   concatStrIntoFunctions,
   json,
+  deepCopy
 } = ObjectUtils
 
 export {
@@ -51,5 +66,6 @@ export {
   equals,
   concatStrIntoFunctions,
   json,
+  deepCopy
 }
 

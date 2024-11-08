@@ -1,7 +1,6 @@
 @use "@angular/material" as mat;
 @use './app/scss/lote-theme' as lote;
 
-mat.$theme-ignore-duplication-warnings: true;
 @include mat.core();
 
 
@@ -21,6 +20,10 @@ $dark-theme: mat.define-theme((
   ),
 ));
 
+* {
+  // transition: background 1s;
+}
+
 html,
 body {
   height: 100%;
@@ -34,16 +37,11 @@ html{
     padding: 15px;
     font-family: Roboto, "Helvetica Neue", sans-serif;
   
-    &.light {
-      @include mat.all-component-themes($light-theme);
-      @include lote.components($light-theme);
-      // @include baseLoteTheme($light-theme)
-    }
+    @include mat.all-component-themes($light-theme);
+    @include lote.components($light-theme);
     &.dark {
-      @include mat.all-component-themes($dark-theme);
+      @include mat.all-component-colors($dark-theme);
       @include lote.components($dark-theme);
-      // background: mat.get-theme-color($dark-theme, primary, 20);
-      // background: mat.get-theme-color($dark-theme, tertiary, 50);
     }
   }
 }

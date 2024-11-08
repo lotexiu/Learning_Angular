@@ -1,8 +1,8 @@
 <main>
   <div class="row">
-    <div class="col-md-11"></div>
+    <div class="col-md-8"></div>
     <div class="col-md-1">
-      <mat-slide-toggle (click)="switchTheme()">{{darkTheme ? 'Light':'Dark'}}</mat-slide-toggle>
+      <mat-slide-toggle [(ngModel)]="value" (click)="switchTheme()">{{theme}}</mat-slide-toggle>
     </div>
   </div>
   <div class="row">
