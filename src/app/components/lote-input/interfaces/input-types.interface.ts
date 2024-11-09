@@ -1,4 +1,4 @@
-import { CustomReturn } from "../../../interfaces/interfaces"
+import { CustomReturn } from "../../../../utils/interfaces/interfaces"
 
 type InputTypes =
 "text"|

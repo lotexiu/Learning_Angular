@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { Subject, debounceTime } from 'rxjs';
-import { componentImports } from '../../imports/import';
-import { DefaultImplements } from '../../interfaces/angular.interfaces';
 import { InputDataReturn, InputDataTypes, InputTypes } from './interfaces/input-types.interface';
 import { InputUtils } from './utils/input-utils';
 import { GridConfig } from '../lote-border/interfaces/grid-template.interface';
-import { isNull } from '../../utils/object-utils';
+import { componentImports } from '../../../utils/imports/import';
+import { DefaultImplements } from '../../../utils/interfaces/angular.interfaces';
+import { isNull } from '../../../utils/object-utils';
 
 @Component({
   selector: 'lote-input',

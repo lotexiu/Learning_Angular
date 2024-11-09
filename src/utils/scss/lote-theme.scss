@@ -1,5 +1,5 @@
-@import './../components/lote-border/lote-border.component';
-@import './../components/lote-input/lote-input.component';
+@import './../../app/components/lote-border/lote-border.component';
+@import './../../app/components/lote-input/lote-input.component';
 
 $-border: linear-gradient(135deg, #606060, #a9a9a9);
 @function configure($border: linear-gradient(135deg, #606060, #a9a9a9)){

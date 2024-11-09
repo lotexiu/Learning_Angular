@@ -4,14 +4,14 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { LoteInputComponent } from "../components/lote-input/lote-input.component";
-import { ClickDirective } from "../directives/click/click.directive";
-import { IconDirective } from "../directives/icon/icon.directive";
-import { LoteError } from "../directives/lote-error/lote-error.directive";
-import { WritterAnimationDirective } from "../directives/writter-animation/writter-animation.directive";
-import { LoteBorderComponent } from "../components/lote-border/lote-border.component";
 import { FormsModule } from "@angular/forms";
-import { LoteMaskDirective } from "../directives/lote-mask/lote-mask.directive";
+import { IconDirective } from "../../app/directives/icon/icon.directive";
+import { ClickDirective } from "../../app/directives/click/click.directive";
+import { WritterAnimationDirective } from "../../app/directives/writter-animation/writter-animation.directive";
+import { LoteMaskDirective } from "../../app/directives/lote-mask/lote-mask.directive";
+import { LoteError } from "../../app/directives/lote-error/lote-error.directive";
+import { LoteBorderComponent } from "../../app/components/lote-border/lote-border.component";
+import { LoteInputComponent } from "../../app/components/lote-input/lote-input.component";
 
 const componentBaseImports = [
   MatButtonModule, // Uso de componentes do angular

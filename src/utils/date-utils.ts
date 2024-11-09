@@ -1,4 +1,4 @@
-import { Compare } from "../interfaces/interfaces"
+import { Compare } from "./interfaces/interfaces"
 import { minMax } from "./math-utils"
 
 class Time {

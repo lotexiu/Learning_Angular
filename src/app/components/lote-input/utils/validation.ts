@@ -1,8 +1,8 @@
-import { Compare, LockedParams } from "../../../interfaces/interfaces";
-import { LocalDate, Time } from "../../../utils/date-utils";
-import { betweenMinMax } from "../../../utils/math-utils";
-import { isNull } from "../../../utils/object-utils";
-import { isValidCNPJ, isValidCPF, isValidEmail } from "../../../utils/string-utils";
+import { LocalDate, Time } from "../../../../utils/date-utils";
+import { Compare, LockedParams } from "../../../../utils/interfaces/interfaces";
+import { betweenMinMax } from "../../../../utils/math-utils";
+import { isNull } from "../../../../utils/object-utils";
+import { isValidCNPJ, isValidCPF, isValidEmail } from "../../../../utils/string-utils";
 import { InputData, InputDataDigits, InputDataNumbers, InputTypes } from "../interfaces/input-types.interface";
 import { InputUtils } from "./input-utils";
 

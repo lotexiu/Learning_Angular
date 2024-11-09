@@ -1,4 +1,4 @@
-import { ConcatStrIntoFunctions, CustomReturn } from "../interfaces/interfaces"
+import { ConcatStrIntoFunctions } from "./interfaces/interfaces"
 import { StringUtils } from "./string-utils"
 
 namespace ObjectUtils {

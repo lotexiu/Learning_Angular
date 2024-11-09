@@ -1,4 +1,4 @@
-import { Compare } from "../interfaces/interfaces"
+import { Compare } from "./interfaces/interfaces"
 import { isNull } from "./object-utils"
 
 /**

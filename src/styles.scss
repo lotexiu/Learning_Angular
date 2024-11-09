@@ -1,5 +1,5 @@
 @use "@angular/material" as mat;
-@use './app/scss/lote-theme' as lote;
+@use './utils/scss/lote-theme' as lote;
 
 @include mat.core();
 

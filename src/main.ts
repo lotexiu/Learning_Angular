@@ -1,9 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
-import { capitalize, capitalizeAll } from './app/utils/string-utils';
-import { divide, minus, multiply, plus } from './app/utils/math-utils';
-import { isNull } from './app/utils/object-utils';
+import { capitalize, capitalizeAll } from './utils/string-utils';
+import { divide, minus, multiply, plus } from './utils/math-utils';
+import { isNull } from './utils/object-utils';
 
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));

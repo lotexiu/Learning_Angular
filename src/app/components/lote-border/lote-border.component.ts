@@ -1,9 +1,9 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, SimpleChanges } from '@angular/core';
-import { componentBaseImports } from '../../imports/import';
-import { DefaultImplements } from '../../interfaces/angular.interfaces';
+import { componentBaseImports } from '../../../utils/imports/import';
+import { DefaultImplements } from '../../../utils/interfaces/angular.interfaces';
 import { GridConfig, GridDimension } from './interfaces/grid-template.interface';
-import { InputFields } from '../../interfaces/interfaces';
-import { ObjectUtils } from '../../utils/object-utils';
+import { InputFields } from '../../../utils/interfaces/interfaces';
+import { ObjectUtils } from '../../../utils/object-utils';
 
 @Component({
   selector: 'lote-border',

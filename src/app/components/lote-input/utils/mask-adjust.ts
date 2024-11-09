@@ -1,5 +1,5 @@
-import { LockedParams } from "../../../interfaces/interfaces";
-import { isNull } from "../../../utils/object-utils";
+import { LockedParams } from "../../../../utils/interfaces/interfaces";
+import { isNull } from "../../../../utils/object-utils";
 import { InputData, InputDataDigits, InputTypes } from "../interfaces/input-types.interface";
 import { InputUtils } from "./input-utils";
 

@@ -1,8 +1,8 @@
 import { Component, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { componentImports } from './imports/import';
 import { Meta } from '@angular/platform-browser';
-import { themeUtils } from './utils/theme-utils';
+import { componentImports } from '../utils/imports/import';
+import { themeUtils } from '../utils/theme-utils';
 
 @Component({
   selector: 'app-root',

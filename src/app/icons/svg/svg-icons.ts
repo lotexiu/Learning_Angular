@@ -1,4 +1,4 @@
-import { LockedParams } from "../../interfaces/interfaces"
+import { LockedParams } from "../../../utils/interfaces/interfaces"
 
 type iconsName =
   "eye"|"eyeSlash"|"poo"
