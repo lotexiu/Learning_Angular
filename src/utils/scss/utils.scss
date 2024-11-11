@@ -1,0 +1,92 @@
+@function generate-selector-list($args...) {
+  $selector: null;
+  /* Percorrendo pelos lista de seletores */
+  @each $class in $args {
+    /* Transformando a lista de seletores em um unico seletor */
+    @if $selector == null {
+      $selector: $class
+    }
+    @else {
+      $selector: $selector+', '+$class;
+    }
+  }
+  /* Retornando resultado do seletor */
+  @return $selector;
+}
+
+@mixin generate-grid($precision, $maxCols, $sizes, $attrs) {
+  $selectors: null;
+
+  @for $i from 1 through length($sizes) {
+    $attr: nth($attrs, $i);
+    $size: nth($sizes, $i);
+
+    $selector: '&[cols~="#{$attr}"]';
+    @if $selectors == null {
+      $selectors: $selector
+    }
+    @else{
+      $selectors: $selectors + ', #{$selector}'
+    }    
+    #{$selector} {
+      grid-auto-columns: minmax(0px, $size);
+      grid-template-columns: repeat(#{$precision}, minmax(0px, $size));
+    }
+  }
+
+  #{generate-selector-list($selectors)}{
+    /* Criando codigos ignorados no @For por causa de duplicação de codigo */
+    [cols]{ 
+      /* cols=* > col=1 */
+      > [col~="1"]{
+        @for $part from 1 through 19 {
+          $percent: calc($part * 5);
+          &[pct="#{$percent}"]{
+            grid-column: 1 / span round($percent);
+          }
+        }
+      }
+      /* col=* > col=* &pct=100 */
+      > [col][pct="100"]{
+        grid-column: 1 / 100;
+      }
+      /* col=* > col=* &pct=0 */
+      > [col][pct="0"]{
+        display: none;
+      }
+    }
+
+    @for $i from 1 through $maxCols {
+      &[cols~="#{$i}"] {
+        $columnSize: calc($precision / $i);        
+        @for $column from 1 through $i {
+          > [col~="#{$column}"] {
+            $rawPos: calc($columnSize * ($column - 1));
+            $pos: round(max($rawPos,1));
+            grid-column: $pos / span round($columnSize);
+            /* 
+              evitando gerações de codigo para evitar duplicatas
+              cols = col (gera codigo duplicado)
+              col = 1    (gera codigo duplicado)
+              pct = 100% (gera codigo duplicado)
+              pct = 0%   (gera codigo duplicado)
+             */
+            @if $i != $column and $column > 1 {
+              @for $part from 1 through 19 {
+                $percent: calc($part * 5);
+                &[pct="#{$percent}"]{
+                  @if $i != 1 and $column != 1 {
+                    $rawPos: calc((($precision - $percent) / ($i - 1)) * ($column - 1));
+                    $pos: round(max($rawPos,1));
+                  }
+                  grid-column: $pos / span round($percent);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

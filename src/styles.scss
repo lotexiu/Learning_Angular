@@ -1,28 +1,23 @@
-@use "@angular/material" as mat;
-@use './utils/scss/lote-theme' as lote;
+// @use "@angular/material" as mat;
+// @use './utils/scss/lote-theme' as lote;
+@import "./utils/scss/utils";
 
-@include mat.core();
+// @include mat.core();
 
-
-
-$light-theme: mat.define-theme((
- color: (
-    theme-type: light,
-    primary: mat.$cyan-palette,
-    tertiary: mat.$blue-palette,
-  ),
-));
-$dark-theme: mat.define-theme((
- color: (
-    theme-type: dark,
-    primary: mat.$violet-palette,
-    tertiary: mat.$orange-palette,
-  ),
-));
-
-* {
-  // transition: background 1s;
-}
+// $light-theme: mat.define-theme((
+//  color: (
+//     theme-type: light,
+//     primary: mat.$cyan-palette,
+//     tertiary: mat.$blue-palette,
+//   ),
+// ));
+// $dark-theme: mat.define-theme((
+//  color: (
+//     theme-type: dark,
+//     primary: mat.$violet-palette,
+//     tertiary: mat.$orange-palette,
+//   ),
+// ));
 
 html,
 body {
@@ -36,18 +31,27 @@ html{
     margin: 0;
     padding: 15px;
     font-family: Roboto, "Helvetica Neue", sans-serif;
-  
-    @include mat.all-component-themes($light-theme);
-    @include lote.components($light-theme);
+
+    // @include mat.all-component-themes($light-theme);
+    // @include lote.components($light-theme);
     &.dark {
-      @include mat.all-component-colors($dark-theme);
-      @include lote.components($dark-theme);
+      // @include mat.all-component-colors($dark-theme);
+      // @include lote.components($dark-theme);
     }
   }
 }
+#{generate-selector-list(
+  '.grid',
+  '.grid-col',
+  '.grid-row',
+  '.grid-dense')} {
 
-.fas-icon{
-  svg{
-    height: 14px;
-  }
+    *{
+      transition: all 1s;
+    }
+    display: grid;
+
+    $sizes: auto, 0fr, 1fr, min-content, max-content;
+    $attrsValues: 'auto', '0fr', '1fr', 'min', 'max';
+    @include generate-grid(100, 12, $sizes, $attrsValues);    
 }
