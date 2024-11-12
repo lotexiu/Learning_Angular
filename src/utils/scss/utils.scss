@@ -101,15 +101,18 @@
   }
 
   [flex]{
-    transition: flex-basis 0.5s;
+    transition: flex-basis 0.5s, width 0.5s, height 0.5s;
+    text-wrap: nowrap;
+
     &[flex~="slow"]{
-      transition: flex-basis 1s;
+      transition: flex-basis 0.5s, width 0.5s, height 0.5s;
     }
     &[flex~="very-slow"]{
-      transition: flex-basis 2s;
+      transition: flex-basis 0.5s, width 0.5s, height 0.5s;
     }
     &[flex~="row"]{
       flex-flow: column;
+      width: 100%;
     }
     &[flex~="on"]{
       display: flex;
@@ -138,7 +141,6 @@
         }
       }
     }
-
   }
 }
 
