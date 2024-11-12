@@ -1,10 +1,12 @@
-<div flex>
-  <div>Logo</div>
-  <div flex="center">Component Name</div>
-  <mat-slide-toggle [(ngModel)]="value" (click)="switchTheme()">{{theme}}</mat-slide-toggle>
+<div>
+  <div flex topbar>
+    <div>Logo</div>
+    <div flex="center">Component Name</div>
+    <mat-slide-toggle [(ngModel)]="value" (click)="switchTheme()">{{theme}}</mat-slide-toggle>
+  </div>
+
+  <router-outlet></router-outlet>
 </div>
 
 
 
-
-<router-outlet></router-outlet>

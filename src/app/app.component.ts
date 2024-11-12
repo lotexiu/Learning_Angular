@@ -26,34 +26,19 @@ export class AppComponent implements OnInit {
   constructor(private meta: Meta) { }
 
   ngOnInit(): void {
-    // setTimeout(()=>{
-      document.body.classList.add('mat-app-background', 'mat-typography')
-      // this.meta.addTag({ name: 'theme-color', content: '' })
-      // this.meta.addTag({ name: 'color-scheme', content: '' })
+    document.body.classList.add('mat-app-background', 'mat-typography')
 
-      themeUtils.initTheme()
-      this.theme = themeUtils.getCurrentTheme()
-      if (this.theme == 'dark') {
-        this.value = true
-      }
-    // })
+    themeUtils.initTheme()
+    this.theme = themeUtils.getCurrentTheme()
+    if (this.theme == 'dark') {
+      this.value = true
+    }
     setTimeout(()=>this.ngModel=1, 2000)
   }
 
   switchTheme() {
-    themeUtils.setTheme(this.value ? 'dark' : 'light')
-    // this.darkTheme = !this.darkTheme
-    // this.setTheme()
-  }
-
-  private setTheme() {
-    // if (this.darkTheme) {
-    //   document.body.classList.add('dark')
-    //   document.body.classList.remove('light')
-    // } else {
-    //   document.body.classList.add('light')
-    //   document.body.classList.remove('dark')
-    // }
+    this.theme = this.value ? 'dark' : 'light'
+    themeUtils.setTheme(this.theme)
   }
 
   title = 'Something About Poyo';

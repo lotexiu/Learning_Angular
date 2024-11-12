@@ -32,6 +32,8 @@ html{
     padding: 15px;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 
+    transition: background 0.8s;
+
     @include mat.all-component-themes($light-theme);
     @include lote.components($light-theme);
     &.dark {
