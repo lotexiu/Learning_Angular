@@ -90,3 +90,68 @@
   }
 
 }
+
+@mixin flexStructure() {
+  *{
+    &:not([flex]>[flex]){
+      &[flex]{
+        display: flex;
+      }
+    }
+  }
+
+  [flex]{
+    transition: flex-basis 0.5s;
+    &[flex~="slow"]{
+      transition: flex-basis 1s;
+    }
+    &[flex~="very-slow"]{
+      transition: flex-basis 2s;
+    }
+    &[flex~="row"]{
+      flex-flow: column;
+    }
+    &[flex~="on"]{
+      display: flex;
+    }
+    &[flex~="center"]{
+      margin: auto;
+    }
+    &[flex~="right"]{
+      margin-left: auto;
+    }
+    &[flex~="adapt"]{
+      flex-grow: 1;
+    }
+    &[flex~="hide"]{
+      overflow: hidden;
+    }
+    @for $i from 0 through 100 {
+      &[flex~="#{$i}"]{
+        $pct: percentage(calc($i/100));
+        &[flex~="row"]{
+          width: $pct;
+        }
+        &:not([flex~="row"]){
+          flex-basis: $pct;
+          width: 100%;
+        }
+      }
+    }
+
+  }
+}
+
+// #{generate-selector-list(
+//   '.grid',
+//   '.grid-col',
+//   '.grid-row',
+//   '.grid-dense')} {
+//     *{
+//       transition: all 1s;
+//     }
+//     display: grid;
+//     $sizes: auto, 0fr, 1fr, min-content, max-content;
+//     $attrsValues: 'auto', '0fr', '1fr', 'min', 'max';
+//     @include generate-grid(100, 12, $sizes, $attrsValues);    
+// }
