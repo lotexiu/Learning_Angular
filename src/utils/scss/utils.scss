@@ -105,10 +105,10 @@
     text-wrap: nowrap;
 
     &[flex~="slow"]{
-      transition: flex-basis 0.5s, width 0.5s, height 0.5s;
+      transition: flex-basis 1s, width 1s, height 1s;
     }
     &[flex~="very-slow"]{
-      transition: flex-basis 0.5s, width 0.5s, height 0.5s;
+      transition: flex-basis 2s, width 2s, height 2s;
     }
     &[flex~="row"]{
       flex-flow: column;
