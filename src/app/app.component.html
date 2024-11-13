@@ -1,11 +1,17 @@
 <div>
-  <div flex topbar>
-    <div>Logo</div>
-    <div flex="center">Component Name</div>
-    <mat-slide-toggle [(ngModel)]="value" (click)="switchTheme()">{{theme}}</mat-slide-toggle>
+  <div flex pad="10 left right" style="background: var(--bg);">
+    <div flex="v-center">LogoIcon</div>
+    <div flex="center">{{title}}</div>
+    <mat-slide-toggle [(ngModel)]="value" (change)="updateTheme()">
+      {{theme}}
+    </mat-slide-toggle>
   </div>
 
-  <router-outlet></router-outlet>
+  <div flex="row on grow" h="max-father" pad="10 bottom left right" style="height: 0px;">
+    <div flex="grow" h="max-father">
+      <router-outlet/>
+    </div>
+  </div>
 </div>
 
 

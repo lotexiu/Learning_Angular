@@ -1,8 +1,12 @@
 import { Component, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, RoutesRecognized } from '@angular/router';
 import { Meta } from '@angular/platform-browser';
 import { componentImports } from '../utils/imports/import';
 import { themeUtils } from '../utils/theme-utils';
+import { lambda } from '../utils/component-utils';
+import { Nullable } from '../utils/interfaces/interfaces';
+import { _Route } from '../utils/route/route';
+import { RouteUtils } from '../utils/route/route-utils';
 
 @Component({
   selector: 'app-root',
@@ -19,27 +23,43 @@ import { themeUtils } from '../utils/theme-utils';
 
 })
 export class AppComponent implements OnInit {
+  public currentRoute!: RoutesRecognized
+  public title: string = 'Main'
   theme!: string
   value!: boolean
-  ngModel: any;
+  // ngModel: any;
 
-  constructor(private meta: Meta) { }
+  constructor(
+    private router: Router,
+  ) {
+
+  }
 
   ngOnInit(): void {
-    document.body.classList.add('mat-app-background', 'mat-typography')
+    localStorage['title'] = this.title
+    this.router.events.subscribe(lambda(this, 'updateRoute'))
 
+    document.body.classList.add('mat-app-background', 'mat-typography')
     themeUtils.initTheme()
     this.theme = themeUtils.getCurrentTheme()
     if (this.theme == 'dark') {
       this.value = true
     }
-    setTimeout(()=>this.ngModel=1, 2000)
   }
+  
 
-  switchTheme() {
+  public updateTheme(): void {
     this.theme = this.value ? 'dark' : 'light'
     themeUtils.setTheme(this.theme)
   }
 
-  title = 'Something About Poyo';
+  private updateRoute(value: any): void {
+    if (value instanceof RoutesRecognized) {
+      this.currentRoute = value
+      const route: Nullable<_Route> = RouteUtils.getRoute(value.url)
+      if (route) {
+        this.title = route.subTitle!
+      }
+    }
+  }
 }
