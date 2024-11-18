@@ -1,18 +1,23 @@
-<div>
-  <div flex pad="10 left right" style="background: var(--bg);">
-    <div flex="v-center">LogoIcon</div>
-    <div flex="center">{{title}}</div>
+<div flex="r 100">
+  <!-- HotBar -->
+  <div flex="on ns b" pad="5 all">
+    <div flex="vc">LogoIcon</div>
+    <div flex="c">{{title}}</div>
     <mat-slide-toggle [(ngModel)]="value" (change)="updateTheme()">
       {{theme}}
     </mat-slide-toggle>
   </div>
-
-  <div flex="row on grow" h="max-father" pad="10 bottom left right" style="height: 0px;">
-    <div flex="grow" h="max-father">
+  <!-- Main/Routes -->
+  <div flex="on r g 60" pad="10 all" p720p>
+    <div flex="on">
+      <div flex="b g">
+        sadsadsa
+      </div>
+      <div flex="on b g nscl">
+        <div>input</div>
+        <div>input</div>
+      </div>
       <router-outlet/>
     </div>
   </div>
 </div>
-
-
-

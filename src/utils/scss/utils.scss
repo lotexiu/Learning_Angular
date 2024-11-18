@@ -6,140 +6,80 @@
   @each $class in $args {
     /* Transformando a lista de seletores em um unico seletor */
     @if $selector == null {
-      $selector: $class
-    }
-    @else {
-      $selector: $selector+', '+$class;
+      $selector: $class;
+    } @else {
+      $selector: $selector + ", " + $class;
     }
   }
   /* Retornando resultado do seletor */
   @return $selector;
 }
 
-@mixin generate-grid($precision, $maxCols, $sizes, $attrs) {
-  $selectors: null;
+@function custom-color-mix($color1, $percent1, $color2, $percent2) {
+  @return color-mix(in srgb, $color1 $percent1, $color2 $percent2);
+}
 
-  @for $i from 1 through length($sizes) {
-    $attr: nth($attrs, $i);
-    $size: nth($sizes, $i);
-
-    $selector: '&[cols~="#{$attr}"]';
-    @if $selectors == null {
-      $selectors: $selector
-    }
-    @else{
-      $selectors: $selectors + ', #{$selector}'
-    }    
-    #{$selector} {
-      grid-auto-columns: minmax(0px, $size);
-      grid-template-columns: repeat(#{$precision}, minmax(0px, $size));
-    }
+@mixin angularMaterial($theme) {
+  $primary: none;
+  $accent: none;
+  $warn: none;
+  $error: none;
+  @if mat.get-theme-type($theme) == dark {
+    $primary: mat.get-theme-color($theme, primary, default);
+    $accent: mat.get-theme-color($theme, accent, default);
+    $warn: mat.get-theme-color($theme, warn, default);
+  } @else {
+    $primary: mat.get-theme-color($theme, primary, default);
+    $accent: mat.get-theme-color($theme, accent, default);
+    $warn: mat.get-theme-color($theme, warn, default);
   }
 
-  #{generate-selector-list($selectors)}{
-    /* Criando codigos ignorados no @For por causa de duplicação de codigo */
-    [cols]{ 
-      /* cols=* > col=1 */
-      > [col~="1"]{
-        @for $part from 1 through 19 {
-          $percent: calc($part * 5);
-          &[pct="#{$percent}"]{
-            grid-column: 1 / span round($percent);
-          }
-        }
-      }
-      /* col=* > col=* &pct=100 */
-      > [col][pct="100"]{
-        grid-column: 1 / 100;
-      }
-      /* col=* > col=* &pct=0 */
-      > [col][pct="0"]{
-        display: none;
-      }
+  mat-icon {
+    transition: transform 0.2s;
+    &:hover{
+      transform: scale(1.3);
     }
-
-    @for $i from 1 through $maxCols {
-      &[cols~="#{$i}"] {
-        $columnSize: calc($precision / $i);        
-        @for $column from 1 through $i {
-          > [col~="#{$column}"] {
-            $rawPos: calc($columnSize * ($column - 1));
-            $pos: round(max($rawPos,1));
-            grid-column: $pos / span round($columnSize);
-            /* 
-              evitando gerações de codigo para evitar duplicatas
-              cols = col (gera codigo duplicado)
-              col = 1    (gera codigo duplicado)
-              pct = 100% (gera codigo duplicado)
-              pct = 0%   (gera codigo duplicado)
-             */
-            @if $i != $column and $column > 1 {
-              @for $part from 1 through 19 {
-                $percent: calc($part * 5);
-                &[pct="#{$percent}"]{
-                  @if $i != 1 and $column != 1 {
-                    $rawPos: calc((($precision - $percent) / ($i - 1)) * ($column - 1));
-                    $pos: round(max($rawPos,1));
-                  }
-                  grid-column: $pos / span round($percent);
-                }
-              }
-            }
-          }
-        }
-      }
+    &:focus{
+      outline: none;
+      fill   : $primary;
+      color  : $primary;
+    }
+    &:active{
+      fill : $accent;
+      color: $accent;
     }
   }
 }
 
-@mixin stickyStructure($theme) {
-  $primary: none;
-  $tertiary: none;
-  $background: none;
-  @if mat.get-theme-type($theme) == dark {
-    $primary: mat.get-theme-color($theme, primary, 30);
-    $tertiary: mat.get-theme-color($theme, tertiary, 50);
-    $background: #ffffffcc;
-  } @else {
-    $primary: mat.get-theme-color($theme, primary, 80);
-    $tertiary: mat.get-theme-color($theme, tertiary, 40);
-    $background: #000000cc;
-  }
-
-  [sticky]{
+@mixin stickyStructure() {
+  [sticky] {
     z-index: 1;
     position: sticky;
+    padding: 5px;
     top: 0;
-    color: opacify(invert($background), 1);
-    *{
-      color: opacify(invert($background), 1);      
-    }
-    &::after{
+    &::after {
       content: "";
       position: absolute;
       inset: 0;
       z-index: -1;
-      background: $background;
-      mask: linear-gradient(to top,rgba(0,0,0,0) 0%, $background 33%, $background 66%, rgba(0,0,0,0));
-      backdrop-filter: blur(5px);
+      border-radius: 5px;
+      background: rgba(0, 0, 0, 0.3);
+      mask: linear-gradient(to top, transparent, black 50%);
+      backdrop-filter: blur(3px);
     }
 
-    &[sticky~="top"]{
-      mask: linear-gradient(to top,rgba(0,0,0,0) 0%, $background 33%, $background 66%, rgba(0,0,0,0));
-      top: 0;
-    }
-    &[sticky~="bottom"]{
-      mask: linear-gradient(to bottom,rgba(0,0,0,0) 0%, $background 33%, $background 66%, rgba(0,0,0,0));
+    &[sticky~="bottom"] {
+      mask: linear-gradient(to bottom, transparent, black 50%);
       top: auto;
       bottom: 0;
     }
-    &[sticky~="left"]{
-      mask: linear-gradient(to left,rgba(0,0,0,0) 0%, $background 33%, $background 66%, rgba(0,0,0,0));
+    &[sticky~="left"] {
+      mask: linear-gradient(to left, transparent, black 50%);
       top: auto;
       left: 0;
     }
-    &[sticky~="right"]{
-      mask: linear-gradient(to right,rgba(0,0,0,0) 0%, $background 33%, $background 66%, rgba(0,0,0,0));
+    &[sticky~="right"] {
+      mask: linear-gradient(to right, transparent, black 50%);
       top: auto;
       right: 0;
     }
@@ -147,138 +87,203 @@
 }
 
 @mixin padStructure($default) {
-  [pad]{
-    &[pad=""]{
-      padding: $default;
-    }
-    &[pad~="bottom"]{
-      padding-bottom: $default;
-    }
-    &[pad~="top"]{
-      padding-top: $default;
-    }
-    &[pad~="left"]{
-      padding-left: $default; 
-    }
-    &[pad~="right"]{
-      padding-right: $default;
-    }
+  [pad~="all"] {
+    padding: $default;
+  }
 
-    @for $i from 0 through 20 {
-      &[pad~="#{$i}"]{
-        &[pad~="bottom"]{
-          padding-bottom: #{$i}px;
-        }
-        &[pad~="top"]{
-          padding-top: #{$i}px;
-        }
-        &[pad~="left"]{
-          padding-left: #{$i}px;
-        }
-        &[pad~="right"]{
-          padding-right: #{$i}px;
-        }
+  [pad~="bottom"],
+  [pad~="bt"] {
+    padding-bottom: $default;
+  }
+  [pad~="top"],
+  [pad~="tp"] {
+    padding-top: $default;
+  }
+  [pad~="left"],
+  [pad~="lt"] {
+    padding-left: $default;
+  }
+  [pad~="right"],
+  [pad~="rt"] {
+    padding-right: $default;
+  }
+
+  @for $i from 0 through 20 {
+    [pad~="#{$i}"] {
+      &[pad~="all"]{
+        padding: #{$i}px;
+      }
+      
+      &[pad~="bottom"],
+      &[pad~="bt"] {
+        padding-bottom: #{$i}px;
+      }
+      &[pad~="top"],
+      &[pad~="tp"] {
+        padding-top: #{$i}px;
+      }
+      &[pad~="left"],
+      &[pad~="lt"] {
+        padding-left: #{$i}px;
+      }
+      &[pad~="right"],
+      &[pad~="rt"] {
+        padding-right: #{$i}px;
       }
     }
   }
 }
 
+/*
+  - [flex] (<div flex="*">)
+    slow      | slw   - transition flex-basis 1s (transição de 1s)
+    very-slow | v-slw - transition flex-basis 2s (transição de 2s)
+    row       | r     - row flow        (Altera o corpotamento de flex para linha)
+    on        |       - habilitar flex  (Utilizado em flex dentro de outro flex) 
+    center    | c     - elemento centralizado
+    v-center  | vc    - elemento centralizado (Vertical apenas)
+    h-center  | hc    - elemento centralizado (Horizontal apenas)
+    right     | rt    - elemento para direita
+    border    | b     - borda no elemento
+    grow      | g     - permite que o elemento cresça o tamanho maior que o citado.
+    shrink    | s     - permite que o elemento dimunua o tamanho menor que o citado.
+    no-shrink | ns    - impede que o elemento dimunua o tamanho menor que o citado.
+      aplicado automaticamente em: (scl-y > scl-x), (scl-x -> scl-y)
+    no-scroll | nscl  - desativa o scroll (visible)
+    scroll    | scl   - habilita scroll
+    scroll-y  | scl-y - habilita apenas scroll-y
+    scroll-x  | scl-x - habilita apenas scroll-x
+    hide      | hid   - permite que seja possivel esconder o elemento
+    [gap] (<div flex="*" gap="n* direction*">)
+      n* - tamanho do espaçamento
+      direction* - direção aplicada do espaçamento (row/col) Opcional
+      Ex: (gap="10 row"), (gap="8")
+ */
 @mixin flexStructure($defaultGap) {
-  *{
-    &:not([flex]>[flex]){
-      &[flex]{
+  * {
+    &:not([flex] > [flex]) {
+      &[flex] {
         display: flex;
+
+        overflow-x: auto;
+        overflow-y: hidden;
       }
     }
   }
-
   [flex]{
+    // min-width: fit-content; 
+    // min-height: fit-content;
+
     column-gap: $defaultGap;
-    row-gap: $defaultGap;    
-
-    transition: flex-basis 0.5s, width 0.5s, height 0.5s;
+    row-gap: $defaultGap;
+    // transition: flex-basis 0.5s, width 0.5s, height 0.5s;
+    transition: max-width 0.5s, max-height 0.5s ;
     text-wrap: nowrap;
+  }
 
-    &[flex~="slow"]{
-      transition: flex-basis 1s, width 1s, height 1s;
-    }
-    &[flex~="very-slow"]{
-      transition: flex-basis 2s, width 2s, height 2s;
-    }
+  :is(
+    [flex~="on"]
+   ) {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  :is(
+    [flex~="row"],
+    [flex~="r"]
+  ) {
+    flex-flow: column;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  :is(
+    [flex~="grow"],
+    [flex~="g"]
+  ) {
+    flex-grow: 1;
+  }
+
+  :is(
+    [flex~="shrink"],
+    [flex~="s"]
+  ) {
+    flex-shrink: 1;
+  }
+
+  :is(
+    [flex~="no-shrink"],
+    [flex~="ns"]
+  ) {
+    flex-shrink: 0;
+  }
+
+  :is(
+    [flex~="no-scroll"],
+    [flex~="nscl"]
+  ){
+    overflow: visible;
+  }
+
+  :is(
+    [flex~="center"],
+    [flex~="c"]
+   ) {
+    margin: auto;
+  }
+
+  :is(
+    [flex~="v-center"],
+    [flex~="vc"]
+  ) {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  :is(
+    [flex~="h-center"],
+    [flex~="hc"] 
+  ) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  :is(
+    [flex~="border"],
+    [flex~="b"] 
+  ) {
+    border: 1px solid;
+    border-radius: 10px;
+    padding: $defaultGap;
+  }
+
+  @for $i from 0 through 100 {
+    $pct: percentage(calc($i/100));
     
-    &[flex~="row"]{
-      flex-flow: column;
-    }
-    &[flex~="on"]{
-      display: flex;
-    }
-
-    &[flex~="center"]{
-      margin: auto;
-    }
-    &[flex~="v-center"]{
-      margin-top: auto;
-      margin-bottom: auto;
-    }
-    &[flex~="h-center"]{
-      margin-left: auto;
-      margin-right: auto;
-    }
-    &[flex~="right"]{
-      margin-left: auto;
-    }
-
-    &[flex~="border"]{
-      border: 1px solid;
-      border-radius: 10px;
-      padding: $defaultGap;
-    }
-
-    
-    &[flex~="grow"]{
-      flex-grow: 1;
-    }
-    &[flex~="no-shrink"]{      
-      flex-shrink: 0;
-    }
-
-    &[flex~="hide"]{
-      overflow: hidden;
-    }    
-    &[flex~="scroll"]{
-      overflow: auto;
-    }
-    &[flex~="scroll-y"]{
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-    &[flex~="scroll-x"]{
-      overflow-x: auto;
-      overflow-y: hidden;
-    }
-
-    @for $i from 0 through 20 {
-      &[gap~="#{$i}"]{
-        &[gap~="col"]{
-          column-gap: #{$i}px;
-        }
-        &[gap~="row"]{
-          column-gap: #{$i}px;
+    :not([flex] > [flex]) {
+      &[flex~="row"], 
+      &[flex~="r"] {
+        &[flex~="#{$i}"] {
+          height: $pct;
         }
       }
     }
 
-    @for $i from 0 through 100 {
-      &[flex~="#{$i}"]{
-        $pct: percentage(calc($i/100));
-        &[flex~="row"]{
-          width: $pct;
-        }
-        &:not([flex~="row"]){
-          flex-basis: $pct;
-          width: 100%;
-        }
+    :not([flex~="row"]):not([flex~="r"])[flex~="#{$i}"] {
+      max-width: $pct;
+      &[flex~="no-scroll"],
+      &[flex~="nscl"]{
+        overflow: hidden;
       }
+    }
+    
+    :is(
+      [flex~="row"],
+      [flex~="r"]
+    ) > [flex~="f#{$i}"] {
+      max-height: $pct;
     }
   }
 }
@@ -294,5 +299,5 @@
 //     display: grid;
 //     $sizes: auto, 0fr, 1fr, min-content, max-content;
 //     $attrsValues: 'auto', '0fr', '1fr', 'min', 'max';
-//     @include generate-grid(100, 12, $sizes, $attrsValues);    
+//     @include generate-grid(100, 12, $sizes, $attrsValues);
 // }

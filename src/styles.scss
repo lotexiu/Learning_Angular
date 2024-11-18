@@ -19,11 +19,6 @@ $dark-theme: mat.define-theme((
   ),
 ));
 
-:root{
-  --bg: rgb(220,220,220);
-  --color: rgb(50,50,50);
-}
-
 html,
 body {
   height: 100%;
@@ -41,18 +36,15 @@ html{
     @include mat.all-component-themes($light-theme);
     @include lote.components($light-theme);
     
-    @include padStructure(5px);
-    @include flexStructure(6px);
-    @include stickyStructure($light-theme);
-
-    &.dark {
-      --bg: rgb(50,50,50);
-      --color: rgb(220,220,220);
-
+    
+    &.dark {      
       @include mat.all-component-colors($dark-theme);
-      @include lote.components($dark-theme);
-
-      @include stickyStructure($dark-theme);
+      @include lote.components($dark-theme);      
     }
   }
 }
+
+@include flexStructure(6px);
+
+@include padStructure(5px);
+@include stickyStructure();
