@@ -1,0 +1,191 @@
+/*
+  Flex Layout System
+  ==================
+
+  Atributos Básicos:
+  ------------------
+  on        - Ativa flex em elementos aninhados
+  row | r   - Fluxo em coluna (vertical)
+  wrap | w  - Permite quebra de linha dos elementos
+
+  Dimensionamento:
+  ---------------
+  [0-100]   - Largura/altura em porcentagem
+  [0-100]vh - Altura baseada na viewport
+  [0-100]vw - Largura baseada na viewport
+  
+  Comportamento:
+  -------------
+  grow    | g     - Permite crescimento
+  shrink  | s     - Permite redução
+  no-shrink | ns  - Impede redução
+  
+  Scroll:
+  -------
+  no-scroll | nscl  - Remove scroll (visible)
+  scroll    | scl   - Habilita scroll
+  scroll-y  | scl-y - Scroll vertical
+  scroll-x  | scl-x - Scroll horizontal
+  
+  Alinhamento:
+  -----------
+  center    | c     - Centraliza (ambos eixos)
+  v-center  | vc    - Centraliza vertical
+  h-center  | hc    - Centraliza horizontal
+  right     | rt    - Alinha à direita
+  
+  Estilo:
+  -------
+  border    | b     - Adiciona borda
+  
+  Transições:
+  -----------
+  slow      | slw   - Transição 1s
+  very-slow | v-slw - Transição 2s
+  
+  Gap:
+  ----
+  [gap="n direction"] - Espaçamento entre elementos
+    n: tamanho do gap
+    direction: row/col (opcional)
+    Ex: gap="10 row", gap="8"
+*/
+@mixin flexStructure($defaultGap) {
+
+  // Base flex para elementos sem pai flex ou com "on" explícito
+  *:not([flex] > [flex])[flex],
+  [flex~="on"] {
+    display: flex;
+    gap: $gap;
+
+    &[flex~="r"] > &,
+    &[flex~="row"] > & {
+      overflow-y: hidden;
+    }
+
+    &:not([flex~="r"]):not([flex~="row"]) > [flex] {
+      overflow-x: hidden;
+    }
+  }
+
+  [flex]{
+    column-gap: $defaultGap;
+    row-gap: $defaultGap;
+    transition: max-width 0.5s, max-height 0.5s ;
+    text-wrap: nowrap;
+  }
+
+  :is(
+    [flex~="row"],
+    [flex~="r"]
+  ) {
+    flex-flow: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  :is(
+    [flex~="wrap"],
+    [flex~="w"]
+  ) {
+    flex-wrap: wrap;
+  }
+  
+  :is(
+    [flex~="grow"],
+    [flex~="g"]
+  ) {
+    flex-grow: 1;
+  }
+
+  :is(
+    [flex~="shrink"],
+    [flex~="s"]
+  ) {
+    flex-shrink: 1;
+  }
+
+  :is(
+    [flex~="no-shrink"],
+    [flex~="ns"]
+  ) {
+    flex-shrink: 0;
+  }
+
+  :is(
+    [flex~="no-scroll"],
+    [flex~="nscl"]
+  ){
+    overflow: visible;
+  }
+
+  :is(
+    [flex~="center"],
+    [flex~="c"]
+   ) {
+    margin: auto;
+  }
+
+  :is(
+    [flex~="v-center"],
+    [flex~="vc"]
+  ) {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  :is(
+    [flex~="h-center"],
+    [flex~="hc"] 
+  ) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  :is(
+    [flex~="border"],
+    [flex~="b"] 
+  ) {
+    border: 1px solid;
+    border-radius: 10px;
+    padding: $defaultGap;
+  }
+
+  @for $i from 0 through 100 {
+    [flex~="#{$i}vh"] {
+      height: #{$i}vh;
+    }
+    
+    [flex~="#{$i}vw"] {
+      width: #{$i}vw;
+    }
+  }
+
+  @for $i from 0 through 100 {
+    $pct: percentage(calc($i/100));
+    
+    :not([flex] > [flex]) {
+      &[flex~="row"], 
+      &[flex~="r"] {
+        &[flex~="#{$i}"] {
+          height: $pct;
+        }
+      }
+    }
+
+    :not([flex~="row"]):not([flex~="r"])[flex~="#{$i}"] {
+      max-width: $pct;
+      &[flex~="no-scroll"],
+      &[flex~="nscl"]{
+        overflow: hidden;
+      }
+    }
+    
+    :is(
+      [flex~="row"],
+      [flex~="r"]
+    ) > [flex~="f#{$i}"] {
+      max-height: $pct;
+    }
+  }
+}
