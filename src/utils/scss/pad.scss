@@ -1,0 +1,39 @@
+@mixin padStructure($default) {
+  [pad] {
+    &[pad~="all"] {
+      padding: $default;
+    }
+    &[pad~="bottom"] {
+      padding-bottom: $default;
+    }
+    &[pad~="top"] {
+      padding-top: $default;
+    }
+    &[pad~="left"] {
+      padding-left: $default;
+    }
+    &[pad~="right"] {
+      padding-right: $default;
+    }
+
+    @for $i from 0 through 20 {
+      &[pad~="#{$i}"] {
+        &[pad~="all"]{
+          padding: #{$i}px;
+        }
+        &[pad~="bottom"] {
+          padding-bottom: #{$i}px;
+        }
+        &[pad~="top"] {
+          padding-top: #{$i}px;
+        }
+        &[pad~="left"] {
+          padding-left: #{$i}px;
+        }
+        &[pad~="right"] {
+          padding-right: #{$i}px;
+        }
+      }
+    }
+  }
+}

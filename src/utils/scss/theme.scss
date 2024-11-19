@@ -1,0 +1,120 @@
+@use "sass:math";
+@use "@angular/material" as mat;
+@import './utils.scss';
+
+ 
+$values: (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, A100, A200, A400, A700);
+ 
+@function createPalette($color) {
+  $white: #fff;
+  $black: #000;
+  $baseDark: multiply($color, $color);
+ 
+  $palette: (
+    50 : mix($color, $white, 12%),
+    100 : mix($color, $white, 30%),
+    200 : mix($color, $white, 50%),
+    300 : mix($color, $white, 70%),
+    400 : mix($color, $white, 85%),
+    500 : mix($color, $white, 100%),
+    600 : mix($color, $baseDark, 87%),
+    700 : mix($color, $baseDark, 70%),
+    800 : mix($color, $baseDark, 54%),
+    900 : mix($color, $baseDark, 25%),
+    A100 : lighten(saturate(mix($black, $baseDark, 15%), 80%), 65%),
+    A200 : lighten(saturate(mix($black, $baseDark, 15%), 80%), 55%),
+    A400 : lighten(saturate(mix($black, $baseDark, 15%), 100%), 45%),
+    A700 : lighten(saturate(mix($black, $baseDark, 15%), 100%), 40%)
+  );
+ 
+  $contrast: ();
+  @each $v in $values {
+    $contrast: map-merge($contrast, ($v: getContrast(map_get($palette, $v))))
+  }
+ 
+  $palette: map-merge($palette, (contrast: $contrast));
+ 
+  @return $palette;
+}
+
+@mixin theme($theme: (
+  type : null,
+  color:(
+    font       : null,
+    background : null,
+    primary    : null,
+    accent     : null,
+    warn       : null,
+  ),
+  density: 0,
+)) {
+  html {
+    body {
+      transition: background 0.3s;
+
+      &.#{get($theme, type)} {
+        /* Variaveis SCSS */
+        $background: get($theme, color, background);
+        $primary: get($theme, color, primary);
+        $accent: get($theme, color, accent);
+        $warn: get($theme, color, warn);
+        $font: get($theme, color, font);
+        /* Variaveis CSS */
+        @include property(background, '<color>', false, $background);
+        @include property(primary, '<color>', false, $primary);
+        @include property(accent, '<color>', false, $accent);
+        @include property(warn, '<color>', false, $warn);
+        @include property(font, '<color>', false, $font);
+        /* Paleta */
+        $primary-palette: createPalette($primary);
+        $accent-palette: createPalette($accent);
+        $warn-palette: createPalette($warn);
+
+        @if isLight($primary) {
+          @include property(primary-font, '<color>', false, black);
+        }
+        @else{
+          @include property(primary-font, '<color>', false, white);
+        }
+
+
+        $angularTheme: null;
+        @if isLight(get($theme, color, background)){
+          $angularTheme: mat.define-light-theme(
+            (
+              color: (
+                primary: mat.define-palette($primary-palette),
+                accent: mat.define-palette($accent-palette),
+                warn: mat.define-palette($warn-palette),
+              ),
+            )
+          );
+        } @else {
+          $angularTheme: mat.define-dark-theme(
+            (
+              color: (
+                primary: mat.define-palette($primary-palette),
+                accent: mat.define-palette($accent-palette),
+                warn: mat.define-palette($warn-palette),
+              ),
+              density: get($theme, density)
+            )
+          );
+        }
+        @include mat.all-component-colors($angularTheme);
+
+        color: get($theme, color, font);
+        background: get($theme, color, background);
+
+        mat-icon{
+          display: flex;
+          height: fit-content;
+          width: fit-content;          
+        //   &::before{
+        //     font-size: 14px;
+        //   }
+        }
+      }
+    }
+  }
+}

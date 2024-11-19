@@ -1,3 +1,5 @@
+@import './utils.scss';
+
 /*
   Flex Layout System
   ==================
@@ -22,10 +24,9 @@
   
   Scroll:
   -------
-  no-scroll | nscl  - Remove scroll (visible)
-  scroll    | scl   - Habilita scroll
-  scroll-y  | scl-y - Scroll vertical
-  scroll-x  | scl-x - Scroll horizontal
+  no-scroll   | nscl  - Remove scroll (visible)
+  hide-scroll | hscl  - Esconde scroll (hidden)
+  no-scroll-son | nscls - Remove scroll (visible) apenas do filho
   
   Alinhamento:
   -----------
@@ -50,27 +51,32 @@
     direction: row/col (opcional)
     Ex: gap="10 row", gap="8"
 */
-@mixin flexStructure($defaultGap) {
+@mixin flexStructure($gap) {
 
   // Base flex para elementos sem pai flex ou com "on" explícito
   *:not([flex] > [flex])[flex],
   [flex~="on"] {
     display: flex;
     gap: $gap;
+    overflow-x: auto;
+    overflow-y: hidden;
 
-    &[flex~="r"] > &,
-    &[flex~="row"] > & {
-      overflow-y: hidden;
+    $selector   : selector('flex', 'not', 'no-scroll-son', 'nscls');
+    $sonSelector: selector('flex', 'not', 'no-scroll', 'nscl');
+
+    &[flex~="r"]#{$selector} > #{$sonSelector},
+    &[flex~="row"]#{$selector} > #{$sonSelector} {
+      overflow-y: auto;
     }
 
-    &:not([flex~="r"]):not([flex~="row"]) > [flex] {
-      overflow-x: hidden;
+    $selector: selector('flex', 'not', 'row', 'r', 'no-scroll-son', 'nscls');
+    &#{$selector} > #{$sonSelector}{
+      overflow-x: auto;
     }
   }
 
   [flex]{
-    column-gap: $defaultGap;
-    row-gap: $defaultGap;
+    box-sizing: border-box;
     transition: max-width 0.5s, max-height 0.5s ;
     text-wrap: nowrap;
   }
@@ -120,35 +126,42 @@
   }
 
   :is(
+    [flex~="hide-scroll"],
+    [flex~="hscl"]
+  ){
+    overflow: hidden;
+  }
+
+  :is(
     [flex~="center"],
     [flex~="c"]
    ) {
-    margin: auto;
+    justify-content: center;
+    align-items: center;
   }
 
   :is(
     [flex~="v-center"],
     [flex~="vc"]
   ) {
-    margin-top: auto;
-    margin-bottom: auto;
+    align-items: center;
   }
 
   :is(
     [flex~="h-center"],
     [flex~="hc"] 
   ) {
-    margin-left: auto;
-    margin-right: auto;
+    justify-content: center;
   }
 
   :is(
     [flex~="border"],
     [flex~="b"] 
   ) {
+    margin: 5px;
+    padding: $gap;
     border: 1px solid;
     border-radius: 10px;
-    padding: $defaultGap;
   }
 
   @for $i from 0 through 100 {
@@ -162,19 +175,21 @@
   }
 
   @for $i from 0 through 100 {
-    $pct: percentage(calc($i/100));
+    $pct: calc($i/100);
     
     :not([flex] > [flex]) {
       &[flex~="row"], 
       &[flex~="r"] {
         &[flex~="#{$i}"] {
-          height: $pct;
+          height: percentage($pct);
         }
       }
     }
 
-    :not([flex~="row"]):not([flex~="r"])[flex~="#{$i}"] {
-      max-width: $pct;
+    :not([flex~="row"]):not([flex~="r"]) > [flex~="#{$i}"] {
+      max-width: percentage($pct);
+      min-width: max(percentage(calc($pct * 0.75)), 100px);
+
       &[flex~="no-scroll"],
       &[flex~="nscl"]{
         overflow: hidden;
@@ -184,8 +199,10 @@
     :is(
       [flex~="row"],
       [flex~="r"]
-    ) > [flex~="f#{$i}"] {
-      max-height: $pct;
+    ) > [flex~="#{$i}"] {
+      content: percentage($pct);
+      max-height: percentage($pct);
+      min-height: max(percentage(calc($pct * 0.75)) + 100px);
     }
   }
 }

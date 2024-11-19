@@ -15,135 +15,69 @@
   @return $selector;
 }
 
-@function custom-color-mix($color1, $percent1, $color2, $percent2) {
-  @return color-mix(in srgb, $color1 $percent1, $color2 $percent2);
+@function selector($attribute, $validation: 'not', $args...) {
+  $selector: '[#{$attribute}]';
+  
+  @each $arg in $args {
+    @if $validation == 'is' {
+      $selector: $selector + '[#{$attribute}~="#{$arg}"]';
+    } @else if $validation == 'not' {
+      $selector: $selector + ':not([#{$attribute}~="#{$arg}"])';
+    } @else if $validation == '>' {
+      $selector: $selector + '[#{$attribute}>#{$arg}]';
+    }
+  }
+  
+  @return $selector;
 }
 
-@mixin angularMaterial($theme) {
-  $primary: none;
-  $accent: none;
-  $warn: none;
-  $error: none;
-  @if mat.get-theme-type($theme) == dark {
-    $primary: mat.get-theme-color($theme, primary, default);
-    $accent: mat.get-theme-color($theme, accent, default);
-    $warn: mat.get-theme-color($theme, warn, default);
+@function mix-v2($color1: (color: null, percent: 0), $colors...) {
+  @if length($colors) == 0 {
+    @return $color1;
+  }
+  $result: $color1;
+  @each $color in $colors {
+    $result: color-mix(in srgb, $result, $color);
+  }
+  @return $result;
+}
+
+@function get($map, $keys...){
+  $value: $map;
+  @each $key in $keys {
+    $value: map-get($value, $key);
+  }
+  @return $value;
+}
+
+@mixin property($property, $type, $inherit, $value) {
+  @property --#{$property} {
+    syntax: $type;
+    inherits: $inherit;
+    initial-value: $value;
+  }
+  --#{$property}: #{$value}
+}
+
+@function multiply($rgb1, $rgb2) {
+  $r: floor(math.div(red($rgb1) * red($rgb2), 255));
+  $g: floor(math.div(green($rgb1) * green($rgb2), 255));
+  $b: floor(math.div(blue($rgb1) * blue($rgb2), 255));
+  @return rgb($r, $g, $b);
+}
+ 
+@function getBrightness($color) {
+  @return math.div(red($color) * 299 + green($color) * 587 + blue($color) * 114, 1000);
+}
+ 
+@function isLight($color) {
+  @return getBrightness($color) >= 128;
+}
+ 
+@function getContrast($color) {
+  @if isLight($color) {
+    @return #000;
   } @else {
-    $primary: mat.get-theme-color($theme, primary, default);
-    $accent: mat.get-theme-color($theme, accent, default);
-    $warn: mat.get-theme-color($theme, warn, default);
-  }
-
-  mat-icon {
-    transition: transform 0.2s;
-    &:hover{
-      transform: scale(1.3);
-    }
-    &:focus{
-      outline: none;
-      fill   : $primary;
-      color  : $primary;
-    }
-    &:active{
-      fill : $accent;
-      color: $accent;
-    }
+    @return #fff;
   }
 }
-
-@mixin stickyStructure() {
-  [sticky] {
-    z-index: 1;
-    position: sticky;
-    padding: 5px;
-    top: 0;
-    &::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      border-radius: 5px;
-      background: rgba(0, 0, 0, 0.3);
-      mask: linear-gradient(to top, transparent, black 50%);
-      backdrop-filter: blur(3px);
-    }
-
-    &[sticky~="bottom"] {
-      mask: linear-gradient(to bottom, transparent, black 50%);
-      top: auto;
-      bottom: 0;
-    }
-    &[sticky~="left"] {
-      mask: linear-gradient(to left, transparent, black 50%);
-      top: auto;
-      left: 0;
-    }
-    &[sticky~="right"] {
-      mask: linear-gradient(to right, transparent, black 50%);
-      top: auto;
-      right: 0;
-    }
-  }
-}
-
-@mixin padStructure($default) {
-  [pad~="all"] {
-    padding: $default;
-  }
-
-  [pad~="bottom"],
-  [pad~="bt"] {
-    padding-bottom: $default;
-  }
-  [pad~="top"],
-  [pad~="tp"] {
-    padding-top: $default;
-  }
-  [pad~="left"],
-  [pad~="lt"] {
-    padding-left: $default;
-  }
-  [pad~="right"],
-  [pad~="rt"] {
-    padding-right: $default;
-  }
-
-  @for $i from 0 through 20 {
-    [pad~="#{$i}"] {
-      &[pad~="all"]{
-        padding: #{$i}px;
-      }
-      
-      &[pad~="bottom"],
-      &[pad~="bt"] {
-        padding-bottom: #{$i}px;
-      }
-      &[pad~="top"],
-      &[pad~="tp"] {
-        padding-top: #{$i}px;
-      }
-      &[pad~="left"],
-      &[pad~="lt"] {
-        padding-left: #{$i}px;
-      }
-      &[pad~="right"],
-      &[pad~="rt"] {
-        padding-right: #{$i}px;
-      }
-    }
-  }
-}
-
-// #{generate-selector-list(
-//   '.grid',
-//   '.grid-col',
-//   '.grid-row',
-//   '.grid-dense')} {
-//     *{
-//       transition: all 1s;
-//     }
-//     display: grid;
-//     $sizes: auto, 0fr, 1fr, min-content, max-content;
-//     $attrsValues: 'auto', '0fr', '1fr', 'min', 'max';
-//     @include generate-grid(100, 12, $sizes, $attrsValues);
-// }
