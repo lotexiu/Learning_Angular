@@ -1,4 +1,6 @@
 @use "sass:math";
+@use "sass:map";
+@use "sass:color";
 @use "@angular/material" as mat;
 
 /* 
@@ -30,7 +32,8 @@
  */
 @function selector($attribute, $validation: 'not', $args...) {
   $selector: '[#{$attribute}]';
-  
+
+
   @each $arg in $args {
     @if $validation == 'is' {
       $selector: $selector + '[#{$attribute}~="#{$arg}"]';
@@ -53,7 +56,7 @@
 @function get($map, $keys...) {
   $value: $map;
   @each $key in $keys {
-    $value: map-get($value, $key);
+    $value: map.get($value, $key);
   }
   @return $value;
 }
@@ -71,7 +74,9 @@
     inherits: $inherit;
     initial-value: $value;
   }
-  --#{$property}: #{$value}
+  & {
+    --#{$property}: #{$value}
+  }
 }
 
 /* 
@@ -81,9 +86,9 @@
  * @return {color} Nova cor RGB resultante da multiplicação
  */
 @function multiply($rgb1, $rgb2) {
-  $r: floor(math.div(red($rgb1) * red($rgb2), 255));
-  $g: floor(math.div(green($rgb1) * green($rgb2), 255));
-  $b: floor(math.div(blue($rgb1) * blue($rgb2), 255));
+  $r: math.floor(math.div(color.channel($rgb1, "red", $space: rgb) * color.channel($rgb2, "red", $space: rgb), 255));
+  $g: math.floor(math.div(color.channel($rgb1, "green", $space: rgb) * color.channel($rgb2, "green", $space: rgb), 255));
+  $b: math.floor(math.div(color.channel($rgb1, "blue", $space: rgb) * color.channel($rgb2, "blue", $space: rgb), 255));
   @return rgb($r, $g, $b);
 }
 
@@ -93,7 +98,7 @@
  * @return {number} Valor do brilho (0-255)
  */
 @function getBrightness($color) {
-  @return math.div(red($color) * 299 + green($color) * 587 + blue($color) * 114, 1000);
+  @return math.div(color.channel($color, "red", $space: rgb) * 299 + color.channel($color, "green", $space: rgb) * 587 + color.channel($color, "blue", $space: rgb) * 114, 1000);
 }
 
 /* 
@@ -130,7 +135,7 @@
   }
   $result: $color1;
   @each $color in $colors {
-    $result: color-mix(in srgb, $result, $color);
+    $result: color.color-mix(in srgb, $result, $color);
   }
   @return $result;
 }

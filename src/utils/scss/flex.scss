@@ -1,4 +1,5 @@
-@import './utils.scss';
+@use "sass:math";
+@use './utils' as *;
 
 /*
   Flex Layout System
@@ -181,14 +182,14 @@
       &[flex~="row"], 
       &[flex~="r"] {
         &[flex~="#{$i}"] {
-          height: percentage($pct);
+          height: math.percentage($pct);
         }
       }
     }
 
     :not([flex~="row"]):not([flex~="r"]) > [flex~="#{$i}"] {
-      max-width: percentage($pct);
-      min-width: max(percentage(calc($pct * 0.75)), 100px);
+      max-width: math.percentage($pct);
+      min-width: max(math.percentage(calc($pct * 0.75)), 100px);
 
       &[flex~="no-scroll"],
       &[flex~="nscl"]{
@@ -200,9 +201,9 @@
       [flex~="row"],
       [flex~="r"]
     ) > [flex~="#{$i}"] {
-      content: percentage($pct);
-      max-height: percentage($pct);
-      min-height: max(percentage(calc($pct * 0.75)) + 100px);
+      content: math.percentage($pct);
+      max-height: math.percentage($pct);
+      min-height: max(math.percentage(calc($pct * 0.75)) + 100px);
     }
   }
 }
