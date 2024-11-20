@@ -78,30 +78,32 @@ $values: (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, A100, A200, A400, A70
         }
 
 
-        $angularTheme: null;
-        @if isLight(get($theme, color, background)){
-          $angularTheme: mat.define-light-theme(
-            (
-              color: (
-                primary: mat.define-palette($primary-palette),
-                accent: mat.define-palette($accent-palette),
-                warn: mat.define-palette($warn-palette),
-              ),
-            )
-          );
-        } @else {
-          $angularTheme: mat.define-dark-theme(
-            (
-              color: (
-                primary: mat.define-palette($primary-palette),
-                accent: mat.define-palette($accent-palette),
-                warn: mat.define-palette($warn-palette),
-              ),
-              density: get($theme, density)
-            )
-          );
-        }
-        @include mat.all-component-colors($angularTheme);
+        // $angularTheme: null;
+        // @if isLight(get($theme, color, background)){
+        //   $angularTheme: mat.define-theme(
+        //     (
+        //       color: (
+        //         theme-type: light,
+        //         primary: mat.define-palette($primary-palette),
+        //         accent: mat.define-palette($accent-palette),
+        //         warn: mat.define-palette($warn-palette),
+        //       ),
+        //     )
+        //   );
+        // } @else {
+        //   $angularTheme: mat.define-theme(
+        //     (
+        //       color: (
+        //         theme-type: dark,
+        //         primary: mat.define-palette($primary-palette),
+        //         accent: mat.define-palette($accent-palette),
+        //         warn: mat.define-palette($warn-palette),
+        //       ),
+        //       density: get($theme, density)
+        //     )
+        //   );
+        // }
+        // @include mat.all-component-colors($angularTheme);
 
         color: get($theme, color, font);
         background: get($theme, color, background);

@@ -1,6 +1,12 @@
+@use "sass:math";
 @use "@angular/material" as mat;
 
-@function generate-selector-list($args...) {
+/* 
+ * Função que gera uma lista de seletores CSS concatenados
+ * @param {string...} $args - Lista variável de seletores CSS
+ * @return {string} String concatenada de seletores separados por vírgula
+ */
+@function selectorList($args...) {
   $selector: null;
   /* Percorrendo pelos lista de seletores */
   @each $class in $args {
@@ -15,6 +21,13 @@
   @return $selector;
 }
 
+/* 
+ * Função que cria seletores de atributos com validações
+ * @param {string} $attribute - Nome do atributo
+ * @param {string} $validation - Tipo de validação ('is', 'not' ou '>')
+ * @param {string...} $args - Valores para validação
+ * @return {string} Seletor CSS completo
+ */
 @function selector($attribute, $validation: 'not', $args...) {
   $selector: '[#{$attribute}]';
   
@@ -31,18 +44,13 @@
   @return $selector;
 }
 
-@function mix-v2($color1: (color: null, percent: 0), $colors...) {
-  @if length($colors) == 0 {
-    @return $color1;
-  }
-  $result: $color1;
-  @each $color in $colors {
-    $result: color-mix(in srgb, $result, $color);
-  }
-  @return $result;
-}
-
-@function get($map, $keys...){
+/* 
+ * Função que acessa valores em mapas aninhados
+ * @param {map} $map - Mapa de dados
+ * @param {string...} $keys - Lista de chaves para acessar o valor
+ * @return {*} Valor encontrado no mapa
+ */
+@function get($map, $keys...) {
   $value: $map;
   @each $key in $keys {
     $value: map-get($value, $key);
@@ -50,6 +58,13 @@
   @return $value;
 }
 
+/* 
+ * Mixin que define uma propriedade CSS customizada
+ * @param {string} $property - Nome da propriedade
+ * @param {string} $type - Sintaxe da propriedade
+ * @param {boolean} $inherit - Se a propriedade é herdada
+ * @param {*} $value - Valor inicial da propriedade
+ */
 @mixin property($property, $type, $inherit, $value) {
   @property --#{$property} {
     syntax: $type;
@@ -59,25 +74,63 @@
   --#{$property}: #{$value}
 }
 
+/* 
+ * Função que multiplica duas cores RGB
+ * @param {color} $rgb1 - Primeira cor RGB
+ * @param {color} $rgb2 - Segunda cor RGB
+ * @return {color} Nova cor RGB resultante da multiplicação
+ */
 @function multiply($rgb1, $rgb2) {
   $r: floor(math.div(red($rgb1) * red($rgb2), 255));
   $g: floor(math.div(green($rgb1) * green($rgb2), 255));
   $b: floor(math.div(blue($rgb1) * blue($rgb2), 255));
   @return rgb($r, $g, $b);
 }
- 
+
+/* 
+ * Função que calcula o brilho de uma cor
+ * @param {color} $color - Cor para calcular o brilho
+ * @return {number} Valor do brilho (0-255)
+ */
 @function getBrightness($color) {
   @return math.div(red($color) * 299 + green($color) * 587 + blue($color) * 114, 1000);
 }
- 
+
+/* 
+ * Função que verifica se uma cor é clara
+ * @param {color} $color - Cor para verificar
+ * @return {boolean} True se a cor for clara, False se for escura
+ */
 @function isLight($color) {
   @return getBrightness($color) >= 128;
 }
- 
+
+/* 
+ * Função que determina a cor de contraste ideal (preto ou branco)
+ * @param {color} $color - Cor base para determinar o contraste
+ * @return {color} #000 para cores claras, #fff para cores escuras
+ */
 @function getContrast($color) {
   @if isLight($color) {
     @return #000;
   } @else {
     @return #fff;
   }
+}
+
+/* 
+ * Função que mistura múltiplas cores
+ * @param {map} $color1 - Cor base com propriedades color e percent
+ * @param {color...} $colors - Lista de cores adicionais para misturar
+ * @return {color} Cor resultante da mistura
+ */
+ @function mixV2($color1: (color: null, percent: 0), $colors...) {
+  @if length($colors) == 0 {
+    @return $color1;
+  }
+  $result: $color1;
+  @each $color in $colors {
+    $result: color-mix(in srgb, $result, $color);
+  }
+  @return $result;
 }
