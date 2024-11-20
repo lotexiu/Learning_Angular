@@ -7,29 +7,30 @@
 @use "./utils/scss/sticky" as *;
 @use "./utils/scss/scroll" as *;
 @use "./utils/scss/theme"  as *;
+@use "./../_theme-colors" as ctheme;
+
+
+$purple_amber_palette: palette(
+  #7700ff,  /* Primary */
+  #ffffff,  /* Secondary */
+  #ffffff,  /* Tertiary */
+  #ffffff,  /* Neutral */
+  red,      /* Error */
+);
 
 html {
+  // @include property(font, '<color>', false, $font);
+
   @include mat.theme((
     color: (
       theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
+      primary: get($purple_amber_palette, primary),
+      tertiary: get($purple_amber_palette, tertiary),
     ),
     typography: Roboto,
     density: 0,
   ));
-}/* You can add global styles to this file, and also import other style files */
-
-@include theme((
-  type: light,  
-  color:(
-    font: black,
-    background: white,
-    primary: rgb(7,71,166),
-    accent: rgb(255, 160, 45),
-    warn: rgb(212, 14, 0),
-  )
-));
+}
 
 html, body { margin: 0; height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

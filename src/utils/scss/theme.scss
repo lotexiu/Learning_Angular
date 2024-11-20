@@ -1,124 +1,71 @@
-@use "sass:math";
-@use "sass:map";
-@use "sass:color";
-@use "@angular/material" as mat;
+@use 'sass:map';
+@use 'sass:color';
+@use 'sass:math';
 @use './utils' as *;
 
- 
-$values: (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, A100, A200, A400, A700);
- 
-@function createPalette($color) {
+
+@function gradiant($baseColor: red, $keys: (0,25,50,75,100)) {
   $white: #fff;
-  $black: #000;
-  $baseDark: multiply($color, $color);
- 
-  $palette: (
-    50 : color.mix($color, $white, 12%),
-    100 : color.mix($color, $white, 30%),
-    200 : color.mix($color, $white, 50%),
-    300 : color.mix($color, $white, 70%),
-    400 : color.mix($color, $white, 85%),
-    500 : color.mix($color, $white, 100%),
-    600 : color.mix($color, $baseDark, 87%),
-    700 : color.mix($color, $baseDark, 70%),
-    800 : color.mix($color, $baseDark, 54%),
-    900 : color.mix($color, $baseDark, 25%),
-    A100 : color.scale(color.adjust(color.mix($black, $baseDark, 15%), $saturation: 80%), $lightness: 65%),
-    A200 : color.scale(color.adjust(color.mix($black, $baseDark, 15%), $saturation: 80%), $lightness: 55%),
-    A400 : color.scale(color.adjust(color.mix($black, $baseDark, 15%), $saturation: 100%), $lightness: 45%),
-    A700 : color.scale(color.adjust(color.mix($black, $baseDark, 15%), $saturation: 100%), $lightness: 40%)
-  );
- 
-  $contrast: ();
-  @each $v in $values {
-    $contrast: map.merge($contrast, ($v: getContrast(map.get($palette, $v))))
+  $black: #000000;
+  $palette: ();
+  @each $key in $keys {
+    @if $key == 50 {
+      $palette: map.set($palette, $key, $baseColor);
+    }
+    @if $key == 0 {
+      $palette: map.set($palette, $key, rgb(0,0,0));
+    }
+    @else if $key < 50 {
+      /* Convert 0-50 range to 0-100% */
+      $percentage: math.div($key * 100, 50);
+      $palette: map.set($palette, $key, color.mix($baseColor, $black, pct($percentage)));
+    }
+    @else {
+      /* Convert 50-100 range to 0-100% */
+      $percentage: math.div(($key - 50) * 100, 50);
+      $palette: map.set($palette, $key, color.mix($white, $baseColor, pct($percentage)));
+    }
   }
- 
-  $palette: map.merge($palette, (contrast: $contrast));
- 
   @return $palette;
 }
 
-@mixin theme($theme: (
-  type : null,
-  color:(
-    font       : null,
-    background : null,
-    primary    : null,
-    accent     : null,
-    warn       : null,
-  ),
-  density: 0,
-)) {
-  $background: map.get($theme, color, background);
-  $primary: map.get($theme, color, primary);
-  $accent: map.get($theme, color, accent);
-  $warn: map.get($theme, color, warn);
-  $font: map.get($theme, color, font);
-  $primary-palette: createPalette($primary);
-  $accent-palette: createPalette($accent);
-  $warn-palette: createPalette($warn);
 
-  html {
-    body {
-      transition: background 0.3s;
+@function palette(
+  $primary:   rgb(160, 0, 196),
+  $secondary: rgb(255, 128, 0),
+  $tertiary:  rgb(0, 81, 255),
+  $neutral:   rgb(92, 59, 113),
+  $error:     rgb(145, 0, 0)
+) {
+  $keys: (0,10,20,25,30,35,40,50,60,70,80,90,95,98,99,100);
+  $primary-palette:   gradiant($primary, $keys);
+  $secondary-palette: gradiant($secondary, $keys);
+  $tertiary-palette:  gradiant($tertiary, $keys);
+  $error-palette:   gradiant($error,  $keys);
 
-      &.#{map.get($theme, type)} {
-        /* Variaveis CSS */
-        @include property(background, '<color>', false, $background);
-        @include property(primary, '<color>', false, $primary);
-        @include property(accent, '<color>', false, $accent);
-        @include property(warn, '<color>', false, $warn);
-        @include property(font, '<color>', false, $font);
-        /* Paleta */
-        @if isLight($primary) {
-          @include property(primary-font, '<color>', false, #000);
-        }
-        @else{
-          @include property(primary-font, '<color>', false, #fff);
-        }
+  $neutral-variant: color.mix(color.mix($primary, $neutral, 62%), white, 78%);
+  $neutral-variant-palette: gradiant($neutral-variant, $keys);
 
-        // $angularTheme: null;
-        // @if isLight(get($theme, color, background)){
-        //   $angularTheme: mat.define-theme(
-        //     (
-        //       color: (
-        //         theme-type: light,
-        //         primary: mat.define-palette($primary-palette),
-        //         accent: mat.define-palette($accent-palette),
-        //         warn: mat.define-palette($warn-palette),
-        //       ),
-        //     )
-        //   );
-        // } @else {
-        //   $angularTheme: mat.define-theme(
-        //     (
-        //       color: (
-        //         theme-type: dark,
-        //         primary: mat.define-palette($primary-palette),
-        //         accent: mat.define-palette($accent-palette),
-        //         warn: mat.define-palette($warn-palette),
-        //       ),
-        //       density: get($theme, density)
-        //     )
-        //   );
-        // }
-        // @include mat.all-component-colors($angularTheme);
+  $keys: map.keys(map.merge(newMap($keys...), newMap(4,6,12,17,22,24,87,92,94,96)));
+  $neutral-palette: gradiant($neutral, $keys);
 
-        & {
-          color: map.get($theme, color, font);
-          background: map.get($theme, color, background);
-        }
+  @return (
+    primary: map.merge(
+      $primary-palette, (
+        secondary: $secondary-palette,
+        neutral: $neutral-palette,
+        neutral-variant: $neutral-variant-palette,
+        error: $error-palette
+      )
+    ),
 
-        mat-icon{
-          display: flex;
-          height: fit-content;
-          width: fit-content;          
-        //   &::before{
-        //     font-size: 14px;
-        //   }
-        }
-      }
-    }
-  }
+    tertiary: map.merge(
+      $tertiary-palette, (
+        secondary: $secondary-palette,
+        neutral: $neutral-palette,
+        neutral-variant: $neutral-variant-palette,
+        error: $error-palette
+      )
+    )
+  );
 }

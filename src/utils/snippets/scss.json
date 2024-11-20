@@ -244,22 +244,22 @@
   },
   "color.red": {
     "prefix": "color.red",
-    "body": "color.channel(${1:$color}, \"red\", $space: rgb)",
+    "body": "color.channel(${1:$color}, \"red\", rgb)",
     "description": "Retorna o canal vermelho de uma cor (depreciado: use color.channel)"
   },
   "color.green": {
     "prefix": "color.green",
-    "body": "color.channel(${1:$color}, \"green\", $space: rgb)",
+    "body": "color.channel(${1:$color}, \"green\", rgb)",
     "description": "Retorna o canal verde de uma cor (depreciado: use color.channel)"
   },
   "color.blue": {
     "prefix": "color.blue",
-    "body": "color.channel(${1:$color}, \"blue\", $space: rgb)",
+    "body": "color.channel(${1:$color}, \"blue\", rgb)",
     "description": "Retorna o canal azul de uma cor (depreciado: use color.channel)"
   },
   "color.channel": {
     "prefix": "color.channel",
-    "body": "color.channel(${1:$color}, ${2:$channel}, $space: rgb)",
+    "body": "color.channel(${1:$color}, ${2:$channel}, rgb)",
     "description": "Retorna o canal especificado de uma cor"
   },
   "list.append": {

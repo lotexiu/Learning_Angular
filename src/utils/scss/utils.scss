@@ -1,6 +1,8 @@
-@use "sass:math";
+@use "sass:math" as *;
 @use "sass:map";
-@use "sass:color";
+@use "sass:color" as *;
+@use "sass:string" as *;
+@use "sass:meta" as *;
 @use "@angular/material" as mat;
 
 /* 
@@ -44,6 +46,7 @@
     }
   }
   
+  
   @return $selector;
 }
 
@@ -61,6 +64,14 @@
   @return $value;
 }
 
+@function newMap($keys...){
+  $map: ();
+  @each $key in $keys {
+    $map: map.merge($map, ($key: null));
+  }
+  @return $map;
+}
+
 /* 
  * Mixin que define uma propriedade CSS customizada
  * @param {string} $property - Nome da propriedade
@@ -74,9 +85,11 @@
     inherits: $inherit;
     initial-value: $value;
   }
-  & {
-    --#{$property}: #{$value}
-  }
+  // > {
+  //   --#{$property}: #{$value}
+  // }
+  // & {
+  // }
 }
 
 /* 
@@ -86,9 +99,9 @@
  * @return {color} Nova cor RGB resultante da multiplicação
  */
 @function multiply($rgb1, $rgb2) {
-  $r: math.floor(math.div(color.channel($rgb1, "red", $space: rgb) * color.channel($rgb2, "red", $space: rgb), 255));
-  $g: math.floor(math.div(color.channel($rgb1, "green", $space: rgb) * color.channel($rgb2, "green", $space: rgb), 255));
-  $b: math.floor(math.div(color.channel($rgb1, "blue", $space: rgb) * color.channel($rgb2, "blue", $space: rgb), 255));
+  $r: floor(div(channel($rgb1, "red", $space: rgb) * channel($rgb2, "red", $space: rgb), 255));
+  $g: floor(div(channel($rgb1, "green", $space: rgb) * channel($rgb2, "green", $space: rgb), 255));
+  $b: floor(div(channel($rgb1, "blue", $space: rgb) * channel($rgb2, "blue", $space: rgb), 255));
   @return rgb($r, $g, $b);
 }
 
@@ -98,7 +111,7 @@
  * @return {number} Valor do brilho (0-255)
  */
 @function getBrightness($color) {
-  @return math.div(color.channel($color, "red", $space: rgb) * 299 + color.channel($color, "green", $space: rgb) * 587 + color.channel($color, "blue", $space: rgb) * 114, 1000);
+  @return div(channel($color, "red", $space: rgb) * 299 + channel($color, "green", $space: rgb) * 587 + channel($color, "blue", $space: rgb) * 114, 1000);
 }
 
 /* 
@@ -135,7 +148,11 @@
   }
   $result: $color1;
   @each $color in $colors {
-    $result: color.color-mix(in srgb, $result, $color);
+    $result: color-mix(in srgb, $result, $color);
   }
   @return $result;
+}
+
+@function pct($value) {
+  @return $value * 1%;
 }
