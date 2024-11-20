@@ -1,14 +1,10 @@
 <div flex="r 100">
   <!-- HotBar -->
-  <div flex="on ns b" pad="5 all">
+  <div flex="on ns b center" pad="5 all">
     <div flex="vc">LogoIcon</div>
-    <div flex="c">{{title}}</div>
-    <div>
-      toggle
-    </div>
-    <!-- <mat-slide-toggle [(ngModel)]="value" (change)="updateTheme()">
-      {{theme}}
-    </mat-slide-toggle> -->
+    <div flex="g c">{{title}}</div>
+    <label>{{theme}}</label>
+    <mat-slide-toggle [(ngModel)]="value" (change)="updateTheme()"></mat-slide-toggle>
   </div>
   <!-- Main/Routes -->
   <div flex="on r g" pad="10 bottom left right">

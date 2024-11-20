@@ -7,7 +7,6 @@
 @use "./utils/scss/sticky" as *;
 @use "./utils/scss/scroll" as *;
 @use "./utils/scss/theme"  as *;
-@use "./../_theme-colors" as ctheme;
 
 
 $purple_amber_palette: palette(
