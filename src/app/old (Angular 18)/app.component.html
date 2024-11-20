@@ -1,0 +1,23 @@
+<div flex="r 100">
+  <!-- HotBar -->
+  <div flex="on ns b" pad="5 all">
+    <div flex="vc">LogoIcon</div>
+    <div flex="c">{{title}}</div>
+    <mat-slide-toggle [(ngModel)]="value" (change)="updateTheme()">
+      {{theme}}
+    </mat-slide-toggle>
+  </div>
+  <!-- Main/Routes -->
+  <div flex="on r g 60" pad="10 all" p720p>
+    <div flex="on">
+      <div flex="b g">
+        sadsadsa
+      </div>
+      <div flex="on b g nscl">
+        <div>input</div>
+        <div>input</div>
+      </div>
+      <router-outlet/>
+    </div>
+  </div>
+</div>

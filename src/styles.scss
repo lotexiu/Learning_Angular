@@ -1,77 +1,19 @@
-@use "@angular/material" as mat;
-@use './utils/scss/lote-theme' as lote;
-@import "./utils/scss/utils.scss";
-@import "./utils/scss/flex.scss";
-@import "./utils/scss/pad.scss";
-@import "./utils/scss/sticky.scss";
-@import "./utils/scss/scroll.scss";
-@import "./utils/scss/theme.scss";
 
-@include mat.core();
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
 
-// $light-theme: mat.define-theme((
-//  color: (
-//     theme-type: light,
-//     primary: mat.$cyan-palette,
-//     tertiary: mat.$blue-palette,
-//   ),
-// ));
-// $dark-theme: mat.define-theme((
-//  color: (
-//     theme-type: dark,
-//     primary: mat.$violet-palette,
-//     tertiary: mat.$orange-palette,
-//   ),
-// ));
-// html,
-// body {
-//   height: 100%;
-// }
-// html{
-//   a{
-//     text-decoration: none;
-//   }
-//   body {
-//     margin: 0;
-//     font-family: Roboto, "Helvetica Neue", sans-serif;
-//     transition: background 0.8s;
-//     @include mat.all-component-themes($light-theme);
-//     @include lote.components($light-theme);
-//     &.dark {      
-//       @include mat.all-component-colors($dark-theme);
-//       @include lote.components($dark-theme);      
-//     }
-//   }
-// }
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}/* You can add global styles to this file, and also import other style files */
 
-
-@include theme((
-  type: light,  
-  color:(
-    font: black,
-    background: white,
-    primary: rgb(7,71,166),
-    accent: rgb(255, 160, 45),
-    warn: rgb(212, 14, 0),
-  )
-));
-@include theme((
-  type: dark,  
-  color:(
-    font: white,
-    background: rgb(20,20,20),
-    primary: rgb(0, 91, 228),
-    accent: rgb(255, 160, 45),
-    warn: rgb(212, 14, 0),
-  )
-));
-
-html,
-body {
-  margin: 0;
-  height: 100%;
-}
-
-@include stickyStructure();
-@include padStructure(5px);
-@include flexStructure(5px);
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
