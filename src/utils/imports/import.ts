@@ -5,15 +5,27 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from "@angular/forms";
+import { LoteInputComponent } from "../../app/components/lote/input/lote-input/lote-input.component";
+import { LoteBorderComponent } from "../../app/components/lote/border/lote-border/lote-border.component";
+import { LoteListComponent } from "../../app/components/lote/list/lote-list/lote-list.component";
+import { LoteModalComponent } from "../../app/components/lote/modal/lote-modal/lote-modal.component";
+
+const basicImports = [
+  CommonModule,
+  FormsModule,
+]
+
+const matImports = [
+  MatButtonModule,
+  MatDividerModule,
+  MatTooltipModule,
+  MatIconModule,
+  MatSlideToggleModule,
+]
 
 const componentBaseImports = [
-  MatButtonModule, // Uso de componentes do angular
-  MatIconModule, // Uso de componentes do angular
-  MatDividerModule, // Uso de componentes do angular
-  MatSlideToggleModule, // Uso de componentes do angular
-  CommonModule, // Basico para criação do componente
-  FormsModule, // Utilização de parametros,validações e funções de formulario (ngmodel) 
-  MatTooltipModule,
+  ...basicImports,
+  ...matImports,
   // IconDirective,
   // ClickDirective,
   // WritterAnimationDirective,
@@ -21,15 +33,21 @@ const componentBaseImports = [
   // LoteError,
 ]
 
+const directiveImports = [
+]
+
 const componentImports = [
-  ...componentBaseImports,
+  LoteBorderComponent,
+  LoteInputComponent,
+  LoteListComponent,
+  LoteModalComponent,
   // LoteBorderComponent,
   // LoteInputComponent,
 ]
 
-const otherImports = [
-  null
-]
-
-export { componentBaseImports, componentImports, otherImports };
+export { 
+  componentBaseImports,
+  componentImports,
+  directiveImports,
+};
 

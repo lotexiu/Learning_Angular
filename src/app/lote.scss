@@ -1,0 +1,5 @@
+@use "./components/lote/modal/lote-modal/lote-modal.component" as *;
+
+@mixin lote-theme($theme){
+  @include modal(gray)
+}

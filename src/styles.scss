@@ -8,6 +8,7 @@
 @use "./utils/scss/scroll" as *;
 @use "./utils/scss/theme"  as *;
 
+@use "./app/lote" as *;
 
 $purple_amber_palette: palette(
   #7700ff,  /* Primary */
@@ -29,6 +30,8 @@ html {
     typography: Roboto,
     density: 0,
   ));
+
+  @include lote-theme($purple_amber_palette);
 }
 
 html, body { margin: 0; height: 100%; }

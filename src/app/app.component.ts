@@ -1,15 +1,18 @@
 import { Component } from '@angular/core';
 import { Router, RouterOutlet, RoutesRecognized } from '@angular/router';
-import { componentImports } from '../utils/imports/import';
+import { componentBaseImports, componentImports } from '../utils/imports/import';
 import { lambda } from '../utils/component-utils';
 import { themeUtils } from '../utils/theme-utils';
 import { Nullable } from '../utils/interfaces/interfaces';
 import { _Route } from '../utils/route/route';
 import { RouteUtils } from '../utils/route/route-utils';
+import { LoteModalService } from './components/lote/modal/lote-modal/lote-modal.service';
+import { LoteInputComponent } from './components/lote/input/lote-input/lote-input.component';
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
+    ...componentBaseImports,
     ...componentImports,
   ],
   templateUrl: './app.component.html',
@@ -23,6 +26,7 @@ export class AppComponent {
 
   constructor(
     private router: Router,
+    private modalService: LoteModalService,
   ) {
 
   }
@@ -37,6 +41,12 @@ export class AppComponent {
     if (this.theme == 'dark') {
       this.value = true
     }
+
+    setTimeout(()=>{
+      this.modalService.open(
+        LoteInputComponent
+      )
+    },1000)
   }
   
 
