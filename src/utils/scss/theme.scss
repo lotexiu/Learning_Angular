@@ -69,3 +69,15 @@
     )
   );
 }
+
+@function themeCopy($theme) {
+  @return (
+    color: (
+      type    : get($theme, color, theme-type),
+      primary : get($theme, color, primary),
+      tertiary: get($theme, color, tertiary),
+    ),
+    typography: Roboto,
+    density   : get($theme, density),
+  );
+}

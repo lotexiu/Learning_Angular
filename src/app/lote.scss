@@ -1,5 +1,8 @@
+@use "../utils/scss/theme.scss" as *;
 @use "./components/lote/modal/lote-modal/lote-modal.component" as *;
 
+
 @mixin lote-theme($theme){
-  @include modal(gray)
+  $copiedTheme: themeCopy($theme);
+  @include modal($copiedTheme);
 }

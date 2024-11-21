@@ -153,6 +153,24 @@
   @return $result;
 }
 
+@function mixes($base, $args...) {
+  $result: $base;  
+  @each $arg in $args {
+    $color: nth($arg, 1);
+    $percentage: nth($arg, 2);    
+    $result: mix($color, $result, $percentage);
+  }  
+  @return $result;
+}
+
 @function pct($value) {
   @return $value * 1%;
+}
+
+@function if($condition, $if, $else: null) {
+  @if $condition {
+    @return $if;
+  } @else {
+    @return $else;
+  }
 }

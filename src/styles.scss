@@ -12,26 +12,26 @@
 
 $purple_amber_palette: palette(
   #7700ff,  /* Primary */
-  #ffffff,  /* Secondary */
-  #ffffff,  /* Tertiary */
-  #ffffff,  /* Neutral */
+  #ff9100,  /* Secondary */
+  #fffb00,  /* Tertiary */
+  #070707,  /* Neutral */
   red,      /* Error */
+);
+
+$theme: (
+  color: (
+    theme-type: dark,
+    primary: get($purple_amber_palette, primary),
+    tertiary: get($purple_amber_palette, tertiary),
+  ),
+  typography: Roboto,
+  density: 0,
 );
 
 html {
   // @include property(font, '<color>', false, $font);
-
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: get($purple_amber_palette, primary),
-      tertiary: get($purple_amber_palette, tertiary),
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
-
-  @include lote-theme($purple_amber_palette);
+  @include mat.theme($theme);
+  @include lote-theme($theme);
 }
 
 html, body { margin: 0; height: 100%; }
