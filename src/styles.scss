@@ -1,16 +1,22 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material'   as mat;
-@use "./utils/scss/utils"  as *;
+
 @use "./utils/scss/flex"   as *;
 @use "./utils/scss/pad"    as *;
 @use "./utils/scss/sticky" as *;
 @use "./utils/scss/scroll" as *;
+
+@use "./utils/scss/utils"  as *;
+@use "./utils/scss/color"  as *;
 @use "./utils/scss/theme"  as *;
+@use "./utils/scss/meta"   as *;
+@use "./utils/scss/map"    as *;
 
 @use "./app/lote" as *;
 
 $purple_amber_palette: palette(
+  3,
   #7700ff,  /* Primary */
   #ff9100,  /* Secondary */
   #fffb00,  /* Tertiary */
@@ -18,20 +24,21 @@ $purple_amber_palette: palette(
   red,      /* Error */
 );
 
-$theme: (
-  color: (
-    theme-type: dark,
-    primary: get($purple_amber_palette, primary),
-    tertiary: get($purple_amber_palette, tertiary),
-  ),
-  typography: Roboto,
-  density: 0,
-);
-
 html {
-  // @include property(font, '<color>', false, $font);
-  @include mat.theme($theme);
-  @include lote-theme($theme);
+  $material: get($purple_amber_palette, material);
+
+  // @debug $material;
+
+  @include mat.theme((
+    color: (
+      theme-type: dark,
+      primary: get($material, primary),
+      tertiary: get($material, tertiary),
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+  // @include lote-theme($theme);
 }
 
 html, body { margin: 0; height: 100%; }

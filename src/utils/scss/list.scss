@@ -1,0 +1,9 @@
+@use "sass:list";
+
+@function length($list) {
+  @return list.length($list);
+}
+
+@function nth($list, $n) {
+  @return list.nth($list, $n);
+}

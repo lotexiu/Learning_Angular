@@ -1,5 +1,5 @@
-@use "sass:math";
-@use './utils' as *;
+@use 'utils' as *;
+@use 'math' as *;
 
 /*
   Flex Layout System
@@ -34,7 +34,7 @@
   center    | c     - Centraliza (ambos eixos)
   v-center  | vc    - Centraliza vertical
   h-center  | hc    - Centraliza horizontal
-  right     | rt    - Alinha à direita
+  h-right   | hr    - Alinha à direita
   
   Estilo:
   -------
@@ -123,14 +123,14 @@
     [flex~="no-scroll"],
     [flex~="nscl"]
   ){
-    overflow: visible;
+    overflow: visible !important;
   }
 
   :is(
     [flex~="hide-scroll"],
     [flex~="hscl"]
   ){
-    overflow: hidden;
+    overflow: hidden !important;
   }
 
   :is(
@@ -157,6 +157,13 @@
   }
 
   :is(
+    [flex~="h-right"],
+    [flex~="hr"]
+  ) {
+    justify-content: flex-end;
+  }
+
+  :is(
     [flex~="border"],
     [flex~="b"] 
   ) {
@@ -176,6 +183,12 @@
     }
   }
 
+  @for $i from 0 through 20 {
+    [flex][gap~="#{$i}"] {
+      gap: #{$i}px;
+    }
+  }
+
   @for $i from 0 through 100 {
     $pct: calc($i/100);
     
@@ -183,14 +196,14 @@
       &[flex~="row"], 
       &[flex~="r"] {
         &[flex~="#{$i}"] {
-          height: math.percentage($pct);
+          height: percentage($pct);
         }
       }
     }
 
     :not([flex~="row"]):not([flex~="r"]) > [flex~="#{$i}"] {
-      max-width: math.percentage($pct);
-      min-width: max(math.percentage(calc($pct * 0.75)), 100px);
+      max-width: percentage($pct);
+      min-width: max(percentage(calc($pct * 0.75)), 100px);
 
       &[flex~="no-scroll"],
       &[flex~="nscl"]{
@@ -202,9 +215,10 @@
       [flex~="row"],
       [flex~="r"]
     ) > [flex~="#{$i}"] {
-      content: math.percentage($pct);
-      max-height: math.percentage($pct);
-      min-height: max(math.percentage(calc($pct * 0.75)) + 100px);
+      max-height: percentage($pct);
+      &:not([flex~="hscl"]):not([flex~="hide-scroll"]){
+        min-height: max(percentage(calc($pct * 0.75)) + 100px);
+      }
     }
   }
 }

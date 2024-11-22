@@ -1,36 +1,105 @@
-@use 'sass:map';
-@use 'sass:color';
-@use 'sass:math';
-@use './utils' as *;
+@use "@angular/material" as mat;
 
+@use "utils" as *;
+@use "color" as *;
+@use "map"  as *;
 
-@function gradiant($baseColor: red, $keys: (0,25,50,75,100)) {
+@function _palette-2($color) {
+  $values: (50, 100, 200, 300, 400, 500, 600, 700, 800, 900, A100, A200, A400, A700);
+
   $white: #fff;
-  $black: #000000;
-  $palette: ();
-  @each $key in $keys {
-    @if $key == 50 {
-      $palette: map.set($palette, $key, $baseColor);
-    }
-    @if $key == 0 {
-      $palette: map.set($palette, $key, rgb(0,0,0));
-    }
-    @else if $key < 50 {
-      /* Convert 0-50 range to 0-100% */
-      $percentage: math.div($key * 100, 50);
-      $palette: map.set($palette, $key, color.mix($baseColor, $black, pct($percentage)));
-    }
-    @else {
-      /* Convert 50-100 range to 0-100% */
-      $percentage: math.div(($key - 50) * 100, 50);
-      $palette: map.set($palette, $key, color.mix($white, $baseColor, pct($percentage)));
-    }
+  $black: #000;
+  $baseDark: multiply($color, $color);
+  
+  $palette: (
+    50 : mix($color, $white, 12%),
+    100 : mix($color, $white, 30%),
+    200 : mix($color, $white, 50%),
+    300 : mix($color, $white, 70%),
+    400 : mix($color, $white, 85%),
+    500 : mix($color, $white, 100%),
+    600 : mix($color, $baseDark, 87%),
+    700 : mix($color, $baseDark, 70%),
+    800 : mix($color, $baseDark, 54%),
+    900 : mix($color, $baseDark, 25%),
+    A100 : lighten(saturate(mix($black, $baseDark, 15%), 80%), 65%),
+    A200 : lighten(saturate(mix($black, $baseDark, 15%), 80%), 55%),
+    A400 : lighten(saturate(mix($black, $baseDark, 15%), 100%), 45%),
+    A700 : lighten(saturate(mix($black, $baseDark, 15%), 100%), 40%)
+  );
+ 
+  $contrast: ();
+  @each $v in $values {
+    $contrast: map-merge($contrast, ($v: getContrast(map_get($palette, $v))))
   }
+ 
+  $palette: map-merge($palette, (contrast: $contrast));
+ 
+  @return mat.define-palette($palette);
+}
+
+@function palette(
+  $palette-type: 3,
+  $primary:   rgb(160, 0, 196),
+  $secondary: rgb(255, 128, 0),
+  $tertiary:  rgb(0, 81, 255),
+  $neutral:   rgb(92, 59, 113),
+  $error:     rgb(145, 0, 0)
+) {
+
+  $palette: ();
+  @if $palette-type == 2 {
+    $material-2: palette-2($primary, $secondary, $error);
+    $material-3: palette-3($primary, $secondary, $tertiary, $neutral, $error);
+
+    $palette: (
+      theme: (
+        primary:          get($material-3, primary),
+        secondary:        get($material-3, primary, secondary),
+        tertiary:         get($material-3, tertiary),
+        neutral:          get($material-3, primary, neutral),
+        neutral-variant:  get($material-3, primary, neutral-variant),
+        error:            get($material-3, primary, error),
+      ),
+      material: $material-2
+    );
+
+  } @else if $palette-type == 3 {
+    $material-3: palette-3($primary, $secondary, $tertiary, $neutral, $error);
+
+    $palette: (
+      theme: (
+        primary:          get($material-3, primary),
+        secondary:        get($material-3, primary, secondary),
+        tertiary:         get($material-3, tertiary),
+        neutral:          get($material-3, primary, neutral),
+        neutral-variant:  get($material-3, primary, neutral-variant),
+        error:            get($material-3, primary, error),
+      ),
+      material: $material-3
+    );
+  }
+
   @return $palette;
 }
 
+@function palette-2(
+  $primary : rgb(160, 0, 196),
+  $accent  : rgb(255, 128, 0),
+  $warn    : rgb(145, 0, 0),
+) {
+  $primary-pelette: _palette-2($primary);
+  $accent-pelette: _palette-2($accent);
+  $warn-pelette: _palette-2($warn);
 
-@function palette(
+  @return (
+    primary: $primary-pelette,
+    accent: $accent-pelette,
+    warn: $warn-pelette,
+  );
+}
+
+@function palette-3(
   $primary:   rgb(160, 0, 196),
   $secondary: rgb(255, 128, 0),
   $tertiary:  rgb(0, 81, 255),
@@ -38,19 +107,20 @@
   $error:     rgb(145, 0, 0)
 ) {
   $keys: (0,10,20,25,30,35,40,50,60,70,80,90,95,98,99,100);
+  
   $primary-palette:   gradiant($primary, $keys);
   $secondary-palette: gradiant($secondary, $keys);
   $tertiary-palette:  gradiant($tertiary, $keys);
   $error-palette:   gradiant($error,  $keys);
 
-  $neutral-variant: color.mix(color.mix($primary, $neutral, 62%), white, 78%);
+  $neutral-variant: mix(mix($primary, $neutral, 62%), white, 78%);
   $neutral-variant-palette: gradiant($neutral-variant, $keys);
 
-  $keys: map.keys(map.merge(newMap($keys...), newMap(4,6,12,17,22,24,87,92,94,96)));
+  $keys: keys(merge(map($keys...), map(4,6,12,17,22,24,87,92,94,96)));
   $neutral-palette: gradiant($neutral, $keys);
 
   @return (
-    primary: map.merge(
+    primary: merge(
       $primary-palette, (
         secondary: $secondary-palette,
         neutral: $neutral-palette,
@@ -59,7 +129,7 @@
       )
     ),
 
-    tertiary: map.merge(
+    tertiary: merge(
       $tertiary-palette, (
         secondary: $secondary-palette,
         neutral: $neutral-palette,
@@ -67,17 +137,5 @@
         error: $error-palette
       )
     )
-  );
-}
-
-@function themeCopy($theme) {
-  @return (
-    color: (
-      type    : get($theme, color, theme-type),
-      primary : get($theme, color, primary),
-      tertiary: get($theme, color, tertiary),
-    ),
-    typography: Roboto,
-    density   : get($theme, density),
   );
 }

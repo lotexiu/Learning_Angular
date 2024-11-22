@@ -1,0 +1,43 @@
+@use "sass:map";
+
+/* 
+ * Função que acessa valores em mapas aninhados
+ * @param {map} $map - Mapa de dados
+ * @param {string...} $keys - Lista de chaves para acessar o valor
+ * @return {*} Valor encontrado no mapa
+ */
+ @function get($map, $keys...) {
+  $value: $map;
+  @each $key in $keys {
+    $value: map.get($value, $key);
+  }
+  @return $value;
+}
+
+@function set($map, $key, $value) {
+  @return map.set($map, $key, $value);
+}
+
+@function map($keys...){
+  $map: ();
+  @each $key in $keys {
+    $map: map.merge($map, ($key: null));
+  }
+  @return $map;
+}
+
+@function keys($map) {
+  @return map.keys($map);
+}
+
+@function values($map) {
+  @return map.values($map);
+}
+
+@function merge($map1, $map2) {
+  @return map.merge($map1, $map2);
+}
+
+@function has-key($map, $key) {
+  @return map.has-key($map, $key);
+}

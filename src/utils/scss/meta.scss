@@ -1,0 +1,5 @@
+@use "sass:meta";
+
+@function type-of($value) {
+  @return meta.type-of($value);
+}

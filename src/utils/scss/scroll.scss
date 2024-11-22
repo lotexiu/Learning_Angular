@@ -1,20 +1,26 @@
-@mixin simpleScroll($thumbColor) {
+@use 'color' as *;
+
+@mixin simpleScroll($track, $thumb) {
   &::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
   &::-webkit-scrollbar-track {
-    background: mix-v2(var(--font) 10%, transparent);
+    background: mix($track 10%, transparent);
     border-radius: 5px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: mix-v2($thumbColor 20%, transparent);
+    background: mix($thumb 20%, transparent);
     border-radius: 5px;
   }
 
   &::-webkit-scrollbar-thumb:active {
-    background: mix-v2($thumbColor 80%, transparent);
+    background: mix($thumb 80%, transparent);
   }
 }
