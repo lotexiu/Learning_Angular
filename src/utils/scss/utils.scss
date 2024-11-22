@@ -5,11 +5,12 @@
 @use "sass:meta" as *;
 @use "@angular/material" as mat;
 
-/* 
- * Função que gera uma lista de seletores CSS concatenados
- * @param {string...} $args - Lista variável de seletores CSS
- * @return {string} String concatenada de seletores separados por vírgula
- */
+/// Gera uma lista de seletores CSS concatenados
+/// @param {List} $args - Lista variável de seletores CSS
+/// @return {String} String concatenada de seletores separados por vírgula
+/// @example scss
+///   selectorList('.classe1', '.classe2') => '.classe1, .classe2'
+///
 @function selectorList($args...) {
   $selector: null;
   /* Percorrendo pelos lista de seletores */
@@ -25,13 +26,14 @@
   @return $selector;
 }
 
-/* 
- * Função que cria seletores de atributos com validações
- * @param {string} $attribute - Nome do atributo
- * @param {string} $validation - Tipo de validação ('is', 'not' ou '>')
- * @param {string...} $args - Valores para validação
- * @return {string} Seletor CSS completo
- */
+/// Cria seletores de atributos com validações
+/// @param {String} $attribute - Nome do atributo
+/// @param {String} $validation ['not'] - Tipo de validação ('is', 'not' ou '>')
+/// @param {List} $args - Valores para validação
+/// @return {String} Seletor CSS completo
+/// @example scss
+///   selector('data-type', 'is', 'button') => '[data-type][data-type~="button"]'
+///
 @function selector($attribute, $validation: 'not', $args...) {
   $selector: '[#{$attribute}]';
 
@@ -50,13 +52,14 @@
   @return $selector;
 }
 
-/* 
- * Mixin que define uma propriedade CSS customizada
- * @param {string} $property - Nome da propriedade
- * @param {string} $type - Sintaxe da propriedade
- * @param {boolean} $inherit - Se a propriedade é herdada
- * @param {*} $value - Valor inicial da propriedade
- */
+/// Define uma propriedade CSS customizada
+/// @param {String} $property - Nome da propriedade
+/// @param {String} $type - Sintaxe da propriedade
+/// @param {Boolean} $inherit - Se a propriedade é herdada
+/// @param {*} $value - Valor inicial da propriedade
+/// @example scss
+///   @include property('minha-cor', '<color>', false, #ff0000)
+///
 @mixin property($property, $type, $inherit, $value) {
   @property --#{$property} {
     syntax: $type;
@@ -70,6 +73,12 @@
   // }
 }
 
+/// Converte um número para porcentagem
+/// @param {Number} $value - Valor a ser convertido
+/// @return {Number} Valor em porcentagem
+/// @example scss
+///   pct(0.5) => 50%
+///
 @function pct($value) {
   @return $value * 1%;
 }
