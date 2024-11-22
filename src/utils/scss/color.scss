@@ -56,7 +56,7 @@
   @return div(
     channel($color, "red", $space: rgb) * 299 + 
     channel($color, "green", $space: rgb) * 587 + 
-    color-channel($color, "blue", $space: rgb) * 114, 
+    channel($color, "blue", $space: rgb) * 114, 
     1000
   );
 }
@@ -112,7 +112,7 @@
   $space: rgb
 ){
   @if function-exists("channel", "color") {
-    @return channel($color, $type, $space);
+    @return color.channel($color, $type, $space);
   } @else {
     @if $type == 'red' {
       @return red($color);

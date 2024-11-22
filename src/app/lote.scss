@@ -3,6 +3,5 @@
 
 
 @mixin lote-theme($theme){
-  $copiedTheme: themeCopy($theme);
-  @include modal($copiedTheme);
+  @include modal($theme);
 }

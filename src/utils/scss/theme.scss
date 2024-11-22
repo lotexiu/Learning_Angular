@@ -35,7 +35,11 @@
  
   $palette: map-merge($palette, (contrast: $contrast));
  
-  @return mat.define-palette($palette);
+  @if function-exists("define-palette", mat) {
+    @return mat.define-palette($palette);
+  } @else {
+    @error "Angular Material 2 required. Angular: 12.0.0 ~= 18.0.0";
+  }
 }
 
 @function palette(
@@ -54,11 +58,11 @@
 
     $palette: (
       theme: (
-        primary:          get($material-3, primary),
-        secondary:        get($material-3, primary, secondary),
-        tertiary:         get($material-3, tertiary),
-        neutral:          get($material-3, primary, neutral),
-        neutral-variant:  get($material-3, primary, neutral-variant),
+        // primary:          get($material-3, primary),
+        // secondary:        get($material-3, primary, secondary),
+        // tertiary:         get($material-3, tertiary),
+        // neutral:          get($material-3, primary, neutral),
+        // neutral-variant:  get($material-3, primary, neutral-variant),
         error:            get($material-3, primary, error),
       ),
       material: $material-2
@@ -89,8 +93,8 @@
   $warn    : rgb(145, 0, 0),
 ) {
   $primary-pelette: _palette-2($primary);
-  $accent-pelette: _palette-2($accent);
-  $warn-pelette: _palette-2($warn);
+  // $accent-pelette: _palette-2($accent);
+  // $warn-pelette: _palette-2($warn);
 
   @return (
     primary: $primary-pelette,

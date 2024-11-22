@@ -26,7 +26,7 @@ $purple_amber_palette: palette(
 
 html {
   $material: get($purple_amber_palette, material);
-
+  $theme: get($purple_amber_palette, theme);
   // @debug $material;
 
   body {
@@ -40,6 +40,8 @@ html {
         typography: Roboto,
         density: 0,
       ));
+
+      // $theme: merge($theme, (type: dark));
       @include lote-theme($theme);
     }
     &.light {
@@ -52,6 +54,8 @@ html {
         typography: Roboto,
         density: 0,
       ));
+
+      // $theme: merge($theme, (type: light));
       @include lote-theme($theme);
     }
   }

@@ -1,10 +1,13 @@
-@use "../../../../../utils/scss/utils" as *;
-@use "sass:color";
+@use "utils" as *;
+@use "color" as *; 
+@use "map" as *;
 
 @mixin modal($theme){
-  $type: get($theme, type);
-  $primary: get($theme, color, primary, 50);
-  $secondary: get($theme, color, primary, secondary, 50);
+  @debug keys($theme);
+
+  $type: null;//get($theme, type);
+  $primary: null;//get($theme, primary, 50);
+  $secondary: null;//get($theme, secondary, 50);
 
   $background: if($type == light, black, white);
   $font: if($type == light, white, black);
