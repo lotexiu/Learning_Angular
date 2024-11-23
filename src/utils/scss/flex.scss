@@ -1,223 +1,164 @@
 @use 'utils' as *;
 @use 'math' as *;
 
-/*
-  Flex Layout System
-  ==================
+$duration: 0.3s;
 
-  Atributos Básicos:
-  ------------------
-  on        - Ativa flex em elementos aninhados
-  row | r   - Fluxo em coluna (vertical)
-  wrap | w  - Permite quebra de linha dos elementos
+@mixin FlexTransition($direction, $name) {
+  @keyframes Flex#{$name} {
+    from {
+      flex-grow: 1;
+    }
+    to {
+      flex-grow: 0;
+    }
+  }
+  @if $direction == 'forward' {
+    animation: Flex#{$name} 0s, Flex#{$name} $duration reverse;
+    animation-fill-mode: both;
+  }
+  @else if $direction == 'reverse' {
+    animation: Flex#{$name} 0s reverse, Flex#{$name} $duration;
+    animation-fill-mode: both;
+  }
+}
 
-  Dimensionamento:
-  ---------------
-  [0-100]   - Largura/altura em porcentagem
-  [0-100]vh - Altura baseada na viewport
-  [0-100]vw - Largura baseada na viewport
-  
-  Comportamento:
-  -------------
-  grow    | g     - Permite crescimento
-  shrink  | s     - Permite redução
-  no-shrink | ns  - Impede redução
-  
-  Scroll:
-  -------
-  no-scroll   | nscl  - Remove scroll (visible)
-  hide-scroll | hscl  - Esconde scroll (hidden)
-  no-scroll-son | nscls - Remove scroll (visible) apenas do filho
-  
-  Alinhamento:
-  -----------
-  center    | c     - Centraliza (ambos eixos)
-  v-center  | vc    - Centraliza vertical
-  h-center  | hc    - Centraliza horizontal
-  h-right   | hr    - Alinha à direita
-  
-  Estilo:
-  -------
-  border    | b     - Adiciona borda
-  
-  Transições:
-  -----------
-  slow      | slw   - Transição 1s
-  very-slow | v-slw - Transição 2s
-  
-  Gap:
-  ----
-  [gap="n direction"] - Espaçamento entre elementos
-    n: tamanho do gap
-    direction: row/col (opcional)
-    Ex: gap="10 row", gap="8"
-*/
 @mixin flexStructure($gap) {
+  * {
+    --flex: false;
+    --col: false;
+  }
 
-  // Base flex para elementos sem pai flex ou com "on" explícito
-  *:not([flex] > [flex])[flex],
-  [flex~="on"] {
-    display: flex;
+  [flex] {
+    --flex: true;
+    --col: false;
+
+    transition: 
+      max-height $duration allow-discrete, 
+      min-height $duration allow-discrete, 
+      flex-basis $duration allow-discrete, 
+      flex-grow  $duration allow-discrete;
+
     gap: $gap;
-    overflow-x: auto;
-    overflow-y: hidden;
-
-    $selector   : selector('flex', 'not', 'no-scroll-son', 'nscls');
-    $sonSelector: selector('flex', 'not', 'no-scroll', 'nscl');
-
-    &[flex~="r"]#{$selector} > #{$sonSelector},
-    &[flex~="row"]#{$selector} > #{$sonSelector} {
-      overflow-y: auto;
-    }
-
-    $selector: selector('flex', 'not', 'row', 'r', 'no-scroll-son', 'nscls');
-    &#{$selector} > #{$sonSelector}{
-      overflow-x: auto;
-    }
-  }
-
-  [flex]{
-    box-sizing: border-box;
-    transition: max-width 0.5s, max-height 0.5s ;
-    text-wrap: nowrap;
-  }
-
-  :is(
-    [flex~="row"],
-    [flex~="r"]
-  ) {
+    display: flex;
     flex-flow: column;
     overflow-y: auto;
     overflow-x: hidden;
-  }
 
-  :is(
-    [flex~="wrap"],
-    [flex~="w"]
-  ) {
-    flex-wrap: wrap;
-  }
-  
-  :is(
-    [flex~="grow"],
-    [flex~="g"]
-  ) {
-    flex-grow: 1;
-  }
-
-  :is(
-    [flex~="shrink"],
-    [flex~="s"]
-  ) {
-    flex-shrink: 1;
-  }
-
-  :is(
-    [flex~="no-shrink"],
-    [flex~="ns"]
-  ) {
-    flex-shrink: 0;
-  }
-
-  :is(
-    [flex~="no-scroll"],
-    [flex~="nscl"]
-  ){
-    overflow: visible !important;
-  }
-
-  :is(
-    [flex~="hide-scroll"],
-    [flex~="hscl"]
-  ){
-    overflow: hidden !important;
-  }
-
-  :is(
-    [flex~="center"],
-    [flex~="c"]
-   ) {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-
-  :is(
-    [flex~="v-center"],
-    [flex~="vc"]
-  ) {
-    align-items: center;
-  }
-
-  :is(
-    [flex~="h-center"],
-    [flex~="hc"] 
-  ) {
-    justify-content: center;
-  }
-
-  :is(
-    [flex~="h-right"],
-    [flex~="hr"]
-  ) {
-    justify-content: flex-end;
-  }
-
-  :is(
-    [flex~="border"],
-    [flex~="b"] 
-  ) {
-    margin: 5px;
-    padding: $gap;
-    border: 1px solid;
-    border-radius: 10px;
-  }
-
-  @for $i from 0 through 100 {
-    [flex~="#{$i}vh"] {
-      height: #{$i}vh;
+    @container style(--flex: true) and style(--col: true) {
+      &#{attrContains(flex, ':not($)', grow, g)}{
+        max-width: max-content;
+      }
     }
-    
-    [flex~="#{$i}vw"] {
-      width: #{$i}vw;
-    }
-  }
 
-  @for $i from 0 through 20 {
-    [flex][gap~="#{$i}"] {
-      gap: #{$i}px;
+    @container style(--flex: true) and style(--col: false) {
+      &#{attrContains(flex, ':not($)', grow, g)}{
+        max-height: max-content;
+      }
     }
-  }
 
-  @for $i from 0 through 100 {
-    $pct: calc($i/100);
-    
-    :not([flex] > [flex]) {
-      &[flex~="row"], 
-      &[flex~="r"] {
-        &[flex~="#{$i}"] {
-          height: percentage($pct);
+    #{attrContains(flex, '&$', off)} {
+      display: block;
+    }
+
+    #{attrContains(flex, '&$,', column, col)} {
+      --col: true;
+      flex-flow: row;
+      overflow-y: hidden;
+      overflow-x: auto;
+    }
+
+    #{attrContains(flex, '&$,', grow, g)} {
+      flex-grow: 1;
+
+      @container style(--flex: true) and style(--col: true) {
+        max-width: 100%;
+      }
+      @container style(--flex: false) and style(--col: true) {
+        width: 100%;
+      }
+      @container style(--flex: true) and style(--col: false) {
+        max-height: 100%;
+      }
+      @container style(--flex: false) and style(--col: false) {
+        height: 100%;
+      }
+    }
+
+    #{attrContains(flex, '&$,', shrink, s)} {
+      flex-shrink: 1;
+    }
+
+    #{attrContains(flex, '&$,', no-shrink, ns)} {
+      flex-shrink: 0;
+    }
+
+    #{attrContains(flex, '&$,', wrap, w)} {
+      flex-wrap: wrap;
+    }
+
+    #{attrContains(flex, '&$,', no-scroll, nscl)} {
+      overflow: visible !important;
+    }
+
+    #{attrContains(flex, '&$,', hide-scroll, hscl)} {
+      overflow: hidden !important;
+    }
+
+    #{attrContains(flex, '&$,', center, c)} {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    #{attrContains(flex, '&$,', v-center, vc)} {
+      @container style(--col: true) {
+        justify-content: center;
+      }
+      @container style(--col: false) {
+        align-items: center;
+      }
+    }
+
+    #{attrContains(flex, '&$,', h-center, hc)} {
+      @container style(--col: true) {
+        align-items: center;
+      }
+      @container style(--col: false) {
+        justify-content: center;
+      }
+    }
+
+    #{attrContains(flex, '&$,', h-right, hr)} {
+      justify-content: flex-end;
+    }
+
+    @for $i from 0 through 100 {
+      $pct: calc($i/100);
+
+      #{attrContains(flex, '&$', $i)} {
+        @container style(--flex: true) and style(--col: true) {
+          max-width: percentage($pct) !important;
+        }
+        @container style(--flex: false) and style(--col: true) {
+          width: percentage($pct) !important;
+        }
+
+        @container style(--flex: true) and style(--col: false) {
+          max-height: percentage($pct) !important;
+        }
+        @container style(--flex: false) and style(--col: false) {
+          height: percentage($pct) !important;
         }
       }
-    }
 
-    :not([flex~="row"]):not([flex~="r"]) > [flex~="#{$i}"] {
-      max-width: percentage($pct);
-      min-width: max(percentage(calc($pct * 0.75)), 100px);
-
-      &[flex~="no-scroll"],
-      &[flex~="nscl"]{
-        overflow: hidden;
+      #{attrContains(gap, '&$', $i)} {
+        gap: #{$i}px;
       }
     }
-    
-    :is(
-      [flex~="row"],
-      [flex~="r"]
-    ) > [flex~="#{$i}"] {
-      max-height: percentage($pct);
-      &:not([flex~="hscl"]):not([flex~="hide-scroll"]){
-        min-height: max(percentage(calc($pct * 0.75)) + 100px);
+
+    @starting-style {
+      [flex] {
+        // background: gray;
       }
     }
   }

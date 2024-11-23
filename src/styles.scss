@@ -14,12 +14,13 @@
 @use "./utils/scss/map"    as *;
 
 @use "./app/lote" as *;
+@use './app/app.component' as *;
 
 $purple_amber_palette: palette(
   3,
-  #7700ff,  /* Primary */
-  #ff9100,  /* Secondary */
-  #fffb00,  /* Tertiary */
+  #c300ff,  /* Primary */
+  #f19100,  /* Secondary */
+  #00039b,  /* Tertiary */
   #070707,  /* Neutral */
   red,      /* Error */
 );
@@ -41,8 +42,9 @@ html {
         density: 0,
       ));
 
-      // $theme: merge($theme, (type: dark));
+      $theme: merge($theme, (type: dark));
       @include lote-theme($theme);
+      @include App($theme);
     }
     &.light {
       @include mat.theme((
@@ -55,8 +57,9 @@ html {
         density: 0,
       ));
 
-      // $theme: merge($theme, (type: light));
+      $theme: merge($theme, (type: light));
       @include lote-theme($theme);
+      @include App($theme);
     }
   }
 

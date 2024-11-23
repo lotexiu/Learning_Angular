@@ -13,12 +13,10 @@
 ///   mix(#ff0000, #0000ff, 50%) => #800080
 ///
 @function mix($color1: (black, 0%), $colors...) {
-  @if length($colors) >= 2 {
+  $third: if(length($colors) == 2, nth($colors, 2), null);
+  @if $third != null and type-of($third) == "number" {
     $second: nth($colors, 1);
-    $third: nth($colors, 2);    
-    @if type-of($third) == "number" {
-      @return color.mix($color1, $second, $third);
-    }
+    @return color.mix($color1, $second, $third);
   }
   @else {
     $result: $color1;
@@ -108,12 +106,12 @@
     @else if $key < 50 {
       /* Convert 0-50 range to 0-100% */
       $percentage: div($key * 100, 50);
-      $palette: set($palette, $key, mix($baseColor, $black, pct($percentage)));
+      $palette: set($palette, $key, mix($baseColor, $black, toPercent($percentage)));
     }
     @else {
       /* Convert 50-100 range to 0-100% */
       $percentage: div(($key - 50) * 100, 50);
-      $palette: set($palette, $key, mix($white, $baseColor, pct($percentage)));
+      $palette: set($palette, $key, mix($white, $baseColor, toPercent($percentage)));
     }
   }
   @return $palette;

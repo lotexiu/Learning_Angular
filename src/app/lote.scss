@@ -3,5 +3,5 @@
 
 
 @mixin lote-theme($theme){
-  @include modal($theme);
+  @include lote-modal($theme);
 }

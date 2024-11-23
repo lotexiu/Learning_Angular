@@ -1,78 +1,164 @@
-@use "utils" as *;
-@use "color" as *; 
 @use "map" as *;
+@use "utils" as *;
+@use 'color' as *;
 
-@mixin modal($theme){
-  @debug keys($theme);
+@mixin GradiantAnimation(){
+  @include property(deg1-x, '<percentage>', false, 50%);
+  @include property(deg1-y, '<percentage>', false, 50%);
+  @include property(deg2-x, '<percentage>', false, 50%);
+  @include property(deg2-y, '<percentage>', false, 50%);
+  @include property(deg3-x, '<percentage>', false, 50%);
+  @include property(deg3-y, '<percentage>', false, 50%);
+  @include property(deg4-x, '<percentage>', false, 50%);
+  @include property(deg4-y, '<percentage>', false, 50%);
 
-  $type: null;//get($theme, type);
-  $primary: null;//get($theme, primary, 50);
-  $secondary: null;//get($theme, secondary, 50);
+  @keyframes moveGradient {
+    0% {
+      --deg1-x: 23%; --deg1-y: 37%;
+      --deg2-x: 82%; --deg2-y: 21%;
+      --deg3-x: 31%; --deg3-y: 73%;
+      --deg4-x: 69%; --deg4-y: 42%;
+  }
+  10% {
+      --deg1-x: 61%; --deg1-y: 43%;
+      --deg2-x: 19%; --deg2-y: 63%;
+      --deg3-x: 52%; --deg3-y: 22%;
+  }
+  20% {
+      --deg1-x: 79%; --deg1-y: 53%;
+      --deg2-x: 18%; --deg2-y: 79%;
+      --deg3-x: 63%; --deg3-y: 32%;
+      --deg4-x: 41%; --deg4-y: 59%;
+  }
+  30% {
+      --deg1-x: 42%; --deg1-y: 68%;
+      --deg2-x: 62%; --deg2-y: 33%;
+      --deg4-x: 21%; --deg4-y: 51%;
+  }
+  40% {
+      --deg1-x: 51%; --deg1-y: 81%;
+      --deg2-x: 71%; --deg2-y: 29%;
+      --deg3-x: 22%; --deg3-y: 49%;
+      --deg4-x: 81%; --deg4-y: 19%;
+  }
+  50% {
+      --deg1-x: 29%; --deg1-y: 19%;
+      --deg3-x: 71%; --deg3-y: 41%;
+      --deg4-x: 49%; --deg4-y: 69%;
+  }
+  60% {
+      --deg1-x: 32%; --deg1-y: 21%;
+      --deg2-x: 52%; --deg2-y: 71%;
+      --deg3-x: 79%; --deg3-y: 39%;
+      --deg4-x: 19%; --deg4-y: 81%;
+  }
+  70% {
+      --deg1-x: 59%; --deg1-y: 52%;
+      --deg2-x: 31%; --deg2-y: 41%;
+      --deg4-x: 71%; --deg4-y: 31%;
+  }
+  80% {
+      --deg1-x: 71%; --deg1-y: 69%;
+      --deg2-x: 29%; --deg2-y: 42%;
+      --deg3-x: 51%; --deg3-y: 21%;
+      --deg4-x: 61%; --deg4-y: 51%;
+  }
+  90% {
+      --deg1-x: 41%; --deg1-y: 61%;
+      --deg2-x: 69%; --deg2-y: 22%;
+      --deg3-x: 32%; --deg3-y: 79%;
+  }
+  100% {
+      --deg1-x: 42%; --deg1-y: 39%;
+      --deg2-x: 61%; --deg2-y: 59%;
+      --deg3-x: 71%; --deg3-y: 32%;
+      --deg4-x: 31%; --deg4-y: 71%;
+  }
+  }
+}
+
+@mixin lote-modal($theme){
+  $type: get($theme, type);
+  $primary: get($theme, primary, 50);
+  $secondary: get($theme, secondary, 50);
+  $tertiary: get($theme, tertiary, 50);
+  $quarter: white;
 
   $background: if($type == light, black, white);
   $font: if($type == light, white, black);
 
-  $radius: 10px;
-
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+  [GlassMain] {
+    position: absolute;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+    width: 100%;
+
+    transition: 
+      opacity 500ms ease-in-out allow-discrete,
+      display 500ms ease-in-out allow-discrete;
+      
+    opacity: 1;
+
+    &.hide {
+      opacity: 0;
+      display: none;
+    }
+
+    background: mix(black, transparent 60%);
+
+    > [Height] {
+      transition: transform 500ms ease-in-out allow-discrete;
+      transform: scale(1);
+    }
+
+    > [Height] > [Width] {
+      position: relative;
+      container-type: inline-size;
+
+      $blurSize: 5%;
+      > [ColorfulBG] {
+        position: absolute;
+        top: - calc($blurSize / 2);
+        left: - calc($blurSize / 2);
+        height: calc(100% + $blurSize);
+        width: calc(100% + $blurSize);
+        
+        background: 
+          radial-gradient(circle at var(--deg1-x, 50%) var(--deg1-y, 50%), $primary, transparent 60%),
+          radial-gradient(circle at var(--deg2-x, 50%) var(--deg2-y, 50%), $secondary, transparent 60%),
+          radial-gradient(circle at var(--deg3-x, 50%) var(--deg3-y, 50%), $tertiary 20%, transparent 50%),
+          radial-gradient(circle at var(--deg4-x, 50%) var(--deg4-y, 50%), $background, transparent 60%);
+        
+        animation: moveGradient 30s ease-in-out alternate infinite;
+        filter: blur(20px);
+
+        @media (width < 1280px) {
+          filter: blur(10px);
+        }
+      }
+      > [Glass] {
+        border-radius: 10px;
+        pointer-events: all;
+        backdrop-filter: blur(3px);
+        background: linear-gradient(0deg, black -50%, mix(white, transparent 80%) 100%);
+
+        box-shadow: 0px 2px 12px 10px rgba(0 0 0 / 80%);
+        @include border(
+          1px,
+          solid,
+          mix(white, black 70%) mix(black, white 70%),
+        );
+      }
+    }
+
   }
-  // outline: 4px solid $secondary;
-  .modal-container {
-
-    background: $background;
-    color: $font;
-    padding: 20px;
-    border-radius: $radius;
-    min-width: 300px;
-    max-width: 90%;
-    max-height: 90vh;
-
-    position: relative;
-
-    &::after, &::before {
-      content: '';
-      display: block;
-      position: absolute;
-      box-sizing: border-box;
-      pointer-events: none;
+  @starting-style {
+    [GlassMain] {
+      opacity: 0;
+      
+      > [Height] {
+        transform: scale(0);
+      }
     }
-
-    &::after {
-      $padding: 6px;
-      top: calc($padding / 2);
-      left: calc($padding / 2);
-      width: calc(100% - $padding);
-      height: calc(100% - $padding);
-
-      border-radius: $radius;
-      border: 2px solid $primary;
-    }
-
-    &::before {
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-
-      border-radius: $radius;
-      border: 20px solid $secondary;
-      filter: blur(14px);
-    }
-  }
-  
-  .hidden {
-    display: none;
   }
 }
-
+@include GradiantAnimation();

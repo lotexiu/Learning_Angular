@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "meta" as *;
 
 /// Acessa valores em mapas aninhados
 /// @param {Map} $map - Mapa de dados

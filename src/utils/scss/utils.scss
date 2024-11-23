@@ -1,9 +1,9 @@
-@use "sass:math" as *;
-@use "sass:map";
 @use "sass:color" as *;
-@use "sass:string" as *;
+@use "sass:math" as *;
 @use "sass:meta" as *;
-@use "@angular/material" as mat;
+@use "sass:map";
+@use "string" as *;
+@use 'list' as *;
 
 /// Gera uma lista de seletores CSS concatenados
 /// @param {List} $args - Lista variável de seletores CSS
@@ -73,12 +73,50 @@
   // }
 }
 
-/// Converte um número para porcentagem
-/// @param {Number} $value - Valor a ser convertido
-/// @return {Number} Valor em porcentagem
-/// @example scss
-///   pct(0.5) => 50%
-///
-@function pct($value) {
-  @return $value * 1%;
+@function attrContains($attr, $baseValidation: null, $values...) {
+  $selector: null;
+  
+  @each $value in $values {
+    $currentSelector: '[#{$attr}~="#{$value}"]';
+    
+    // Se tem baseValidation, aplica para cada valor
+    @if $baseValidation != null {
+      // Substitui $ pelo seletor atual
+      $processedSelector: str-replace($baseValidation, "$", $currentSelector);
+      
+      @if $selector == null {
+        $selector: $processedSelector;
+      } @else {
+        $selector: $selector + $processedSelector;
+      }
+    } @else {
+      // Comportamento original sem baseValidation
+      @if $selector == null {
+        $selector: $currentSelector;
+      } @else {
+        $selector: $selector + ', ' + $currentSelector;
+      }
+    }
+  }
+  
+  @return $selector;
+}
+
+@mixin border($sizes, $style, $colors) {
+  @if length($sizes) == 1 {
+    $sizes: ($sizes, $sizes, $sizes, $sizes);
+  }
+  @if length($colors) == 1 {
+    $colors: ($colors, $colors, $colors, $colors);
+  }
+  @else if length($colors) == 2 {
+    $colors: (
+      nth($colors, 1), nth($colors, 1),
+      nth($colors, 2), nth($colors, 2),
+    );
+  }
+  border-bottom: nth($sizes, 1) nth($colors, 1) $style;
+  border-left:   nth($sizes, 2) nth($colors, 2) $style;
+  border-top:    nth($sizes, 3) nth($colors, 3) $style;
+  border-right:  nth($sizes, 4) nth($colors, 4) $style;
 }

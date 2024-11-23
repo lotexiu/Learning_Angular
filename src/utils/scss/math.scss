@@ -7,3 +7,7 @@
 @function div($a, $b) {
   @return math.div($a, $b);
 }
+
+@function toPercent($value) {
+  @return $value * 1%;
+}
