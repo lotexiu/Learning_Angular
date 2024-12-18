@@ -1,6 +1,11 @@
 import { EnvironmentProviders, Provider, Type } from "@angular/core";
 import { Data, DefaultExport, LoadChildrenCallback, Resolve, ResolveData, ResolveFn, Routes, RunGuardsAndResolvers, UrlMatcher } from "@angular/router";
 import { Observable } from "rxjs";
+import { ArrayType } from "../interfaces/interfaces";
+import { Routes as Routes_ } from "./route";
+
+type MinimalRoute = [string, string, Component_];
+type AddChildren = Routes_[]| MinimalRoute[];
 
 type CanActivate_ = any[] | undefined;
 type CanActivateChild_ = any[] | undefined;
@@ -28,6 +33,8 @@ type LoadComponent_ =  (() =>
 ) | undefined;
 
 export {
+  MinimalRoute,
+  AddChildren,
   CanActivate_,
   CanActivateChild_,
   CanDeactivate_,

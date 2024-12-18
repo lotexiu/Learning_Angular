@@ -10,11 +10,9 @@ class RouteUtils {
   }
   
   static getRoute(path: string): Nullable<_Route> {
-    const route: Nullable<_Route> = allRoutes.find((routes: Routes): string | undefined =>
-      routes.paths.find((path: string): boolean =>
-        path.includes(path)))?.routes.find((route: _Route): boolean =>
-          path.includes(route.path || ''))
-    return route
+    return allRoutes.find((routes: Routes) => {
+      return path == `/${routes.fullPath}`
+    })?.toRoute()
   }
 }
 

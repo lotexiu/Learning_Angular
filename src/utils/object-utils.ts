@@ -1,14 +1,14 @@
-import { ConcatStrIntoFunctions } from "./interfaces/interfaces"
+import { ConcatStrIntoFunctions, Nullable } from "./interfaces/interfaces"
 import { StringUtils } from "./string-utils"
 
 namespace ObjectUtils {
 
-  export function isNull<T>(value: T, ...customNullValues: any[]): value is T {
+  export function isNull<T>(value: Nullable<T>, ...customNullValues: any[]): value is Nullable<null> {
     if (customNullValues.map((v: any): string=>JSON.stringify(v)).includes(JSON.stringify(value))) return true as any
     return ![0,'',false].includes(value as any) && !value as any
   }
 
-  export function isNullOrUndefined<T>(value: T): value is T {
+  export function isNullOrUndefined<T>(value: Nullable<T>): value is Nullable<null> {
     return value == null || value == undefined
   }
 

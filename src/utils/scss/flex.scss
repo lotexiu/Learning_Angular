@@ -26,6 +26,21 @@ $duration: 0.3s;
   * {
     --flex: false;
     --col: false;
+
+    @container style(--flex: true) and style(--col: true) {
+      &:not([flex]) {
+        max-width: 100%;
+      }
+    }  
+    @container style(--flex: true) and style(--col: false) {
+      &:not([flex]) {
+        max-height: 100%;
+      }
+    }
+  }
+
+  > *:not([flex]) {
+    max-height: 100;
   }
 
   [flex] {
@@ -44,17 +59,18 @@ $duration: 0.3s;
     overflow-y: auto;
     overflow-x: hidden;
 
+    /* Talvez esse codigo esteja redundante */
     @container style(--flex: true) and style(--col: true) {
       &#{attrContains(flex, ':not($)', grow, g)}{
         max-width: max-content;
       }
     }
-
     @container style(--flex: true) and style(--col: false) {
       &#{attrContains(flex, ':not($)', grow, g)}{
         max-height: max-content;
       }
     }
+    /* Talvez esse codigo esteja redundante */
 
     #{attrContains(flex, '&$', off)} {
       display: block;
@@ -119,6 +135,24 @@ $duration: 0.3s;
       }
     }
 
+    #{attrContains(flex, '&$,', v-top, vt)} {
+      @container style(--col: true) {
+        align-items: end;
+      }
+      @container style(--col: false) {
+        justify-content: flex-start;
+      }
+    }
+
+    #{attrContains(flex, '&$,', v-bottom, vb)} {
+      @container style(--col: true) {
+        align-items: start;
+      }
+      @container style(--col: false) {
+        justify-content: flex-end;
+      }
+    }
+
     #{attrContains(flex, '&$,', h-center, hc)} {
       @container style(--col: true) {
         align-items: center;
@@ -130,6 +164,14 @@ $duration: 0.3s;
 
     #{attrContains(flex, '&$,', h-right, hr)} {
       justify-content: flex-end;
+    }
+
+    #{attrContains(flex, '&$,', h-fit-content, h-fit)} {
+      min-width: fit-content;
+    }
+    
+    #{attrContains(flex, '&$,', v-fit-content, v-fit)} {
+      min-height: fit-content;
     }
 
     @for $i from 0 through 100 {

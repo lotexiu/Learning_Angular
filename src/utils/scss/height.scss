@@ -1,0 +1,52 @@
+@use 'utils' as *;
+@use 'math' as *;
+
+@mixin HeightStructure($min: 0%, $default: max-content, $max: 100%) {
+  [height] {
+    height: $min;
+    min-height: $default;
+    max-height: $max;
+
+    /* (0, 50, 100, 150, ...) */
+    @each $i in valuesFromSteps(50, 0, 20) {
+      /* Pixel */
+      #{attrContains(height, '&$', $i)} {
+        height: toPixel($i);
+      }
+    }
+
+    /* (0, 5, 10, 15, ...) */
+    @each $i in valuesFromSteps() {
+      /* Percent */
+      #{attrContains(height, '&$', $i)} {
+        height: toPercent($i);
+      }
+      #{attrContains(height, '&$', min#{$i})} {
+        min-height: toPercent($i);
+      }
+      #{attrContains(height, '&$', max#{$i})} {
+        max-height: toPercent($i);
+      }
+      /* Video Height */
+      #{attrContains(height, '&$', #{$i}vh)} {
+        height: toVH($i);
+      }
+      #{attrContains(height, '&$', min#{$i}vh)} {
+        min-height: toVH($i);
+      }
+      #{attrContains(height, '&$', max#{$i}vh)} {
+        max-height: toVH($i);
+      }
+      /* Video Width */
+      #{attrContains(height, '&$', #{$i}vw)} {
+        height: toVW($i);
+      }
+      #{attrContains(height, '&$', min#{$i}vw)} {
+        min-height: toVW($i);
+      }
+      #{attrContains(height, '&$', max#{$i}vw)} {
+        max-height: toVW($i);
+      }
+    }
+  }
+}

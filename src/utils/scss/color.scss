@@ -106,12 +106,12 @@
     @else if $key < 50 {
       /* Convert 0-50 range to 0-100% */
       $percentage: div($key * 100, 50);
-      $palette: set($palette, $key, mix($baseColor, $black, toPercent($percentage)));
+      $palette: set($palette, $key, mix($baseColor, $black, pct($percentage)));
     }
     @else {
       /* Convert 50-100 range to 0-100% */
       $percentage: div(($key - 50) * 100, 50);
-      $palette: set($palette, $key, mix($white, $baseColor, toPercent($percentage)));
+      $palette: set($palette, $key, mix($white, $baseColor, pct($percentage)));
     }
   }
   @return $palette;

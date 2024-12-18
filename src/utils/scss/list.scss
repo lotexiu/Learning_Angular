@@ -7,3 +7,7 @@
 @function nth($list, $n) {
   @return list.nth($list, $n);
 }
+
+@function append($list, $value) {
+  @return list.append($list, $value);
+}

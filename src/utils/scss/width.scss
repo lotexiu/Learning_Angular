@@ -1,0 +1,52 @@
+@use 'utils' as *;
+@use 'math' as *;
+
+@mixin WidthStructure($min: 0%, $default: max-content, $max: 100%) {
+  [width] {
+    width: $min;
+    min-width: $default;
+    max-width: $max;
+
+    /* (0, 50, 100, 150, ...) */
+    @each $i in valuesFromSteps(50, 0, 20) {
+      /* Pixel */
+      #{attrContains(width, '&$', $i)} {
+        width: toPixel($i);
+      }
+    }
+
+    /* (0, 5, 10, 15, ...) */
+    @each $i in valuesFromSteps() {
+      /* Percent */
+      #{attrContains(width, '&$', $i)} {
+        width: toPercent($i);
+      }
+      #{attrContains(width, '&$', min#{$i})} {
+        min-width: toPercent($i);
+      }
+      #{attrContains(width, '&$', max#{$i})} {
+        max-width: toPercent($i);
+      }
+      /* Video width */
+      #{attrContains(width, '&$', #{$i}vh)} {
+        width: toVH($i);
+      }
+      #{attrContains(width, '&$', min#{$i}vh)} {
+        min-width: toVH($i);
+      }
+      #{attrContains(width, '&$', max#{$i}vh)} {
+        max-width: toVH($i);
+      }
+      /* Video Width */
+      #{attrContains(width, '&$', #{$i}vw)} {
+        width: toVW($i);
+      }
+      #{attrContains(width, '&$', min#{$i}vw)} {
+        min-width: toVW($i);
+      }
+      #{attrContains(width, '&$', max#{$i}vw)} {
+        max-width: toVW($i);
+      }
+    }
+  }
+}
