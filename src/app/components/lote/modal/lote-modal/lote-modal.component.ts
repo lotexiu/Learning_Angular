@@ -1,11 +1,13 @@
 import { Component, Input, ViewChild, ComponentFactoryResolver, ViewContainerRef, Type, AfterViewInit } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { componentBaseImports } from '../../../../../utils/imports/import';
+import { LoteFiltersComponent } from '../../svg/filters/lote-filters/lote-filters.component';
 
 @Component({
   selector: 'app-lote-modal',
   imports: [
-    ...componentBaseImports
+    ...componentBaseImports,
+    LoteFiltersComponent
   ],
   templateUrl: './lote-modal.component.html',
   styleUrl: './lote-modal.component.scss'
@@ -13,7 +15,7 @@ import { componentBaseImports } from '../../../../../utils/imports/import';
 export class LoteModalComponent implements AfterViewInit {
   @Input() data: any;
   @Input() childComponent!: Type<any>;
-  @ViewChild('modalContent', { read: ViewContainerRef }) modalContent!: ViewContainerRef;
+  @ViewChild('modalContent', { read: ViewContainerRef }) modalContent?: ViewContainerRef;
   
   overlayRef: OverlayRef | null = null;
 
@@ -21,8 +23,10 @@ export class LoteModalComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     if (this.childComponent) {
-      const componentRef = this.modalContent.createComponent(this.childComponent);
-      Object.assign(componentRef.instance, this.data);
+      const componentRef = this.modalContent?.createComponent(this.childComponent);
+      if (componentRef) {
+        Object.assign(componentRef.instance, this.data);
+      }
     }
   }
 

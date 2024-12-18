@@ -46,7 +46,7 @@ export class AppComponent {
       this.modalService.open(
         LoteInputComponent
       )
-    },1000)
+    },0)
   }
   
 

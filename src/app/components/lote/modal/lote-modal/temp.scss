@@ -14,55 +14,105 @@
 
   [GlassMain] {
     position: absolute;
+    height: 100%;
     width: 100%;
 
-    background: mix(black, transparent 90%);
+    transition: 
+      opacity 500ms ease-in-out allow-discrete,
+      display 500ms ease-in-out allow-discrete;
+      
+    opacity: 1;
+
+    &.hide {
+      opacity: 0;
+      display: none;
+    }
+
+    background: mix(black, transparent 60%);
 
     > [Height] {
-      > [Width] {
-        position: relative;
+      transition: transform 500ms ease-in-out allow-discrete;
+      transform: scale(1);
+    }
 
-        &::before, &::after {
-          content: '';
-          width: 100%;
-          height: 100%;
-          z-index: -1;
-          position: absolute;
-          display: block;
-          border-radius: 5px;
-        }
+    > [Height] > [Width] {
+      position: relative;
+      container-type: inline-size;
 
-        &::before {          
-          background: 
-            radial-gradient(circle at var(--deg1-x, 50%) var(--deg1-y, 50%), $primary, transparent 60%),
-            radial-gradient(circle at var(--deg2-x, 50%) var(--deg2-y, 50%), $secondary, transparent 60%),
-            radial-gradient(circle at var(--deg3-x, 50%) var(--deg3-y, 50%), $tertiary 20%, transparent 50%),
-            radial-gradient(circle at var(--deg4-x, 50%) var(--deg4-y, 50%), $background, transparent 60%);
+      $blurSize: 5%;
+      > [ColorfulBG] {
+        position: absolute;
+        top: - calc($blurSize / 2);
+        left: - calc($blurSize / 2);
+        height: calc(100% + $blurSize);
+        width: calc(100% + $blurSize);
         
-          animation: moveGradient 30s ease-in-out alternate infinite;
-        }
+        background: 
+          radial-gradient(circle at var(--deg1-x, 50%) var(--deg1-y, 50%), $primary, transparent 60%),
+          radial-gradient(circle at var(--deg2-x, 50%) var(--deg2-y, 50%), $secondary, transparent 60%),
+          radial-gradient(circle at var(--deg3-x, 50%) var(--deg3-y, 50%), $tertiary 20%, transparent 50%),
+          radial-gradient(circle at var(--deg4-x, 50%) var(--deg4-y, 50%), $background, transparent 60%);
+        
+        animation: moveGradient 30s ease-in-out alternate infinite;
+        filter: blur(20px);
 
-        &::after {
-          // background: linear-gradient(0deg, black -50%, mix(white, transparent 0%) 100%);
-          backdrop-filter: blur(4px);
-        }
-
-        > [ColorfulBG] {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          // filter: url(#BlueNoise);
-        }
-        > [Glass] {
-          border-radius: 5px;
-          div {
-            background-image: linear-gradient(url(#BlueNoise));
-            
-          }
+        @media (width < 1280px) {
+          filter: blur(10px);
         }
       }
+      > [Glass] {
+        position: relative;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          z-index: -1;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(0deg, black -50%, mix(white, transparent 0%) 100%);
+
+          // position: absolute;
+          // top: 0;
+          // left: 0;
+          // height: 100%;
+          // width: 100%;
+          // background: mix(white, black 70%);
+          // opacity: 0.5;
+          // z-index: 1;
+        }
+
+        border-radius: 10px;
+        pointer-events: all;
+        // backdrop-filter: blur(3px);
+        // background: linear-gradient(0deg, black -50%, mix(white, transparent 80%) 100%);
+
+        box-shadow: 0px 2px 12px 10px rgba(0 0 0 / 80%);
+        @include border(
+          1px,
+          solid,
+          mix(white, black 70%) // mix(black, white 70%),
+        );
+
+        // filter: url(#Distorce);
+        // isolation: isolate;
+        [testFilter] {
+          font-size: 20px;
+          // opacity: 0.2;
+        }
+
+      }
     }
+
   }
+  // @starting-style {
+  //   [GlassMain] {
+  //     opacity: 0;
+      
+  //     > [Height] {
+  //       transform: scale(0);
+  //     }
+  //   }
+  // }
 }
 
 
