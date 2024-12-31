@@ -6,25 +6,19 @@
     <label>{{theme}}</label>
     <mat-slide-toggle [(ngModel)]="value" (change)="updateTheme()"></mat-slide-toggle>
   </div>
-  <!-- Main/Routes -->
   <div flex="g" pad="10 bottom left right">
-    <div flex="off g hscl">
-      
-      <div flex="col">
-        @for (item of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]; track $index) {
-          <div>Conteudo falso</div>
-        }
-      </div>
-      <div flex="col">
-        @for (item of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]; track $index) {
-          <div>Conteudo falso</div>
-        }
-      </div>
-      <div flex="col">
-        @for (item of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]; track $index) {
-          <div>Conteudo falso</div>
-        }
-      </div>
+    <div>
+      <input type="text">
+    </div>
+
+    <div flex="off g hscl">     
+      @for (item of []; track $index) {
+        <div flex="col">
+          @for (item of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]; track $index) {
+            <div>Conteudo falso</div>
+          }
+        </div>
+      } 
 
       <router-outlet/>
     </div>

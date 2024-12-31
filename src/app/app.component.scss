@@ -1,7 +1,12 @@
 @use "map" as *;
 @use "utils" as *;
 @use 'color' as *;
+@use 'scroll' as *;
 
 @mixin App($theme){
 
+}
+
+*{
+  @include simpleScroll(white, blue);
 }

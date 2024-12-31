@@ -37,10 +37,15 @@ $duration: 0.3s;
         max-height: 100%;
       }
     }
-  }
 
-  > *:not([flex]) {
-    max-height: 100;
+    &:has(> [flex-father]) {
+      --flex: true;
+      display: flex;
+      flex-flow: column;      
+    }
+    // &:not([flex]) {
+    //   max-height: 100%;
+    // }
   }
 
   [flex] {
@@ -58,19 +63,6 @@ $duration: 0.3s;
     flex-flow: column;
     overflow-y: auto;
     overflow-x: hidden;
-
-    /* Talvez esse codigo esteja redundante */
-    @container style(--flex: true) and style(--col: true) {
-      &#{attrContains(flex, ':not($)', grow, g)}{
-        max-width: max-content;
-      }
-    }
-    @container style(--flex: true) and style(--col: false) {
-      &#{attrContains(flex, ':not($)', grow, g)}{
-        max-height: max-content;
-      }
-    }
-    /* Talvez esse codigo esteja redundante */
 
     #{attrContains(flex, '&$', off)} {
       display: block;

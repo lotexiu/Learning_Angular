@@ -1,6 +1,18 @@
 @use 'utils' as *;
 @use 'math' as *;
 
+@mixin _setHeight($unit, $type) {
+  #{attrContains(height, '&$', #{$i}#{$type})} {
+    height: #{$unit}#{$type}
+  }
+  #{attrContains(height, '&$', min#{$i}#{$type})} {
+    min-height: #{$unit}#{$type}
+  }
+  #{attrContains(height, '&$', max#{$i}#{$type})} {
+    max-height: #{$unit}#{$type}
+  }
+}
+
 @mixin HeightStructure($min: 0%, $default: max-content, $max: 100%) {
   [height] {
     height: $min;
@@ -17,36 +29,9 @@
 
     /* (0, 5, 10, 15, ...) */
     @each $i in valuesFromSteps() {
-      /* Percent */
-      #{attrContains(height, '&$', $i)} {
-        height: toPercent($i);
-      }
-      #{attrContains(height, '&$', min#{$i})} {
-        min-height: toPercent($i);
-      }
-      #{attrContains(height, '&$', max#{$i})} {
-        max-height: toPercent($i);
-      }
-      /* Video Height */
-      #{attrContains(height, '&$', #{$i}vh)} {
-        height: toVH($i);
-      }
-      #{attrContains(height, '&$', min#{$i}vh)} {
-        min-height: toVH($i);
-      }
-      #{attrContains(height, '&$', max#{$i}vh)} {
-        max-height: toVH($i);
-      }
-      /* Video Width */
-      #{attrContains(height, '&$', #{$i}vw)} {
-        height: toVW($i);
-      }
-      #{attrContains(height, '&$', min#{$i}vw)} {
-        min-height: toVW($i);
-      }
-      #{attrContains(height, '&$', max#{$i}vw)} {
-        max-height: toVW($i);
-      }
+      @include _setHeight(toPercent($i), '%');
+      @include _setHeight(toVH($i), 'vh');
+      @include _setHeight(toVW($i), 'vw');
     }
   }
 }

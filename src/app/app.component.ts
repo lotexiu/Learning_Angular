@@ -42,11 +42,11 @@ export class AppComponent {
       this.value = true
     }
 
-    setTimeout(()=>{
-      this.modalService.open(
-        LoteInputComponent
-      )
-    },0)
+    // setTimeout(()=>{
+    //   this.modalService.open(
+    //     LoteInputComponent
+    //   )
+    // },0)
   }
   
 
