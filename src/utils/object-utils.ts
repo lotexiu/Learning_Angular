@@ -48,6 +48,24 @@ namespace ObjectUtils {
   export function json(obj: any): string {
     return JSON.stringify(obj)
   }
+
+  export function getValueFromPath(obj: any, path: string): any {
+    if (!path || !obj) return obj
+    return path.split('.').reduce((acc: any, key: string): any => {
+      return acc[key]
+    }, obj)
+  }
+
+  export function setValueFromPath(obj: any, path: string, value: any): void {
+    if (!path || !obj) return
+    const keys = path.split('.')
+    keys.reduce((acc: any, key: string, idx: number): any => {
+      if (idx == keys.length - 1) {
+        acc[key] = value
+      }
+      return acc[key]
+    }, obj)
+  }
 }
 
 const {
@@ -56,7 +74,9 @@ const {
   isNullOrUndefined,
   concatStrIntoFunctions,
   json,
-  deepCopy
+  deepCopy,
+  getValueFromPath,
+  setValueFromPath,
 } = ObjectUtils
 
 export {
@@ -66,6 +86,7 @@ export {
   equals,
   concatStrIntoFunctions,
   json,
-  deepCopy
+  deepCopy,
+  getValueFromPath,
+  setValueFromPath,
 }
-

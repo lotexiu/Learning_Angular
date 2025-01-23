@@ -1,3 +1,5 @@
+import { RegexUtils } from "./regex/regex-utils"
+
 namespace StringUtils {
 
     /**
@@ -6,39 +8,32 @@ namespace StringUtils {
    * @returns The string with only digits.
    */
   export function onlyDigits(value: string): string {
-    return value.replace(/\D/g, '')
+    return RegexUtils.onlyDigits(value)
   }
 
-    /**
-   * Formats a phone number according to the Brazilian standard.
-   * @param phone - The input phone number as a string.
-   * @returns The formatted phone number.
-   */
+  /**
+  * Formats a phone number according to the Brazilian standard.
+  * @param phone - The input phone number as a string.
+  * @returns The formatted phone number.
+  */
   export function formatPhone(phone: string) {
-    let phoneOnlyDigits = onlyDigits(phone).slice(0, 13)
-    let phoneSize = phoneOnlyDigits.length
-
-    function dynamicPhoneMask() {
-      let maskPart = phoneSize > 4 ? "-" : ""
-      return (
-        `${phoneOnlyDigits.slice(0, 4)}${maskPart}${phoneOnlyDigits.slice(4, 8)}`
-      )
-    }
-    return (
-      phoneSize < 9 ? dynamicPhoneMask() :
-      phoneSize == 9 ? phoneOnlyDigits.replace(/(\d{5})(\d{4})$/, '$1-$2') :
-      phoneSize == 10 ? phoneOnlyDigits.replace(/(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3') :
-      phoneSize == 11 ? phoneOnlyDigits.replace(/(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3') :
-      phoneSize == 12 ? phoneOnlyDigits.replace(/(\d{2})(\d{2})(\d{4})(\d{4})$/, '+$1 ($2) $3-$4') :
-      phoneOnlyDigits.replace(/(\d{2})(\d{2})(\d{5})(\d{4})$/, '+$1 ($2) $3-$4')
-    )
+    return RegexUtils.formatPhone(phone)
   }
 
-    /**
-   * Validates a CPF (Brazilian Individual Taxpayer Registry Number).
-   * @param cpf - The input CPF as a string.
-   * @returns True if the CPF is valid, false otherwise.
-   */
+  /**
+  * Validates an email address using a simple regex pattern.
+  * @param email - The input email address as a string.
+  * @returns True if the email is valid, false otherwise.
+  */
+  export function isValidEmail(email: string): boolean {
+    return RegexUtils.isValidEmail(email)
+  }
+
+  /**
+  * Validates a CPF (Brazilian Individual Taxpayer Registry Number).
+  * @param cpf - The input CPF as a string.
+  * @returns True if the CPF is valid, false otherwise.
+  */
   export function isValidCPF(cpf: string): boolean {
     cpf = cpf.replace(/[\s.-]*/g, '');
     if (!cpf || cpf.length !== 11 || /^(.)\1+$/.test(cpf)) {
@@ -67,11 +62,11 @@ namespace StringUtils {
     );
   }
 
-    /**
-   * Validates a CNPJ (Brazilian Business Taxpayer Registry Number).
-   * @param cnpj - The input CNPJ as a string.
-   * @returns True if the CNPJ is valid, false otherwise.
-   */
+  /**
+  * Validates a CNPJ (Brazilian Business Taxpayer Registry Number).
+  * @param cnpj - The input CNPJ as a string.
+  * @returns True if the CNPJ is valid, false otherwise.
+  */
   export function isValidCNPJ(cnpj: string): boolean {
     const weights: number[] = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
     const digits: string = onlyDigits(cnpj);
@@ -101,34 +96,131 @@ namespace StringUtils {
     return true;
   }
 
-    /**
-   * Validates an email address using a simple regex pattern.
-   * @param email - The input email address as a string.
-   * @returns True if the email is valid, false otherwise.
-   */
-  export function isValidEmail(email: string): boolean {
-    const emailRegex: RegExp = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/;
-    return emailRegex.test(email);
-  }
-
-    /**
-   * Capitalizes the first letter of a string.
-   * @param str - The input string.
-   * @returns The string with the first letter capitalized.
-   */
+  /**
+  * Capitalizes the first letter of a string.
+  * @param str - The input string.
+  * @returns The string with the first letter capitalized.
+  */
   export function capitalize(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1)
   }
 
-    /**
-   * Capitalizes the first letter of each word in a string.
-   * @param str - The input string.
-   * @param splitStr - The delimiter used to split the string into words.
-   * @returns The string with the first letter of each word capitalized.
-   */
+  /**
+  * Capitalizes the first letter of each word in a string.
+  * @param str - The input string.
+  * @param splitStr - The delimiter used to split the string into words.
+  * @returns The string with the first letter of each word capitalized.
+  */
   export function capitalizeAll(str: string, splitStr: string): string {
     return str.split(splitStr).map((strPart: string): string => capitalize(strPart)).join(splitStr)
   }
+
+  export function rightPad(str: string, padChar: string, length: number): string {
+    return str + padChar.repeat(length - str.length)
+  }
+
+  export function leftPad(str: string, padChar: string, length: number): string {
+    return padChar.repeat(length - str.length) + str
+  }
+
+  export function removeNearestPatternFromIndex(value: string, pattern: string, index: number): string {
+    if (!value || !pattern) {
+        throw new Error("The strings must not be empty");
+    }
+    let closestIndex = -1;
+    let minDistance = Infinity;
+    for (let i = 0; i <= value.length - pattern.length; i++) {
+        const substring = value.slice(i, i + pattern.length);
+        if (substring === pattern) {
+            const distance = Math.abs(i - index);
+            if (distance < minDistance) {
+                closestIndex = i;
+                minDistance = distance;
+            }
+        }
+    } 
+    if (closestIndex === -1) {
+        return value;
+    }
+    return value.slice(0, closestIndex) + value.slice(closestIndex+pattern.length);
+  }
+
+  export function getAddedCharacters(original: string, updated: string): string {
+    const originalChars = [...original];
+    let addedCharacters: string = '';
+  
+    [...updated].forEach((char: string): void =>{
+      const index = originalChars.indexOf(char);
+      if (index !== -1) {
+        originalChars.splice(index, 1);
+      } else {
+        addedCharacters += char;
+      }
+
+    })  
+    return addedCharacters;
+  }
+
+  export function getRemovedCharacters(original: string, updated: string): string {
+    const updatedChars = [...updated];
+    let removedCharacters: string = '';
+  
+    [...original].forEach((char: string): void => {
+      const index = updatedChars.indexOf(char);
+      if (index !== -1) {
+        updatedChars.splice(index, 1);
+      } else {
+        removedCharacters += char;
+      }
+    });
+  
+    return removedCharacters;
+  }
+
+  export function countMissingCharsBeforeIndex(
+    oldStr: string,
+    newStr: string,
+    index: number
+  ): number {
+    if (index < 0 || index > newStr.length) {
+      return Math.abs(oldStr.length - newStr.length);
+    }
+    const oldSubstr = oldStr.slice(0, index);
+    const newSubstr = newStr.slice(0, index);
+    let missingCount = 0;
+    const charMap = new Map<string, number>();
+    for (const char of oldSubstr) {
+      charMap.set(char, (charMap.get(char) || 0) + 1);
+    }
+    for (const char of newSubstr) {
+      if (charMap.has(char) && charMap.get(char)! > 0) {
+        charMap.set(char, charMap.get(char)! - 1);
+      } else {
+        missingCount++;
+      }
+    }
+  
+    return missingCount;
+  }
+
+  export function getFirstDifferentIndex(str1: string, str2: string, defaultValue: number = -1): number {
+    let index: number = [...str1].findIndex((char, index) => {
+      return str2[index] !== char;
+    });
+    return index === -1 ? defaultValue : index;
+  }
+
+  export function removeCharacters(baseString: string, charsToRemove: string): string {
+    return baseString
+      .split('')
+      .filter(char => !charsToRemove.includes(char))
+      .join('');
+  }
+
+  export function noAccent(str: string): string {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+  
 }
 
 const {
@@ -139,6 +231,15 @@ const {
   onlyDigits,
   capitalize,
   capitalizeAll,
+  rightPad,
+  leftPad,
+  getAddedCharacters,
+  getRemovedCharacters,
+  removeNearestPatternFromIndex,
+  countMissingCharsBeforeIndex,
+  getFirstDifferentIndex,
+  removeCharacters,
+  noAccent,
 } = StringUtils
 
 export {
@@ -150,4 +251,13 @@ export {
   onlyDigits,
   capitalize,
   capitalizeAll,
+  rightPad,
+  leftPad,
+  getAddedCharacters,
+  getRemovedCharacters,
+  removeNearestPatternFromIndex,
+  countMissingCharsBeforeIndex,
+  getFirstDifferentIndex,
+  removeCharacters,
+  noAccent
 }

@@ -27,7 +27,7 @@ type LockedParams<
 */
 type KeysOfType<Target, TValue> = {
   [K in keyof Target]: Target[K] extends TValue ? K : never
-}[keyof Target];
+}[keyof Target] & string;
 
 /**
  * @template Target - Recebe uma interface de um objeto ou classe
@@ -59,20 +59,11 @@ type CustomReturn <Value, ReturnConfigList extends [any|Value[], any][]=[any[], 
 
 type Never<T extends null|never = null> = T
 
-type TypeCompare = boolean|null;
-
 type Nullable<Type=any> = Type|undefined|null
 
 type First<T extends any[], _nv extends Never=never> = T extends [infer Rest, ...infer Last] ? Rest : _nv;
 
 type Last<T extends any[], _nv extends Never=never> = T extends [...infer Rest, infer Last] ? Last : _nv;
-
-type CompareResult<T extends TypeCompare = Never> = 
-  T extends true ? 1 :
-  T extends false ? 0 :
-  -1
-
-type Compare = -1|0|1  
 
 type ArrayType<
   Types = any[],
@@ -88,8 +79,9 @@ type ArrayType<
 type Function<
   Types extends any[] = any[],
   Inf extends boolean = false,
-  InfType = any
-> = (...args: ArrayType<Types,Inf,InfType>) => void
+  InfType = any,
+  RType = void
+> = (...args: ArrayType<Types,Inf,InfType>) => RType
 
 /** Coloca o primeiro caracter da string recebida em maiúsculo. */
 type Capitalize<S extends string> = 
@@ -109,13 +101,10 @@ export {
   LockedParams,
   KeysOfType,
   InputFields,
-  Compare,
   Never,
-  TypeCompare,
   Nullable,
   First,
   Last,
-  CompareResult,
   ArrayType,
   Function,
   Capitalize,

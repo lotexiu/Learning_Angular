@@ -1,9 +1,8 @@
-@use "sass:color" as *;
 @use "sass:math" as *;
-@use "sass:meta" as *;
 @use "sass:map";
-@use "string" as *;
-@use 'list' as *;
+@use "sass:color" as *;
+@use "sass:string" as *;
+@use "sass:meta" as *;
 @use "@angular/material" as mat;
 
 /// Gera uma lista de seletores CSS concatenados
@@ -111,4 +110,14 @@
   }
   
   @return $selector;
+}
+
+@function str-replace($string, $search, $replace) {
+  $index: index($string, $search);
+  
+  @if $index {
+    @return slice($string, 1, $index - 1) + $replace + slice($string, $index + length($search));
+  }
+  
+  @return $string;
 }

@@ -1,37 +1,58 @@
-@mixin padStructure($default) {
+@use 'utils' as *;
+@use 'math' as *;
+
+@mixin PadStructure($default) {
   [pad] {
-    &[pad~="all"] {
+    #{attrContains(pad, '&$', all)} {
       padding: $default;
     }
-    &[pad~="bottom"] {
+    #{attrContains(pad, '&$', bottom)} {
       padding-bottom: $default;
     }
-    &[pad~="top"] {
+    #{attrContains(pad, '&$', top)} {
       padding-top: $default;
     }
-    &[pad~="left"] {
+    #{attrContains(pad, '&$', left)} {
       padding-left: $default;
     }
-    &[pad~="right"] {
+    #{attrContains(pad, '&$', right)} {
       padding-right: $default;
+    }
+
+    #{attrContains(pad, '&$', h)} {
+      padding-left: $default;
+      padding-right: $default;
+    }
+    #{attrContains(pad, '&$', v)} {
+      padding-top: $default;
+      padding-bottom: $default;
     }
 
     @for $i from 0 through 20 {
       &[pad~="#{$i}"] {
-        &[pad~="all"]{
+        #{attrContains(pad, '&$', all)} {
           padding: #{$i}px;
         }
-        &[pad~="bottom"] {
+        #{attrContains(pad, '&$', bottom)} {
           padding-bottom: #{$i}px;
         }
-        &[pad~="top"] {
+        #{attrContains(pad, '&$', top)} {
           padding-top: #{$i}px;
         }
-        &[pad~="left"] {
+        #{attrContains(pad, '&$', left)} {
           padding-left: #{$i}px;
         }
-        &[pad~="right"] {
+        #{attrContains(pad, '&$', right)} {
           padding-right: #{$i}px;
+        }
+    
+        #{attrContains(pad, '&$', h)} {
+          padding-left: #{$i}px;
+          padding-right: #{$i}px;
+        }
+        #{attrContains(pad, '&$', v)} {
+          padding-top: #{$i}px;
+          padding-bottom: #{$i}px;
         }
       }
     }

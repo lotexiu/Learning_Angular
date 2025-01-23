@@ -1,5 +1,5 @@
-import { Class, λ } from "../component-utils";
-import { onKeyboardEvent } from "./event-interface";
+﻿import { Class, λ } from "../component-utils";
+import { onKeyboardEvent } from "./interfaces/event-interface";
 
 class KeyboardEventData{
   private event!: KeyboardEvent;
@@ -33,9 +33,9 @@ class KeyboardEventData{
 }
 
 namespace EventUtils {
-  export function onKeyboardEvent<T, R>(_this: Class<T>, call: string): R {
+  export function onKeyboardEvent<T, R>(_this: Class<T>, call: string, preventDefault = true): R {
     const funcEvent: any = (evt: Event): void => {
-      if (evt.cancelable){
+      if (evt.cancelable && preventDefault){
         evt.preventDefault()
       }
       _this[call](evt)
@@ -45,6 +45,5 @@ namespace EventUtils {
 }
 
 export {
-  KeyboardEventData,
-  EventUtils
-}
+  EventUtils, KeyboardEventData
+};

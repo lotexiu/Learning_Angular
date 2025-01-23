@@ -1,9 +1,13 @@
 @use 'color' as *;
 
-@mixin simpleScroll($track, $thumb) {
+@mixin simpleScroll($track, $thumb, $verticalSize: 8px, $horizontalSize: 8px) {
+  scroll-snap-type: both proximity;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+
   &::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: $verticalSize;
+    height: $horizontalSize;
   }
 
   &::-webkit-scrollbar-corner {

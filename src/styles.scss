@@ -68,6 +68,6 @@ html {
 html, body { margin: 0; height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-@include stickyStructure();
-@include padStructure(5px);
-@include flexStructure(5px);
+@include StickyStructure();
+@include PadStructure(5px);
+@include FlexStructure(5px);

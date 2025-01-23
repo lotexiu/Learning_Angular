@@ -22,9 +22,10 @@ $duration: 0.3s;
   }
 }
 
-@mixin flexStructure($gap) {
+@mixin FlexStructure($gap) {
   * {
     --flex: false;
+    --d-flex: false;
     --col: false;
 
     @container style(--flex: true) and style(--col: true) {
@@ -40,12 +41,25 @@ $duration: 0.3s;
 
     &:has(> [flex-father]) {
       --flex: true;
+      --d-flex: true;
       display: flex;
-      flex-flow: column;      
+
+      &:has(> [flex-father~=off]) {
+        --d-flex: false;
+        display: block;
+      }
+
+      #{attrContains(flex-father, '&:has(> $),', column, col)} {
+        --col: true;
+        flex-flow: row;
+        overflow-y: hidden;
+        overflow-x: auto;
+      }
+
+      #{attrContains(flex-father, '&:has(> $),', grow, g)} {
+        flex-grow: 1;;
+      }
     }
-    // &:not([flex]) {
-    //   max-height: 100%;
-    // }
   }
 
   [flex] {
@@ -64,7 +78,12 @@ $duration: 0.3s;
     overflow-y: auto;
     overflow-x: hidden;
 
+    > * {
+      box-sizing: border-box;
+    }
+
     #{attrContains(flex, '&$', off)} {
+      --d-flex: false;
       display: block;
     }
 
@@ -119,43 +138,47 @@ $duration: 0.3s;
     }
 
     #{attrContains(flex, '&$,', v-center, vc)} {
-      @container style(--col: true) {
-        justify-content: center;
-      }
-      @container style(--col: false) {
+      #{attrContains(flex, '&$,', column, col)} {
         align-items: center;
+      }
+      &#{attrContains(flex, ':not($)', column, col)} {
+        justify-content: center;
       }
     }
 
     #{attrContains(flex, '&$,', v-top, vt)} {
-      @container style(--col: true) {
-        align-items: end;
+      #{attrContains(flex, '&$,', column, col)} {
+        align-items: flex-start;
       }
-      @container style(--col: false) {
+      &#{attrContains(flex, ':not($)', column, col)} {
         justify-content: flex-start;
       }
     }
 
     #{attrContains(flex, '&$,', v-bottom, vb)} {
-      @container style(--col: true) {
-        align-items: start;
+      #{attrContains(flex, '&$,', column, col)} {
+        align-items: flex-end;
       }
-      @container style(--col: false) {
+      &#{attrContains(flex, ':not($)', column, col)} {
         justify-content: flex-end;
       }
     }
 
     #{attrContains(flex, '&$,', h-center, hc)} {
-      @container style(--col: true) {
-        align-items: center;
-      }
-      @container style(--col: false) {
+      #{attrContains(flex, '&$,', column, col)} {
         justify-content: center;
+      }
+      &#{attrContains(flex, ':not($)', column, col)} {
+        align-items: center;
       }
     }
 
     #{attrContains(flex, '&$,', h-right, hr)} {
       justify-content: flex-end;
+    }
+
+    #{attrContains(flex, '&$,', h-left, hl)} {
+      justify-content: flex-start;
     }
 
     #{attrContains(flex, '&$,', h-fit-content, h-fit)} {
@@ -190,10 +213,5 @@ $duration: 0.3s;
       }
     }
 
-    @starting-style {
-      [flex] {
-        // background: gray;
-      }
-    }
   }
 }

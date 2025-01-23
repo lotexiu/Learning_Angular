@@ -1,6 +1,6 @@
 import { EnvironmentProviders, Provider, Type } from "@angular/core";
-import { Data, DefaultExport, LoadChildrenCallback, Resolve, ResolveData, ResolveFn, Routes, RunGuardsAndResolvers, UrlMatcher } from "@angular/router";
-import { Observable } from "rxjs";
+import { Data, DefaultExport, LoadChildrenCallback, Resolve, ResolveData, ResolveFn, Router, Routes, RunGuardsAndResolvers, UrlMatcher } from "@angular/router";
+import { Observable, Subscription } from "rxjs";
 import { ArrayType } from "../interfaces/interfaces";
 import { Routes as Routes_ } from "./route";
 
@@ -32,6 +32,13 @@ type LoadComponent_ =  (() =>
   DefaultExport<Type<unknown>>>
 ) | undefined;
 
+interface RouteData {
+  createdRoutes: Routes_[],
+  router: Router,
+  routerEvents: Subscription
+  currentUrl: string
+}
+
 export {
   MinimalRoute,
   AddChildren,
@@ -53,4 +60,5 @@ export {
   RunGuardsAndResolvers_,
   Title_,
   LoadComponent_,
+  RouteData
 }

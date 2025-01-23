@@ -4,7 +4,7 @@ import { Route as AngularRoute } from "@angular/router";
 // Local imports
 import { Nullable } from "../interfaces/interfaces";
 import { isNull } from "../object-utils";
-import { allRoutes } from "./route-utils";
+import { RouteData } from "./route-utils";
 import * as RouteI from "./route.interface";
 
 /**
@@ -20,7 +20,7 @@ class Routes {
     public readonly component: Nullable<RouteI.Component_> = null
   ) {
     this.fullPath = path;
-    allRoutes.push(this);
+    RouteData.createdRoutes.push(this);
   }
 
   /**
