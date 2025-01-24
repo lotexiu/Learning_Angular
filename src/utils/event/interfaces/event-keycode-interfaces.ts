@@ -1,4 +1,4 @@
-﻿type KeyCode = 
+﻿type KeyboardEventCode = 
   "AltLeft"|"AltRight"|
   "ArrowDown"|"ArrowLeft"|"ArrowRight"|"ArrowUp"|
   "Backquote"|"Backslash"|"Backspace"|"BracketLeft"|
@@ -21,5 +21,5 @@
   "Semicolon"|"ShiftLeft"|"ShiftRight"|"Slash"|"Space"|"Tab"
 
 export {
-  KeyCode
+  KeyboardEventCode
 }

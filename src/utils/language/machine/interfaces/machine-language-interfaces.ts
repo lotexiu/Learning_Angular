@@ -6,7 +6,7 @@ interface LanguageRules {
     scopeKeys: string;
     invalid: string;
   };
-  indentifiers?: Record<string, IdentifierRule>;
+  indentifiers: Record<string, IdentifierRule>;
 }
 
 interface IdentifierRule {

@@ -1,7 +1,7 @@
 import { NavigationExtras, Router, RoutesRecognized } from "@angular/router";
 import { λ } from "../component-utils";
 import { Nullable } from "../interfaces/interfaces";
-import { LocalStorageUtils } from "../localstorage-utils";
+import { LocalStorageUtils } from "../localStorage-utils";
 import { Routes, _Route } from "./route";
 import { RouteData } from "./route.interface";
 import { RegexUtils } from "../regex/regex-utils";

@@ -1,26 +1,2 @@
-<div flex="100">
-  <!-- HotBar -->
-  <div flex="ns col b center" pad="5 all">
-    <div flex="vc">LogoIcon</div>
-    <div flex="g c">{{title}}</div>
-    <label>{{theme}}</label>
-    <mat-slide-toggle [(ngModel)]="value" (change)="updateTheme()"></mat-slide-toggle>
-  </div>
-  <div flex="g" pad="10 bottom left right">
-    <div>
-      <input type="text">
-    </div>
-
-    <div flex="off g hscl">     
-      @for (item of []; track $index) {
-        <div flex="col">
-          @for (item of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]; track $index) {
-            <div>Conteudo falso</div>
-          }
-        </div>
-      } 
-
-      <router-outlet/>
-    </div>
-  </div>
-</div>
+<div></div>
+<router-outlet/>

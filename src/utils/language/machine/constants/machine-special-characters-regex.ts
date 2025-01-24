@@ -35,11 +35,11 @@ const MachineLanguages: Record<string, LanguageRules> = {
     },
     indentifiers: {
       typeObject: {
-        identify: '(?<=[\s\S]+){',
+        identify: '(?<=[\\s\\S]+){',
         hasScope: true,
       },
       type: {
-        identify: '(?<=[\s\S]+)[A-z]\\w*\\s*(<\\s*{type}\\s*>)?){',
+        identify: '(?<=[\\s\\S]+)[A-z]\\w*\\s*(<\\s*{type}\\s*>)?){',
         hasScope: true,
       },
       declareType: {

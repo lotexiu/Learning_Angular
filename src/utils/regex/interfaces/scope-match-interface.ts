@@ -1,7 +1,7 @@
 interface ScopeMatch {
   scope: string;
   start: number;
-  end: number | null;
+  end: number;
   children: ScopeMatch[]; // Adicionado para suportar escopos aninhados
 }
 

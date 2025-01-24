@@ -8,6 +8,8 @@ import { _Route } from '../utils/route/route';
 import { RouteUtils } from '../utils/route/route-utils';
 import { LoteModalService } from './components/lote/modal/lote-modal/lote-modal.service';
 import { LoteInputComponent } from './components/lote/input/lote-input/lote-input.component';
+import { RegexUtils } from 'src/utils/regex/regex-utils';
+import { MachineLanguages } from 'src/utils/language/machine/constants/machine-special-characters-regex';
 @Component({
   selector: 'app-root',
   imports: [
@@ -26,42 +28,13 @@ export class AppComponent {
 
   constructor(
     private router: Router,
-    private modalService: LoteModalService,
+  private modalService: LoteModalService,
   ) {
 
   }
 
   ngOnInit(): void {
-    localStorage['title'] = this.title
-    this.router.events.subscribe(lambda(this, 'updateRoute'))
+    const {reservedKeys,scopeKeys,indentifiers} = MachineLanguages['typescript']
 
-    document.body.classList.add('mat-app-background', 'mat-typography')
-    themeUtils.initTheme()
-    this.theme = themeUtils.getCurrentTheme()
-    if (this.theme == 'dark') {
-      this.value = true
-    }
-
-    // setTimeout(()=>{
-    //   this.modalService.open(
-    //     LoteInputComponent
-    //   )
-    // },0)
-  }
-  
-
-  public updateTheme(): void {
-    this.theme = this.value ? 'dark' : 'light'
-    themeUtils.setTheme(this.theme)
-  }
-
-  private updateRoute(value: any): void {
-    if (value instanceof RoutesRecognized) {
-      this.currentRoute = value
-      const route: Nullable<_Route> = RouteUtils.getRoute(value.url)
-      if (route) {
-        this.title = route.subTitle!
-      }
-    }
   }
 }

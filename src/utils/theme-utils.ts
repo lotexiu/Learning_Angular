@@ -1,4 +1,4 @@
-import { LocalStorageUtils } from "./localstorage-utils"
+import { LocalStorageUtils } from "./localStorage-utils"
 
 export class themeUtils {
 
