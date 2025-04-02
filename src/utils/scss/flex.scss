@@ -43,6 +43,7 @@ $duration: 0.3s;
       --flex: true;
       --d-flex: true;
       display: flex;
+      flex-flow: column;
 
       &:has(> [flex-father~=off]) {
         --d-flex: false;
@@ -57,7 +58,11 @@ $duration: 0.3s;
       }
 
       #{attrContains(flex-father, '&:has(> $),', grow, g)} {
-        flex-grow: 1;;
+        flex-grow: 1;
+      }
+
+      #{attrContains(flex-father, '&:has(> $),', v-max-content, v-max)} {
+        min-height: max-content;
       }
 
       #{attrContains(flex-father, '&:has(> $),', v-center, vc)} {
@@ -67,6 +72,14 @@ $duration: 0.3s;
         &#{attrContains(flex-father, ':not($)', column, col)} {
           justify-content: center;
         }
+      }
+
+      #{attrContains(flex-father, '&:has(> $),', hide-scroll, hscl)} {
+        overflow: hidden !important;
+      }
+
+      #{attrContains(flex-father, '&:has(> $),', no-scroll, nscl)} {
+        overflow: visible !important;
       }
     }
   }
@@ -128,6 +141,12 @@ $duration: 0.3s;
 
     #{attrContains(flex, '&$,', no-shrink, ns)} {
       flex-shrink: 0;
+      #{attrContains(flex, '&$,', column, col)} {
+        min-width: max-content;
+      }
+      &#{attrContains(flex, ':not($)', column, col)} {
+        min-height: max-content;
+      }
     }
 
     #{attrContains(flex, '&$,', wrap, w)} {
@@ -140,6 +159,10 @@ $duration: 0.3s;
 
     #{attrContains(flex, '&$,', hide-scroll, hscl)} {
       overflow: hidden !important;
+    }
+
+    #{attrContains(flex, '&$,', scroll, hscl)} {
+      overflow: auto !important;
     }
 
     #{attrContains(flex, '&$,', center, c)} {
@@ -210,12 +233,17 @@ $duration: 0.3s;
       min-height: fit-content;
     }
 
+    #{attrContains(flex, '&$,', v-max-content, v-max)} {
+      min-height: fit-content;
+    }
+
     @for $i from 0 through 100 {
       $pct: calc($i/100);
 
       #{attrContains(flex, '&$', $i)} {
         @container style(--flex: true) and style(--col: true) {
           max-width: percentage($pct) !important;
+          width: percentage($pct) !important;
         }
         @container style(--flex: false) and style(--col: true) {
           width: percentage($pct) !important;

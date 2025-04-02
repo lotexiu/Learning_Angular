@@ -18,11 +18,6 @@
   }
 }
 
-const {
-  focusUntilSuccess
-} = HTMLUtils;
-
 export {
   HTMLUtils,
-  focusUntilSuccess,
 }

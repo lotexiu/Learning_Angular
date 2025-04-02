@@ -2,7 +2,6 @@
 
 @mixin simpleScroll($track, $thumb, $verticalSize: 8px, $horizontalSize: 8px) {
   scroll-snap-type: both proximity;
-  scroll-snap-align: center;
   scroll-snap-stop: always;
 
   &::-webkit-scrollbar {
@@ -20,11 +19,11 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: mix($thumb 20%, transparent);
+    background: mix($thumb 50%, $track 30%, transparent 10% );
     border-radius: 5px;
   }
 
   &::-webkit-scrollbar-thumb:active {
-    background: mix($thumb 80%, transparent);
+    background: mix($thumb 100%);
   }
 }

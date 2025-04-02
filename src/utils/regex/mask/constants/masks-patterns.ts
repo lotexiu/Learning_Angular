@@ -1,4 +1,4 @@
-﻿import { LockedParams } from "src/utils/interfaces/interfaces"
+﻿import { LockedParams } from "src/utils/interfaces/object-interfaces"
 
 type MaskPatterns =
   |'TEXT'
@@ -55,7 +55,7 @@ const maskPatterns: LockedParams<MaskPatterns, string> =  {
     '0{2}/0{2}/0{4} 0{2}:||'+
     '0{2}/0{2}/0{4} ||'+
     '0{2}/0{2}/||'+
-    '0{2}/||',
+    '0{2}/',
   NUMBER:
     '0*',
   NUMBER_DECIMAL:

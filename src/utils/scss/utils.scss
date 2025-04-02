@@ -113,11 +113,15 @@
 }
 
 @function str-replace($string, $search, $replace) {
-  $index: index($string, $search);
+  $index: str-index($string, $search);
   
   @if $index {
-    @return slice($string, 1, $index - 1) + $replace + slice($string, $index + length($search));
+    @return str-slice($string, 1, $index - 1) + $replace + str-slice($string, $index + str-length($search));
   }
   
   @return $string;
+}
+
+@mixin alignToElementCenter() {
+  transform: translate(-50%, -50%);
 }

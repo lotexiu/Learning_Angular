@@ -1,7 +1,13 @@
-﻿import { LockedParams, Nullable } from "src/utils/interfaces/interfaces";
-import { isNull } from "src/utils/object-utils";
-import { RegexPatterns, removeCharsExcept, formatNumber, MaskRegexPatterns, RegexUtils } from "src/utils/regex/regex-utils";
-import { countMissingCharsBeforeIndex, getAddedCharacters, getFirstDifferentIndex, getRemovedCharacters, removeCharacters, removeNearestPatternFromIndex } from "src/utils/string-utils";
+﻿import {
+  isNull,
+  strCountMissingCharsBeforeIndex,
+  strGetAddedCharacters,
+  strGetFirstDifferentIndex,
+  strGetRemovedCharacters,
+  strRemoveCharacters,
+  strRemoveNearestPatternFromIndex
+} from "src/utils/easy-use";
+import { RegexPatterns, MaskRegexPatterns, RegexUtils } from "src/utils/regex/regex-utils";
 
 class MaskRegex {
   static get rules(): any {
@@ -128,43 +134,8 @@ class MaskRegex {
     return value;
   }
 
-  static removeMask(value: string, mask: string, separator: string = '', previousValue: string = ''): string {
-    let valueCopy = value;
-
-    if (previousValue) {      
-      let removedChars: string = getRemovedCharacters(previousValue, value);
-      if (removedChars.length > 0) {
-        let removedPosition = getFirstDifferentIndex(value, previousValue, value.length);
-        valueCopy = valueCopy.slice(0, removedPosition) + removedChars + valueCopy.slice(removedPosition);
-        valueCopy = this.removeMask(valueCopy, mask, separator);
-        const missingChars: number = countMissingCharsBeforeIndex(
-          valueCopy,
-          this.removeMask(valueCopy, mask, separator),
-          removedPosition
-        )
-        removedPosition -= missingChars;
-        if (!valueCopy.includes(removedChars)) {
-          const maskChars = getRemovedCharacters(this.applyMask(valueCopy, mask, separator), valueCopy)
-          removedChars = removeCharacters(removedChars, maskChars)
-        }
-        valueCopy = removeNearestPatternFromIndex(valueCopy, removedChars, removedPosition)
-      }
-
-      const newChars: string = getAddedCharacters(previousValue, value);      
-      if (newChars.length > 0) {
-        let addedPosition: number = getFirstDifferentIndex(value, previousValue);
-        valueCopy = removeNearestPatternFromIndex(valueCopy, newChars, addedPosition)        
-        valueCopy = this.removeMask(valueCopy, mask, separator);
-
-        const missingChars: number = countMissingCharsBeforeIndex(
-          this.applyMask(valueCopy, mask, separator),
-          this.removeMask(valueCopy, mask, separator),
-          addedPosition
-        )
-        addedPosition -= missingChars;
-        valueCopy = valueCopy.slice(0, addedPosition) + newChars + valueCopy.slice(addedPosition);
-      }
-    }
+  private static removeMaskWithoutPreviousValue(value: string, mask: string, separator: string = ''): string { 
+    let valueCopy: string = value;
 
     if (!isNull(separator, '')) {
       if (value.includes(separator)) {
@@ -175,10 +146,12 @@ class MaskRegex {
         valueCopy = value.match(new RegExp(RegexPatterns.Digit, 'g'))?.join('') || '';
       }
     }
-
     const masks = mask.split(/(?<!\\)\|\|/).map(m => m.replace(/\\\|\|/g, '||'));
     for (const m of masks) {
       const regexStr = this.getRegex(m, true)
+      if (regexStr === '') {
+        continue;
+      };
       const regexParts = regexStr.split(/(?<!\\)\|/g)
 
       let invalidRegex: boolean = false;
@@ -194,6 +167,45 @@ class MaskRegex {
         valueCopy = valueCopy.replace(regex, '');
       }
     }
+    return valueCopy;
+  }
+
+  static removeMask(value: string, mask: string, separator: string = '', previousValue: string = ''): string {
+    let valueCopy = value;
+
+    if (previousValue) {      
+      let removedChars: string = strGetRemovedCharacters(previousValue, value);
+      if (removedChars.length > 0) {
+        let removedPosition = strGetFirstDifferentIndex(value, previousValue, value.length);
+        valueCopy = valueCopy.slice(0, removedPosition) + removedChars + valueCopy.slice(removedPosition);
+        valueCopy = this.removeMask(valueCopy, mask, separator);
+        const missingChars: number = strCountMissingCharsBeforeIndex(
+          valueCopy,
+          this.removeMask(valueCopy, mask, separator),
+          removedPosition
+        )
+        removedPosition -= missingChars;
+        if (!valueCopy.includes(removedChars)) {
+          const maskChars = strGetRemovedCharacters(this.applyMask(valueCopy, mask, separator), valueCopy)
+          removedChars = strRemoveCharacters(removedChars, maskChars)
+        }
+        valueCopy = strRemoveNearestPatternFromIndex(valueCopy, removedChars, removedPosition)
+      }
+      const newChars: string = strGetAddedCharacters(previousValue, value);      
+      if (newChars.length > 0) {
+        let addedPosition: number = strGetFirstDifferentIndex(value, previousValue);
+        valueCopy = strRemoveNearestPatternFromIndex(valueCopy, newChars, addedPosition)
+        valueCopy = this.removeMask(valueCopy, mask, separator);
+        const missingChars: number = strCountMissingCharsBeforeIndex(
+          this.applyMask(valueCopy, mask, separator),
+          valueCopy,
+          addedPosition
+        )
+        addedPosition -= missingChars;
+        valueCopy = valueCopy.slice(0, addedPosition) + newChars + valueCopy.slice(addedPosition);
+      }
+    }
+    valueCopy = this.removeMaskWithoutPreviousValue(valueCopy, mask, separator);
     return valueCopy;
   }
 

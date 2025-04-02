@@ -1,6 +1,4 @@
-﻿import { ScopeMatch } from "./interfaces/scope-match-interface"
-
-const RegexPatterns = {
+﻿const RegexPatterns = {
   Digit: '\\d',
   Letter: '[A-Za-z]',
   LetterOrDigit: '[A-Za-z0-9]',
@@ -8,18 +6,25 @@ const RegexPatterns = {
   LowercaseLetter: '[a-z]',
   SpecialChar: '[^A-Za-z0-9]',
   Whitespace: '\\s',
-  Dot: '.',
   Any: '[\\s\\S]',
   Word: '\\w',
   NotWord: '\\W',
   NotDigit: '\\D',
   NotWhitespace: '\\S',
+  Dot: '[.]',
+  Comma: '[,]',
+  /* LookAround */
   PositiveLookahead: '?=',
   NegativeLookahead: '?!',
   PositiveLookbehind: '?<=',
   NegativeLookbehind: '?<!',
-  Number: '\\d+(?=[,.])',
-  Decimal: '(?<=[,.])\\d+(?![,.])(?!\\d+?)',
+  /* ReservedKeys */
+  AnyExceptWhiteSpace: '.',
+  Escape: '\\',
+  Or: '|',
+  /* Others */
+  Number: '(\\d+)(?=[,.])(?!(\\d))',
+  Decimal: '(?<=[,.])(\\d+)(?!(?:.+)?[,.])',
   DecimalSeparator: '[.,]',
 }
 
@@ -62,6 +67,10 @@ class RegexUtils {
   static isValidEmail(email: string): boolean {
     const emailRegex: RegExp = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/;
     return emailRegex.test(email);
+  }
+
+  static isValidCEP(cep: string): boolean {
+    return /^\d{8}$/.test(cep.replace(/[^\d]+/g, ""));
   }
 
   /**
@@ -107,76 +116,10 @@ class RegexUtils {
     const parts = path.split('/');
     return parts.slice(0, -levels).join('/');
   }
-
-  static analyzeScopes(scopePairs: Record<string, string>, text: string): ScopeMatch[] {
-    const openingScopes = Object.keys(scopePairs)
-      .map((key) => key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-      .join("|");
-    const closingScopes = Object.values(scopePairs)
-      .map((key) => key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-      .join("|");
-
-    const scopeRegex = new RegExp(`(${openingScopes})|(${closingScopes})`, "g");
-
-    const scopeStack: { char: string; index: number; children: ScopeMatch[] }[] = [];
-    const scopeMatches: ScopeMatch[] = [];
-
-    for (const match of text.matchAll(scopeRegex)) {
-      const char = match[0];
-      const index = match.index || 0;
-
-      if (scopePairs[char]) {
-        // Abertura de escopo
-        scopeStack.push({ char, index, children: [] });
-      } else {
-        // Fechamento de escopo
-        const lastOpen = scopeStack.pop();
-        if (lastOpen && scopePairs[lastOpen.char] === char) {
-          const newScope: ScopeMatch = {
-            scope: `${lastOpen.char}${char}`,
-            start: lastOpen.index,
-            end: index,
-            children: lastOpen.children, // Adiciona escopos filhos
-          };
-
-          if (scopeStack.length > 0) {
-            // Adiciona como filho do escopo anterior
-            scopeStack[scopeStack.length - 1].children.push(newScope);
-          } else {
-            // Escopo de nível superior
-            scopeMatches.push(newScope);
-          }
-        } else {
-          console.warn(`Unmatched closing scope "${char}" at position ${index}`);
-        }
-      }
-    }
-
-    for (const unmatched of scopeStack) {
-      console.warn(`Unmatched opening scope "${unmatched.char}" at position ${unmatched.index}`);
-    }
-
-    return scopeMatches;
-  }
 }
-
-const {
-  isValidEmail,
-  formatPhone,
-  onlyDigits,
-  removeCharsExcept,
-  formatNumber,
-  downPath,
-} = RegexUtils;
 
 export {
   RegexPatterns,
   MaskRegexPatterns,
   RegexUtils,
-  isValidEmail,
-  formatPhone,
-  onlyDigits,
-  removeCharsExcept,
-  formatNumber,
-  downPath,
 }

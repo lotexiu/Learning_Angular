@@ -13,12 +13,18 @@
   $neutral: get($theme, neutral, 50);
   $error: get($theme, error, 50);
 
-  mat-icon.mat-icon{
+  .material-icons{
     font-size: $defaultSize;
-    display: flex;
-    flex-direction: column;
-    height: fit-content;
-    width: fit-content;
+  }
+  
+  mat-icon.mat-icon{
+    min-width: $defaultSize;
+    width: $defaultSize;
+    height: $defaultSize;
+    margin: 4px;
+    // display: flex;
+    // flex-direction: column;
+
 
     border: none;
     outline: none;
@@ -30,8 +36,9 @@
     &.clickable {
       &:focus,
       &:hover {
-        transform: scale(1.1) rotate(360deg);
+        transform: scale(1.1); //rotate(360deg);
       }
+      &:hover,
       &:focus,
       &:active {
         color: $secondary;

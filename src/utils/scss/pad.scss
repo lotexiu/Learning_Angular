@@ -46,11 +46,11 @@
           padding-right: #{$i}px;
         }
     
-        #{attrContains(pad, '&$', h)} {
+        #{attrContains(pad, '&$,', h, horizontal)} {
           padding-left: #{$i}px;
           padding-right: #{$i}px;
         }
-        #{attrContains(pad, '&$', v)} {
+        #{attrContains(pad, '&$,', v, vertical)} {
           padding-top: #{$i}px;
           padding-bottom: #{$i}px;
         }
