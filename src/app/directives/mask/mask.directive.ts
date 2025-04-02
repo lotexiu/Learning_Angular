@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import { λ } from 'src/utils/component-utils';
+import { λ } from 'src/utils/easy-use';
 
 @Directive({
   selector: '[mask]',

@@ -1,5 +1,4 @@
-import { divide, minus, multiply, plus } from "./math-utils"
-import { capitalize, capitalizeAll } from "./string-utils"
+import { divide, minus, multiply, plus, strCapitalize, strCapitalizeAll } from "./easy-use"
 
 declare global {
   interface Number {
@@ -40,8 +39,8 @@ Number.prototype.minus = function(...minusValues:number[]): number {
 }
 
 String.prototype.capitalize = function(): string {
-  return capitalize(this as string)
+  return strCapitalize(this as string)
 }
 String.prototype.capitalizeAll = function(split: string): string {
-  return capitalizeAll(this as string, split)
+  return strCapitalizeAll(this as string, split)
 }

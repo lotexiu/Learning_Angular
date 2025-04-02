@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { isNull } from 'src/utils/object-utils';
+import { isNull } from 'src/utils/easy-use';
 
 interface Transition {
   value: number;
