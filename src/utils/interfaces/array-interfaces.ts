@@ -42,9 +42,12 @@ type ArrayType<
  */
 type _ArrayLike<T> = ArrayLike<T>;
 
+type ExtractValues<T extends readonly any[]> = T[number];
+
 export { 
   First, 
   Last, 
   ArrayType,
-  _ArrayLike as ArrayLike
+  _ArrayLike as ArrayLike,
+  ExtractValues,
 }

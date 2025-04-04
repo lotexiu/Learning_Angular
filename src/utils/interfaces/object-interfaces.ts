@@ -199,6 +199,10 @@ type ConcatStrIntoKeys<Base, Prefix extends string> = {
     : never]: Base[Key];
 };
 
+interface Constructor<T>{
+  new (value?: any): T;
+}
+
 export { 
   LockedParams, 
   KeysOfType, 
@@ -215,5 +219,6 @@ export {
   _Extract as Extract, 
   _Omit as Omit, 
   _NonNullable as NonNullable,
-  ConcatStrIntoKeys 
+  ConcatStrIntoKeys,
+  Constructor,
 }
