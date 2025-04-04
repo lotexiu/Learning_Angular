@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { Router, RouterOutlet, RoutesRecognized } from '@angular/router';
 import { componentBaseImports, componentImports } from '../utils/imports/import';
 import { LoteModalService } from './components/lote/modal/lote-modal/lote-modal.service';
-import { MachineLanguages } from 'src/utils/language/machine/constants/machine-special-characters-regex';
+import { LoteFiltersComponent } from './components/lote/svg/filters/lote-filters/lote-filters.component';
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
     ...componentBaseImports,
     ...componentImports,
+    LoteFiltersComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -27,7 +28,6 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    const {reservedKeys,scopeKeys,indentifiers} = MachineLanguages['typescript']
 
   }
 }

@@ -1,4 +1,4 @@
-import { isNull } from "../easy-use"
+import { by10, interpolate, isNull } from "../easy-use"
 import { Compare } from "./interfaces/math-interfaces"
 
 /**
@@ -70,7 +70,7 @@ class MathUtils {
    */
   static divide(value: number, ...divideValues: number[]): number{
     return [value, ...divideValues].reduce((p: number,c: number): number => 
-      MathUtils.by10(p,"multiply") / MathUtils.by10(c,"multiply")
+      by10(p,"multiply") / by10(c,"multiply")
     )
   }
 
@@ -84,7 +84,7 @@ class MathUtils {
    */
   static multiply(value: number, ...multiplyValues: number[]): number{
     return [value, ...multiplyValues].reduce((p: number,c: number): number => 
-      (MathUtils.by10(p,"multiply") * MathUtils.by10(c,"multiply")) / 100
+      (by10(p,"multiply") * by10(c,"multiply")) / 100
     )
   }
 
@@ -99,7 +99,7 @@ class MathUtils {
    */
   static sum(value: number, ...plusValues: number[]): number{
     return [value, ...plusValues].reduce((p: number,c: number): number => 
-      MathUtils.by10(MathUtils.by10(p,"multiply") + MathUtils.by10(c,"multiply"), "divide")
+      by10(by10(p,"multiply") + by10(c,"multiply"), "divide")
     ) 
   }
 
@@ -113,8 +113,21 @@ class MathUtils {
    */
   static minus(value: number, ...minusValues: number[]): number{
     return [value, ...minusValues].reduce((p: number,c: number): number => 
-      MathUtils.by10(MathUtils.by10(p,"multiply") - MathUtils.by10(c,"multiply"), "divide")
+      by10(by10(p,"multiply") - by10(c,"multiply"), "divide")
     ) 
+  }
+
+  /**
+   * Simula o comportamento do operador % (módulo).
+   * @param dividend - O número a ser dividido.
+   * @param divisor - O número pelo qual será dividido.
+   * @returns O restante da divisão (módulo).
+   * @example
+   * mod(10, 3); // retorna 1
+   * mod(-10, 3); // retorna 2 (comportamento correto para números negativos)
+   */
+  static mod(dividend: number, divisor: number): number {
+    return by10(by10(dividend, "multiply") % by10(divisor, "multiply"), "divide")
   }
 
   /**
@@ -147,12 +160,12 @@ class MathUtils {
    * MathUtils.interpolate(0.5, 0, 10); // returns 5
    */
   static interpolate(t: number, ...values: number[]): number {
-    const n: number = values.length - 1;
+    const n: number = values.length.minus(1);
     if (t >= 1) return values[n];
-    const i: number = Math.floor(t * n);
+    const i: number = Math.floor(t.multiply(n));
     const a: number = values[i];
-    const b: number = values[i + 1];
-    const localT: number = (t - i / n) * n;
+    const b: number = values[i.sum(1)];
+    const localT: number = (t.minus(i.divide(n))).multiply(n);
     return MathUtils._interpolate(a, b, localT);
   }
 
@@ -164,7 +177,7 @@ class MathUtils {
    * @returns The interpolated value.
    */
   private static _interpolate(a: number, b: number, t: number): number {
-    return a + (b - a) * t;
+    return a.sum(b.minus(a).multiply(t));
   }
 
   /**
@@ -183,6 +196,17 @@ class MathUtils {
     return [value, ...values].reduce((p: number,c: number): number => 
       Math.pow(p,c)
     )
+  }
+
+  static transition(factor: number, columns: number): number[] {
+    const value: number = interpolate(factor, 1, columns+1).minus(1)
+    const percentage: number = (1).minus(value.mod(1))
+    const idx: number = Math.floor(value) == columns ? 0 : Math.floor(value)
+    const nextIdx: number = idx+1 >= columns ? 0 : idx+1 
+    const array: number[] = new Array(columns).fill(0)
+    array[idx] = percentage
+    array[nextIdx] = (1).minus(percentage)
+    return array
   }
 } 
 

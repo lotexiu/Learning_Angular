@@ -1,4 +1,4 @@
-﻿import { ComponentUtils } from "./components/component-utils";
+﻿import { Class, ComponentUtils } from "./components/component-utils";
 import { HTMLUtils } from "./html/html-utils";
 import { MathUtils } from "./math/math-utils";
 import { RegexUtils } from "./regex/regex-utils";
@@ -7,6 +7,28 @@ import { ConsoleUtils } from "./unkown/console-utils";
 import { GenericUtils } from "./unkown/generic-utils";
 import { ObjectUtils } from "./unkown/object-utils";
 import { StringUtils } from "./unkown/string-utils";
+
+const utilsClasses: Function[] = [
+  ComponentUtils,
+  HTMLUtils,
+  MathUtils,
+  RegexUtils,
+  ClipboardUtils,
+  ConsoleUtils,
+  GenericUtils,
+  ObjectUtils,
+  StringUtils,
+];
+
+utilsClasses.forEach((utilsClass) => {
+  (window as any)[utilsClass.name.replaceAll("_","")] = utilsClass;
+  // Object.getOwnPropertyNames(utilsClass).forEach((key: string): void => {
+  //   if (typeof utilsClass[key] === 'function') {
+  //     utilsClass[key] = utilsClass[key].bind(utilsClass);
+  //   }
+  // });
+})
+
 
 
 // Object Utilities
@@ -90,7 +112,8 @@ const {
   divide, 
   minus, 
   multiply, 
-  sum: plus, 
+  sum,
+  mod, 
   random,
   by10,
   interpolate,
@@ -149,7 +172,8 @@ export {
   divide,
   minus,
   multiply,
-  plus,
+  sum,
+  mod,
   random,
   by10,
   interpolate,

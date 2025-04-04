@@ -1,4 +1,4 @@
-import { divide, minus, multiply, plus, pow, remainPercentage } from "src/utils/easy-use"
+import { divide, minus, multiply, sum, pow, remainPercentage } from "src/utils/easy-use"
 import { INumberHandler, IOperators } from "./interfaces/number-interfaces"
 
 class PNumber {
@@ -17,7 +17,7 @@ class PNumber {
     )
     switch (op) {
       case "+":
-        this.value = plus(this.value, ...nValues)
+        this.value = sum(this.value, ...nValues)
         break
       case "-":
         this.value = minus(this.value, ...nValues)

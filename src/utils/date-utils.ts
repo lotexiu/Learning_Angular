@@ -55,11 +55,11 @@ class Time {
 castTimeTo(type: 'hour' | 'minutes' | 'seconds'): number {
   switch (type) {
     case "hour":
-      return ((this.hour)).plus((this.minutes).divide(60)).plus((this.seconds).divide(60, 60))
+      return ((this.hour)).sum((this.minutes).divide(60)).sum((this.seconds).divide(60, 60))
     case "minutes":
-      return ((this.hour).multiply(60)).plus((this.minutes)).plus((this.seconds).divide(60))
+      return ((this.hour).multiply(60)).sum((this.minutes)).sum((this.seconds).divide(60))
     case "seconds":
-      return ((this.hour).multiply(60, 60)).plus((this.minutes).multiply(60)).plus((this.seconds))
+      return ((this.hour).multiply(60, 60)).sum((this.minutes).multiply(60)).sum((this.seconds))
     default:
       return -1
   }

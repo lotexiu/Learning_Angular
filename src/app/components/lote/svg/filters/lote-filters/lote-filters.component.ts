@@ -11,45 +11,26 @@ interface Transitions {
 }
 
 @Component({
-  selector: 'app-lote-filters',
+  selector: 'lote-filters',
   standalone: true,
   templateUrl: './lote-filters.component.html',
   styleUrl: './lote-filters.component.scss'
 })
 export class LoteFiltersComponent implements OnInit, OnDestroy {  
   private transitions: Transitions = {};
+  public turbulenceBaseFrequency: string = '0.01';
+  public waveBaseFrequency: string = '0.05';
+
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
+    // Iniciar com um efeito de turbulência animado
   }
 
   ngOnDestroy() {
+    // Limpar todos os intervalos quando o componente for destruído
   }
 
-  transition(id: string, min: number, max: number, interval: number, setps: number): number {
-    if(isNull(this.transitions[id])){
-      this.transitions[id] = {
-        value: min,
-        direction: setps,
-        interval: setInterval((): void => {
-          let objSelf: Transition = this.transitions[id];
 
-          if(objSelf.value >= max){
-            objSelf.direction = -setps;      
-            objSelf.value = max;
-          }
-          if (objSelf.value <= min){
-            objSelf.direction = setps;
-            objSelf.value = min;
-          }
-          objSelf.value += objSelf.direction;
 
-        }, interval)
-      }
-
-      return min;
-    } else {
-      return this.transitions[id].value;
-    }
-  }
 }

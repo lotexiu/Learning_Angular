@@ -19,8 +19,8 @@ type Provider<T> = {
 
 const ngControlFunctionsLink = new Map<NgControl, Map<Class, string>>();
 
-namespace ComponentUtils {
-  export function ngValueAcessor<T>(value: Constructor<T>): Provider<T> {
+class ComponentUtils {
+  static ngValueAcessor<T>(value: Constructor<T>): Provider<T> {
     return {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => value) as T,
@@ -28,15 +28,15 @@ namespace ComponentUtils {
     }
   }
 
-  export function λ<T>(_this: Class<T>, functionName: KeysOfType<T, any>): any {
+  static λ<T>(_this: Class<T>, functionName: KeysOfType<T, any>): any {
     return (...args: any[]): any => _this[functionName](...args);
   }
 
-  export function lambda<T>(_this: Class<T>, functionName: KeysOfType<T, any>): any {
-    return λ(_this, functionName)
+  static lambda<T>(_this: Class<T>, functionName: KeysOfType<T, any>): any {
+    return ComponentUtils.λ(_this, functionName)
   }
 
-  export function createDebounce(_this: Class, functionName: string, debounce: number): Subject<any> {
+  static createDebounce(_this: Class, functionName: string, debounce: number): Subject<any> {
     const subject = new Subject<any>();
     subject.pipe(debounceTime(debounce)).subscribe((...event) => {
       _this[functionName](...event);
@@ -44,7 +44,7 @@ namespace ComponentUtils {
     return subject;
   }
 
-  export function newId(): string {
+  static newId(): string {
     const date: string = new Date(Math.pow(random(7,9.99999),13)).getTime().toString();
     return date.slice(date.length - Math.floor(date.length/2));
   }

@@ -2,9 +2,9 @@ import { Nullable } from "../interfaces/misc-interfaces"
 import { ConcatStrIntoKeys } from "../interfaces/object-interfaces"
 import { StringUtils } from "./string-utils"
 
-namespace ObjectUtils {
+class ObjectUtils {
 
-  function removeCircularReferences() {
+  static removeCircularReferences() {
     const seen = new Set();
   
     return function(key: string, value: any) {
@@ -18,24 +18,26 @@ namespace ObjectUtils {
     };
   }
 
-  export function isNull<T>(value: Nullable<T>, ...customNullValues: any[]): value is Nullable<null> {
-    if (customNullValues.map((v: any): string=>JSON.stringify(v)).includes(JSON.stringify(value, removeCircularReferences()))) return true as any
+  static isNull<T>(value: Nullable<T>, ...customNullValues: any[]): value is Nullable<null> {
+    const { json } = ObjectUtils
+    if (customNullValues.map((v: any): string=>json(v)).includes(json(value))) return true as any
     return ![0,'',false].includes(value as any) && !value as any
   }
 
-  export function isNullOrUndefined<T>(value: Nullable<T>): value is Nullable<null> {
+  static isNullOrUndefined<T>(value: Nullable<T>): value is Nullable<null> {
     return value == null || value == undefined
   }
 
-  export function equals(a: any, b: any, ...customNullValues: any[]): boolean {
-    let result: boolean = isNull(a, ...customNullValues) && isNull(b, ...customNullValues)
+  static equals(a: any, b: any, ...customNullValues: any[]): boolean {
+    const { json } = ObjectUtils
+    let result: boolean = ObjectUtils.isNull(a, ...customNullValues) && ObjectUtils.isNull(b, ...customNullValues)
     if (!result) {
-      result = JSON.stringify(a) == JSON.stringify(b)
+      result = json(a) == json(b)
     }
     return result
   }
 
-  export function concatStrIntoFunctions<Base, Prefix extends string>(obj: Base, prefix: Prefix): ConcatStrIntoKeys<Base, Prefix> {
+  static concatStrIntoFunctions<Base, Prefix extends string>(obj: Base, prefix: Prefix): ConcatStrIntoKeys<Base, Prefix> {
     const result = {} as ConcatStrIntoKeys<Base, Prefix>;
     let objAny: any = obj as any
     Object.getOwnPropertyNames(obj).forEach((key: string) => {
@@ -47,13 +49,13 @@ namespace ObjectUtils {
     return result;
   }
 
-  export function deepCopy(value: any) {
+  static deepCopy(value: any) {
     const newObj: any = {}
     for (let key in value){
       if (value[key] && 
           typeof value[key] == 'object' &&
           !Object.keys(value[key]).includes('__ngContext__')){
-        newObj[key] = deepCopy(value[key])
+        newObj[key] = ObjectUtils.deepCopy(value[key])
       }else{
         newObj[key] = value[key]
       }
@@ -61,18 +63,18 @@ namespace ObjectUtils {
     return newObj
   }
 
-  export function json(obj: any): string {
-    return JSON.stringify(obj)
+  static json(obj: any): string {
+    return JSON.stringify(obj, ObjectUtils.removeCircularReferences())
   }
 
-  export function getValueFromPath(obj: any, path: string): any {
+  static getValueFromPath(obj: any, path: string): any {
     if (!path || !obj) return obj
     return path.split('.').reduce((acc: any, key: string): any => {
       return acc[key]
     }, obj)
   }
 
-  export function setValueFromPath(obj: any, path: string, value: any): void {
+  static setValueFromPath(obj: any, path: string, value: any): void {
     if (!path || !obj) return
     const keys = path.split('.')
     keys.reduce((acc: any, key: string, idx: number): any => {
@@ -83,7 +85,7 @@ namespace ObjectUtils {
     }, obj)
   }
 
-  export function removeNullFields<T extends object>(obj: T): Partial<T> {
+  static removeNullFields<T extends object>(obj: T): Partial<T> {
     return Object.entries(obj).reduce((acc, [key, value]) => {
       if (value !== null && value !== undefined) {
         acc[key as keyof T] = value;

@@ -1,4 +1,4 @@
-import { divide, minus, multiply, plus, strCapitalize, strCapitalizeAll } from "./easy-use"
+import { divide, minus, multiply, sum, strCapitalize, strCapitalizeAll, mod } from "./easy-use"
 
 declare global {
   interface Number {
@@ -6,9 +6,9 @@ declare global {
     getDecimals(): number|undefined
     divide(...divideValues:number[]): number
     multiply(...multiplyValues:number[]): number
-    plus(...plusValues:number[]): number
+    sum(...plusValues:number[]): number
     minus(...minusValues:number[]): number
-
+    mod(value: number): number
   }
   interface String {
     capitalize(): string;
@@ -31,11 +31,14 @@ Number.prototype.divide = function(...divideValues:number[]): number {
 Number.prototype.multiply = function(...multiplyValues:number[]): number {
   return multiply(this as number, ...multiplyValues)
 }
-Number.prototype.plus = function(...plusValues:number[]): number {
-  return plus(this as number, ...plusValues)
+Number.prototype.sum = function(...plusValues:number[]): number {
+  return sum(this as number, ...plusValues)
 }
 Number.prototype.minus = function(...minusValues:number[]): number {
   return minus(this as number, ...minusValues)
+}
+Number.prototype.mod = function(value: number): number {
+  return mod(this as number, value)
 }
 
 String.prototype.capitalize = function(): string {
