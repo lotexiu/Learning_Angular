@@ -130,6 +130,15 @@ class MathUtils {
     return by10(by10(dividend, "multiply") % by10(divisor, "multiply"), "divide")
   }
 
+  static hasDecimals(value: number): boolean {
+    return value.toFixed(0) != value.toString()
+  }
+
+  static getDecimals(value: number): number|undefined {
+    let decimals: string = value.toString().split('.')[1]
+    return Number(decimals) || undefined
+  }
+
   /**
    * Generates a random number between a minimum and maximum value.
    * @param min - The minimum value.
@@ -160,12 +169,12 @@ class MathUtils {
    * MathUtils.interpolate(0.5, 0, 10); // returns 5
    */
   static interpolate(t: number, ...values: number[]): number {
-    const n: number = values.length.minus(1);
+    const n: number = values.length ["-"] (1);
     if (t >= 1) return values[n];
-    const i: number = Math.floor(t.multiply(n));
+    const i: number = Math.floor(t ["*"] (n));
     const a: number = values[i];
-    const b: number = values[i.sum(1)];
-    const localT: number = (t.minus(i.divide(n))).multiply(n);
+    const b: number = values[i ["+"] (1)];
+    const localT: number = (t ["-"] (i ["/"] (n))) ["*"] (n);
     return MathUtils._interpolate(a, b, localT);
   }
 
@@ -177,19 +186,7 @@ class MathUtils {
    * @returns The interpolated value.
    */
   private static _interpolate(a: number, b: number, t: number): number {
-    return a.sum(b.minus(a).multiply(t));
-  }
-
-  /**
-   * Calculates the remaining percentage of a value relative to a total value.
-   * @param currentValue - The current value.
-   * @param totalValue - The total value.
-   * @returns The remaining percentage.
-   * @example
-   * MathUtils.remainPercentage(30, 100); // returns 0.7
-   */
-  static remainPercentage(currentValue: number, totalValue: number): number {
-    return MathUtils.minus(1,MathUtils.divide(currentValue, totalValue))
+    return a ["+"] ((b ["-"] (a)) ["*"] (t));
   }
 
   static pow(value: number, ...values: number[]): number {

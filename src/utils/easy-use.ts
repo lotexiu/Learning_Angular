@@ -8,29 +8,6 @@ import { GenericUtils } from "./unkown/generic-utils";
 import { ObjectUtils } from "./unkown/object-utils";
 import { StringUtils } from "./unkown/string-utils";
 
-const utilsClasses: Function[] = [
-  ComponentUtils,
-  HTMLUtils,
-  MathUtils,
-  RegexUtils,
-  ClipboardUtils,
-  ConsoleUtils,
-  GenericUtils,
-  ObjectUtils,
-  StringUtils,
-];
-
-utilsClasses.forEach((utilsClass) => {
-  (window as any)[utilsClass.name.replaceAll("_","")] = utilsClass;
-  // Object.getOwnPropertyNames(utilsClass).forEach((key: string): void => {
-  //   if (typeof utilsClass[key] === 'function') {
-  //     utilsClass[key] = utilsClass[key].bind(utilsClass);
-  //   }
-  // });
-})
-
-
-
 // Object Utilities
 const {
   equals,
@@ -106,19 +83,20 @@ const {
 
 // Math Utilities
 const { 
+  random,
+  getDecimals,
+  hasDecimals,
   getAvarage, 
   betweenMinMax, 
   minMax, 
+  multiply, 
   divide, 
   minus, 
-  multiply, 
   sum,
   mod, 
-  random,
+  pow,
   by10,
   interpolate,
-  remainPercentage,
-  pow,
 } = MathUtils;
 
 // Exporting Utilities
@@ -166,19 +144,20 @@ export {
   regDownPath,
 
   // Math
-  getAvarage,
-  betweenMinMax,
-  minMax,
-  divide,
-  minus,
-  multiply,
-  sum,
-  mod,
   random,
+  getDecimals,
+  hasDecimals,
+  getAvarage, 
+  betweenMinMax, 
+  minMax, 
+  multiply, 
+  divide, 
+  minus, 
+  sum,
+  mod, 
+  pow,
   by10,
   interpolate,
-  remainPercentage,
-  pow,
 
   // Component
   ngValueAcessor,
