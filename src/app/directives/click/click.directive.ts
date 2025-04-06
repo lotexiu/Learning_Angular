@@ -1,5 +1,5 @@
 import { Directive, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { isNull } from 'src/utils/easy-use';
+import { isNull } from 'src/utils/typescript/natives/object/object-utils';
 
 @Directive({
   selector: '[click]',

@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import { λ } from 'src/utils/easy-use';
+import { λ } from 'src/utils/typescript/natives/object/object-utils';
 
 @Directive({
   selector: '[mask]',
@@ -18,7 +18,7 @@ export class MaskDirective {
     this.ngOnChange = (this.ngControl.valueAccessor as any).onChange;
     this.ngWriteValue = λ(this.ngControl.valueAccessor!, 'writeValue');
 
-    (this.ngControl.valueAccessor as any).onChange = λ(this, 'onChange');
+    (this.ngControl.valueAccessor as any).onChange = λ<MaskDirective>(this, 'onChange');
   }
 
   onChange(value: any) {

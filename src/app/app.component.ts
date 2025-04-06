@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { Router, RouterOutlet, RoutesRecognized } from '@angular/router';
-import { componentBaseImports, componentImports } from '../utils/imports/import';
-import { LoteModalService } from './components/lote/modal/lote-modal/lote-modal.service';
+import { ColorUtils } from 'src/utils/typescript/extras/color/color-utils';
+import { MathUtils } from 'src/utils/typescript/natives/math/math-utils';
+import { ObjectUtils } from 'src/utils/typescript/natives/object/object-utils';
 import { LoteFiltersComponent } from './components/lote/svg/filters/lote-filters/lote-filters.component';
+import { componentBaseImports, componentImports } from 'src/utils/typescript/imports/import';
+
 @Component({
   selector: 'app-root',
   imports: [
@@ -22,12 +25,14 @@ export class AppComponent {
 
   constructor(
     private router: Router,
-  private modalService: LoteModalService,
+  // private modalService: LoteModalService,
   ) {
 
   }
 
   ngOnInit(): void {
-
+    ColorUtils
+    ObjectUtils
+    MathUtils
   }
 }

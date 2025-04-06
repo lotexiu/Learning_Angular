@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild, ComponentFactoryResolver, ViewContainerRef, Type, AfterViewInit } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
-import { componentBaseImports } from '../../../../../utils/imports/import';
 import { LoteFiltersComponent } from '../../svg/filters/lote-filters/lote-filters.component';
+import { componentBaseImports } from 'src/utils/typescript/imports/import';
 
 @Component({
   selector: 'app-lote-modal',
