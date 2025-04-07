@@ -1,7 +1,7 @@
 ﻿import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, inject } from "@angular/core";
 import { Base } from "./base";
-import { λ } from "src/utils/easy-use";
 import { ComponentUtils } from "../component-utils";
+import { λ } from "src/utils/typescript/natives/object/object-utils";
 
 @Component({
   template: '',
@@ -12,17 +12,17 @@ export abstract class BaseComponent extends Base {
 
   constructor() {
     super();
-    document.addEventListener('focusout', λ(this,'blurDetected'));
-    document.addEventListener('focusin', λ(this,'focusDetected'));
-    this.element.addEventListener('mouseenter', λ(this,'mouseEnterDetected'));
-    this.element.addEventListener('mouseleave', λ(this,'mouseLeaveDetected'));
+    document.addEventListener('focusout', λ(this as any,'blurDetected'));
+    document.addEventListener('focusin', λ(this as any,'focusDetected'));
+    this.element.addEventListener('mouseenter', λ(this as any,'mouseEnterDetected'));
+    this.element.addEventListener('mouseleave', λ(this as any,'mouseLeaveDetected'));
   }
 
   ngOnDestroy(): void {
-    document.removeEventListener('focusout', λ(this,"blurDetected"))
-    document.removeEventListener('focusin', λ(this,"focusDetected"))
-    this.element.removeEventListener('mouseenter', λ(this,"mouseEnterDetected"));
-    this.element.removeEventListener('mouseleave', λ(this,"mouseLeaveDetected"));
+    document.removeEventListener('focusout', λ(this as any,"blurDetected"))
+    document.removeEventListener('focusin', λ(this as any,"focusDetected"))
+    this.element.removeEventListener('mouseenter', λ(this as any,"mouseEnterDetected"));
+    this.element.removeEventListener('mouseleave', λ(this as any,"mouseLeaveDetected"));
   }
 
   private _id: string = `id${ComponentUtils.newId()}`;

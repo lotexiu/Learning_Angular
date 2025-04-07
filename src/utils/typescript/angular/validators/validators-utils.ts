@@ -1,5 +1,5 @@
-﻿import { RegexUtils } from "../regex/regex-utils";
-import { StringUtils } from "../unkown/string-utils";
+﻿import { RegexUtils } from "../../natives/regex/regex-utils";
+import { StringUtils } from "../../natives/string/string-utils";
 
 class ValidatorsUtils {
   static required(value: string): boolean {

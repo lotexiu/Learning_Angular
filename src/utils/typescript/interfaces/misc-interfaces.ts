@@ -9,7 +9,10 @@ type INever<T extends null|never = null> = T;
  * @example
  * type NullableString = Nullable<string>; // string | null | undefined
  */
-type INullable<Type=any> = Type|undefined|null|void;
+type INullable<Type=any, NoVoid extends boolean=false> = 
+  NoVoid extends false ?
+    Type|undefined|null|void :
+    Type|undefined|null;
 
 /**
  * Recursively unwraps the "awaited" type of a type. Non-promise thenables should resolve to `never`. This emulates the behavior of `await`.

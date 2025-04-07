@@ -4,15 +4,14 @@ import { ColorUtils } from 'src/utils/typescript/extras/color/color-utils';
 import { MathUtils } from 'src/utils/typescript/natives/math/math-utils';
 import { ObjectUtils } from 'src/utils/typescript/natives/object/object-utils';
 import { LoteFiltersComponent } from './components/lote/svg/filters/lote-filters/lote-filters.component';
-import { componentBaseImports, componentImports } from 'src/utils/typescript/imports/import';
+import { basicImports } from '@ts-angular/imports/import';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    ...componentBaseImports,
-    ...componentImports,
-    LoteFiltersComponent
+    ...basicImports,
+    LoteFiltersComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

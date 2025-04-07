@@ -1,8 +1,9 @@
-﻿import { LockedParams } from "src/utils/interfaces/object-interfaces";
-import { MaskPatterns, maskPatterns } from "./masks-patterns";
-import { regIsValidEmail, strIsValidCNPJ, strIsValidCPF } from "src/utils/easy-use";
+﻿import { MaskPatterns, maskPatterns } from "./masks-patterns";
 import { MaskValidationUtils } from "../mask-validation";
-import { Nullable } from "src/utils/interfaces/misc-interfaces";
+import { Nullable } from "src/utils/typescript/interfaces/misc-interfaces";
+import { LockedParams } from "../../../object/interfaces/object-interfaces";
+import { strIsValidCPF, strIsValidCNPJ } from "../../../string/string-utils";
+import { regIsValidEmail } from "../../regex-utils";
 
 
 type MaskValidationFunction = (value: string) => Nullable<string>;

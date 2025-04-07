@@ -3,8 +3,8 @@ import { ControlContainer, ControlValueAccessor, FormControl, FormGroup } from "
 import { Subscription } from "rxjs";
 
 import { BaseComponent } from "./base-component";
-import { Nullable } from "src/utils/interfaces/misc-interfaces";
-import { cLog } from "src/utils/easy-use";
+import { Nullable } from "src/utils/typescript/interfaces/misc-interfaces";
+import { cLog } from "src/utils/typescript/natives/console/console-utils";
 
 @Component({ template: '' })
 export abstract class BaseNgModelComponent<NgModelType = any> 

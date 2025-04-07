@@ -1,7 +1,7 @@
 import { ClipboardUtils } from "../html/clipborad/clipboard-utils";
 import { HTMLUtils } from "../html/html-utils";
 import { ConsoleUtils } from "../natives/console/console-utils";
-import { divide, MathUtils, minus, mod, multiply, sum } from "../natives/math/math-utils";
+import { mathDivide, MathUtils, mathMinus, mathMod, mathMultiply, mathSum } from "../natives/math/math-utils";
 import { KeyOf, GetTypeFromKey, Constructor } from "../natives/object/interfaces/object-interfaces";
 import { ObjectUtils } from "../natives/object/object-utils";
 import { RegexUtils } from "../natives/regex/regex-utils";
@@ -81,35 +81,35 @@ GlobalUtils.registerMethod(Number, "getDecimals", function(this: number): number
 })
 
 GlobalUtils.registerMethod(Number, "divide", function(this: number, ...divideValues:number[]): number {
-  return divide(this, ...divideValues)
+  return mathDivide(this, ...divideValues)
 })
 GlobalUtils.registerMethod(Number, "multiply", function(this: number, ...multiplyValues:number[]): number {
-  return multiply(this, ...multiplyValues)
+  return mathMultiply(this, ...multiplyValues)
 })
 GlobalUtils.registerMethod(Number, "sum", function(this: number, ...plusValues:number[]): number {
-  return sum(this, ...plusValues)
+  return mathSum(this, ...plusValues)
 })
 GlobalUtils.registerMethod(Number, "minus", function(this: number, ...minusValues:number[]): number {
-  return minus(this, ...minusValues)
+  return mathMinus(this, ...minusValues)
 })
 GlobalUtils.registerMethod(Number, "mod", function(this: number, value: number): number {
-  return mod(this, value)
+  return mathMod(this, value)
 })
 
 GlobalUtils.registerMethod(Number, "/", function(this: number, ...divideValues:number[]): number {
-  return divide(this, ...divideValues)
+  return mathDivide(this, ...divideValues)
 })
 GlobalUtils.registerMethod(Number, "*", function(this: number, ...multiplyValues:number[]): number {
-  return multiply(this, ...multiplyValues)
+  return mathMultiply(this, ...multiplyValues)
 })
 GlobalUtils.registerMethod(Number, "+", function(this: number, ...plusValues:number[]): number {
-  return sum(this, ...plusValues)
+  return mathSum(this, ...plusValues)
 })
 GlobalUtils.registerMethod(Number, "-", function(this: number, ...minusValues:number[]): number {
-  return minus(this, ...minusValues)
+  return mathMinus(this, ...minusValues)
 })
 GlobalUtils.registerMethod(Number, "%", function(this: number, value: number): number {
-  return mod(this, value)
+  return mathMod(this, value)
 })
 
 GlobalUtils.registerMethod(String, "capitalize", function(this: string): string {

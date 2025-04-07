@@ -1,13 +1,7 @@
-﻿import {
-  isNull,
-  strCountMissingCharsBeforeIndex,
-  strGetAddedCharacters,
-  strGetFirstDifferentIndex,
-  strGetRemovedCharacters,
-  strRemoveCharacters,
-  strRemoveNearestPatternFromIndex
-} from "src/utils/easy-use";
-import { RegexPatterns, MaskRegexPatterns, RegexUtils } from "src/utils/regex/regex-utils";
+﻿import { isNull } from "../../object/object-utils";
+import { strGetRemovedCharacters, strGetFirstDifferentIndex, strCountMissingCharsBeforeIndex, strRemoveCharacters, strRemoveNearestPatternFromIndex, strGetAddedCharacters } from "../../string/string-utils";
+import { RegexPatterns, MaskRegexPatterns, RegexUtils } from "../regex-utils";
+
 
 class MaskRegex {
   static get rules(): any {

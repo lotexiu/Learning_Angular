@@ -123,3 +123,22 @@ export {
   MaskRegexPatterns,
   RegexUtils,
 }
+
+
+const {
+  isValidEmail,
+  formatPhone,
+  onlyDigits,
+  removeCharsExcept,
+  formatNumber,
+  downPath,
+} = RegexUtils
+
+export {
+  isValidEmail as regIsValidEmail,
+  formatPhone as regFormatPhone,
+  onlyDigits as regOnlyDigits,
+  removeCharsExcept as regRemoveCharsExcept,
+  formatNumber as regFormatNumber,
+  downPath as regDownPath,
+}

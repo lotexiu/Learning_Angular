@@ -1,4 +1,4 @@
-import { copy, isNull } from "../object/object-utils"
+import { isNull } from "@ts-natives/object/object-utils"
 import { Compare } from "./interfaces/math-interfaces"
 
 /**
@@ -218,35 +218,35 @@ export {
 }
 
 const { 
-  mathRandom,
-  mathGetDecimals,
-  mathHasDecimals,
-  mathGetAvarage, 
-  mathBetweenMinMax, 
-  mathMinMax, 
-  mathMultiply, 
-  mathDivide, 
-  mathMinus, 
-  mathSum,
-  mathMod, 
-  mathPow,
-  mathBy10,
-  mathInterpolate,
-} = copy(MathUtils, 'math');
+  random,
+  getDecimals,
+  hasDecimals,
+  getAvarage, 
+  betweenMinMax, 
+  minMax, 
+  multiply, 
+  divide, 
+  minus, 
+  sum,
+  mod, 
+  pow,
+  by10,
+  interpolate,
+} = MathUtils;
 
 export {
-  mathRandom as random,
-  mathGetDecimals as getDecimals,
-  mathHasDecimals as hasDecimals,
-  mathGetAvarage as getAvarage, 
-  mathBetweenMinMax as betweenMinMax, 
-  mathMinMax as minMax, 
-  mathMultiply as multiply, 
-  mathDivide as divide, 
-  mathMinus as minus, 
-  mathSum as sum,
-  mathMod as mod, 
-  mathPow as pow,
-  mathBy10 as by10,
-  mathInterpolate as interpolate,
+  random as mathRandom,
+  getDecimals as mathGetDecimals,
+  hasDecimals as mathHasDecimals,
+  getAvarage as mathGetAvarage,
+  betweenMinMax as mathBetweenMinMax, 
+  minMax as mathMinMax,
+  multiply as mathMultiply, 
+  divide as mathDivide,
+  minus as mathMinus, 
+  sum as mathSum,
+  mod as mathMod, 
+  pow as mathPow,
+  by10 as mathBy10,
+  interpolate as mathInterpolate,
 }

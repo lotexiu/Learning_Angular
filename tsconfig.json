@@ -19,7 +19,28 @@
     "module": "ES2022",
     "baseUrl": "./",    
     "paths": {
-      "@styles/*": ["./src/utils/scss/*"]
+      /* Os mais especificos devem ficar no topo */
+      "@ts-natives/*": [
+        "./src/utils/typescript/natives/*"
+      ],
+      "@ts-interfaces/*": [
+        "./src/utils/typescript/interfaces/*"
+      ],
+      "@ts-extras/*": [
+        "./src/utils/typescript/extras/*"
+      ],
+      "@ts-angular/*": [
+        "./src/utils/typescript/angular/*"
+      ],
+      "@ts-utils/*": [
+        "./src/utils/typescript/*"
+      ],
+      "@styles/*": [
+        "./src/utils/scss/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
     },
   },
   "angularCompilerOptions": {

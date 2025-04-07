@@ -1,17 +1,11 @@
-﻿import { ColorUtils } from "../../extras/color/color-utils";
-import { Color } from "../../extras/color/interfaces/color-interface";
-import { GenericUtils } from "../../extras/generic-utils";
-import { Timer } from "../../extras/timer/timer";
-import { Nullable } from "../../interfaces/misc-interfaces";
-import { copy, isNull } from "../object/object-utils";
+﻿import { ColorUtils } from "@ts-extras/color/color-utils";
+import { Color } from "@ts-extras/color/interfaces/color-interface";
+import { GenericUtils } from "@ts-extras/generic-utils";
+import { Timer } from "@ts-extras/timer/timer";
+import { Nullable } from "@ts-interfaces/misc-interfaces";
+import { isNull, copy } from "@ts-natives/object/object-utils";
+import { ConsoleOptions } from "./console-interfaces";
 
-
-type ConsoleOptions = {
-  caller?: boolean;
-  callerLevel?: number;
-  TimeDifference?: boolean;
-  type?: 'log' | 'warn' | 'error';
-}
 class ConsoleUtils {
   private static lastLogTimer: Timer = new Timer();
 

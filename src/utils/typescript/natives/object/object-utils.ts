@@ -1,11 +1,8 @@
-import { Function } from "../../interfaces/function-interfaces";
-import { Nullable } from "../../interfaces/misc-interfaces";
-import { ConcatStrIntoKeys, CustomReturn, EntriesReturn, KeyOf, KeysOfType } from "./interfaces/object-interfaces"
-
-type RemoveCicularReferences = Function<[string, any], false, any, any> ;
-
+import { Function } from "@ts-interfaces/function-interfaces";
+import { Nullable } from "@ts-interfaces/misc-interfaces";
+import { strCapitalize } from "@ts-natives/string/string-utils";
+import { KeyOf, ConcatStrIntoKeys, CustomReturn, EntriesReturn, KeysOfType, RemoveCicularReferences } from "./interfaces/object-interfaces";
 class ObjectUtils {
-
   static removeCircularReferences(): RemoveCicularReferences {
     const seen = new Set();
     return function(key: string, value: any): any {
@@ -20,7 +17,6 @@ class ObjectUtils {
   }
 
   static isNull<T>(value: Nullable<T>, ...customNullValues: any[]): value is Nullable<null> {
-    const {json} = ObjectUtils
     const jsonNullValues: string[] = customNullValues.map((v: any): string=> json(v))
     return (
       jsonNullValues.includes(json(value)) ?
@@ -52,17 +48,17 @@ class ObjectUtils {
     return obj
   }
 
-  static addPrefixToKeys<T extends Object, Prefix extends string>(value: T): ConcatStrIntoKeys<T, Prefix> {
+  static addPrefixToKeys<T extends Object, Prefix extends string>(value: T, prefix: Prefix): ConcatStrIntoKeys<T, Prefix> {
     const obj = (value as any) as T & ConcatStrIntoKeys<T, Prefix>
     (Object.getOwnPropertyNames(value) as KeyOf<T>[])
       .forEach((key: KeyOf<T>): void => {
-        const newKey = `${value[key]}` as keyof ConcatStrIntoKeys<T, Prefix>
+        const newKey = `${prefix}${strCapitalize(key as any)}` as keyof ConcatStrIntoKeys<T, Prefix>
         obj[newKey] = value[key] as any;
     })
     return  obj
   }
 
-  static copy<T extends Object, Prefix extends string|null|undefined = null >(
+  static copy<T extends Object, Prefix extends Nullable<string, true> = null >(
     value:T, 
     prefixOnKeys?: Prefix,
   )
@@ -74,19 +70,18 @@ class ObjectUtils {
     try {
       copiedValue = structuredClone(value)
     } catch {
-      copiedValue = ObjectUtils.makeObjectBasedOn(value)
+      copiedValue = makeObjectBasedOn(value)
     }
     
-    const {isNull} = ObjectUtils
     if (isNull(prefixOnKeys, '')) {
       return copiedValue as any
     }
-    copiedValue = ObjectUtils.addPrefixToKeys(copiedValue)
+    copiedValue = addPrefixToKeys(copiedValue, prefixOnKeys)
     return copiedValue
   }
 
   static json(obj: any): string {
-    return JSON.stringify(obj, ObjectUtils.removeCircularReferences())
+    return JSON.stringify(obj, removeCircularReferences())
   }
 
   static getValueFromPath(obj: any, path: string): any {
@@ -117,19 +112,19 @@ class ObjectUtils {
     }, {} as Partial<T>);
   }
 
-  static λ<T extends Object, Key extends KeysOfType<T,Function> = KeysOfType<T,Function>>(
+  static λ<T extends Object, R>(
     value: T, 
-    functionName: Key
-  ): T[Key] {
+    functionName: KeysOfType<T, Function>
+  ): R {
     return ((...args: any): any => {
       return (value[functionName] as Function)(...args);
-    }) as T[Key];
+    }) as R;
   }
 
-  static lambda<T extends Object, Key extends KeysOfType<T,Function> = KeysOfType<T,Function>>(
+  static lambda<T extends Object, R>(
     value: T, 
-    functionName: Key
-  ): T[Key] {
+    functionName: KeysOfType<T, Function>
+  ): R {
     return λ(value, functionName)
   }
 }
@@ -152,7 +147,7 @@ const {
   setValueFromPath,
   λ,
   lambda,
-} = ObjectUtils.copy(ObjectUtils);
+} = ObjectUtils;
 
 export {
   equals,

@@ -1,5 +1,5 @@
 ﻿import { Nullable } from "../../interfaces/misc-interfaces";
-import { interpolate } from "../../natives/math/math-utils";
+import { mathInterpolate } from "../../natives/math/math-utils";
 import { copy } from "../../natives/object/object-utils";
 import { Color } from "./interfaces/color-interface";
 
@@ -30,7 +30,7 @@ class ColorUtils {
     const keys: (keyof Color)[] = Object.keys(color) as any;
     keys.forEach((part: keyof Color): any => {
       let keyValues: number[] = values.map((color: Color): number => color[part]||1)
-      color[part] = interpolate(t, ...keyValues)
+      color[part] = mathInterpolate(t, ...keyValues)
     })
     return color;
   }

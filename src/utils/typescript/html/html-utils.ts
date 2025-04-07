@@ -1,4 +1,6 @@
-﻿class HTMLUtils {
+﻿import { copy } from "../natives/object/object-utils";
+
+class HTMLUtils {
   
   static focusUntilSuccess(element: HTMLElement|string, maxAttempts: number = 5): void {
     setTimeout(()=>{
@@ -20,4 +22,12 @@
 
 export {
   HTMLUtils,
+}
+
+const {
+  focusUntilSuccess
+} = copy(HTMLUtils)
+
+export {
+  focusUntilSuccess
 }

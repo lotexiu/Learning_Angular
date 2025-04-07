@@ -1,4 +1,5 @@
-﻿import { LockedParams } from "src/utils/interfaces/object-interfaces"
+﻿import { LockedParams } from "../../../object/interfaces/object-interfaces"
+
 
 type MaskPatterns =
   |'TEXT'

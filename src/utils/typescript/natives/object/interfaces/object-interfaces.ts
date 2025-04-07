@@ -1,4 +1,6 @@
-﻿/**
+﻿import { Function } from "@ts-interfaces/function-interfaces";
+
+/**
  * Usado para limitar os campos que podem ser criados em um objeto e seus tipos.
  * 
  * @example
@@ -211,6 +213,8 @@ interface IConstructor<T> extends Object {
 
 type IEntriesReturn<T> =  [IKeyOf<T>, IGetTypeFromKey<T, IKeyOf<T>>];
 
+type IRemoveCicularReferences = Function<[string, any], false, any, any> ;
+
 export { 
   ILockedParams as LockedParams, 
   IKeysOfType as KeysOfType, 
@@ -230,4 +234,5 @@ export {
   IConcatStrIntoKeys as ConcatStrIntoKeys,
   IConstructor as Constructor,
   IEntriesReturn as EntriesReturn,
+  IRemoveCicularReferences as RemoveCicularReferences
 }

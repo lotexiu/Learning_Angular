@@ -3,8 +3,8 @@ import { Injectable } from "@angular/core";
 import { Observable, Subject, lastValueFrom, takeUntil } from "rxjs";
 import { CatchRequest, FinallyRequest, HttpClientFunctionArgs, HttpClientKeys, SuccessRequest } from "./interfaces/params-interfaces";
 import { ServiceObjInterceptor } from "./interfaces/interceptor-interface";
-import { Nullable } from "../interfaces/misc-interfaces";
-import { isNull } from "../easy-use";
+import { Nullable } from "../../interfaces/misc-interfaces";
+import { isNull } from "../../natives/object/object-utils";
 
 
 

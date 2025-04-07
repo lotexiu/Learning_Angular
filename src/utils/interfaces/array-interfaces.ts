@@ -1,4 +1,4 @@
-﻿import { Never } from "@ts-interfaces/misc-interfaces";
+﻿import { Never } from "../typescript/interfaces/misc-interfaces";
 
 /**
  * Tipo que retorna o primeiro elemento de um array.
@@ -6,7 +6,7 @@
  * @example
  * type FirstElement = First<[number, string, boolean]>; // number
  */
-type IFirst<T extends any[], _nv extends Never = never> = T extends [infer Rest, ...infer Last] ? Rest : _nv;
+type First<T extends any[], _nv extends Never = never> = T extends [infer Rest, ...infer Last] ? Rest : _nv;
 
 /**
  * Tipo que retorna o último elemento de um array.
@@ -14,7 +14,7 @@ type IFirst<T extends any[], _nv extends Never = never> = T extends [infer Rest,
  * @example
  * type LastElement = Last<[number, string, boolean]>; // boolean
  */
-type ILast<T extends any[], _nv extends Never = never> = T extends [...infer Rest, infer Last] ? Last : _nv;
+type Last<T extends any[], _nv extends Never = never> = T extends [...infer Rest, infer Last] ? Last : _nv;
 
 /**
  * Tipo que representa um array de tipos.
@@ -23,7 +23,7 @@ type ILast<T extends any[], _nv extends Never = never> = T extends [...infer Res
  * type NumberArray = ArrayType<number>; // number[]
  * type MixedArray = ArrayType<[number, string]>; // [number, string]
  */
-type IArrayType<
+type ArrayType<
   Types = any[],
   Inf extends boolean = false,
   InfType = Never,
@@ -31,7 +31,7 @@ type IArrayType<
 > = [
   ...Types extends any[] ? Types : [Types],
   ...Inf extends true ? InfType extends Never ? Types extends any[] ? 
-    ILast<Types, _nv>[] : Types[] : InfType[] : []
+    Last<Types, _nv>[] : Types[] : InfType[] : []
 ]
 
 /**
@@ -40,14 +40,14 @@ type IArrayType<
  * @example
  * type ArrayLikeString = _ArrayLike<string>; // { readonly length: number; readonly [index: number]: string; }
  */
-type _IArrayLike<T> = ArrayLike<T>;
+type _ArrayLike<T> = ArrayLike<T>;
 
-type IExtractValues<T extends readonly any[]> = T[number];
+type ExtractValues<T extends readonly any[]> = T[number];
 
 export { 
-  IFirst as First, 
-  ILast as Last, 
-  IArrayType as ArrayType,
-  _IArrayLike as ArrayLike,
-  IExtractValues as ExtractValues,
+  First, 
+  Last, 
+  ArrayType,
+  _ArrayLike as ArrayLike,
+  ExtractValues,
 }

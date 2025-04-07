@@ -1,22 +1,24 @@
 ﻿import { Component, ElementRef, inject } from "@angular/core";
 import { ActivatedRoute, NavigationExtras, Route, Router, Routes } from "@angular/router";
-import { Nullable } from "src/utils/interfaces/misc-interfaces";
-import { SGCColumn } from "../../../app/components/sgcloud/list/sgc-list/interfaces/column-interface";
-import { SGCListUtils } from "../../../app/components/sgcloud/list/sgc-list/sgc-list-utils";
-import { Notification } from "../../../app/components/sgcloud/notification/sgc-notification/interfaces/notifications-interface";
-import { SGCNotification } from "../../../app/components/sgcloud/notification/sgc-notification/sgc-notification.service";
 import { Subject } from "rxjs";
-import { createDebounce, focusUntilSuccess, isNull } from "src/utils/easy-use";
 import { FormGroup } from "@angular/forms";
-import { FormUtils } from "src/utils/unkown/form-utils";
+import { FormUtils } from "src/utils/typescript/html/form-utils";
+import { Nullable } from "src/utils/typescript/interfaces/misc-interfaces";
+import { isNull } from "src/utils/typescript/natives/object/object-utils";
+import { focusUntilSuccess } from "src/utils/typescript/html/html-utils";
+import { createDebounce } from "../component-utils";
 
 @Component({
   template: ''
 })
-export abstract class Base {
+export abstract class Base<T extends Base<T>=any> {
   public readonly route: ActivatedRoute = inject(ActivatedRoute);
   public readonly router = inject(Router);
   public readonly elementRef: ElementRef<HTMLElement> = inject(ElementRef<HTMLElement>)
+
+  get own(): T{
+    return this as any;
+  }
 
   get element(): HTMLElement {
     return this.elementRef.nativeElement;
@@ -100,34 +102,15 @@ export abstract class Base {
     }
   }
 
-  createDebounce(_this: any, functionName: string, debounce: number): Subject<any> {
-    return createDebounce(this, functionName, debounce);
+  createDebounce(functionName: string, debounce: number): Subject<any> {
+    return createDebounce<T>(this as any, functionName as any, debounce);
   }
-
-  notifty(
-    notification: Notification,
-    vertical: 'top'|'bottom',
-    horizontal: 'left'|'center'|'right'
-  ): void {
-    SGCNotification.notifty(notification, vertical, horizontal);
-  }
-
+  
   getControlsWithErrors(form: FormGroup) {
     return FormUtils.getControlsWithErrors(form);
   }
 
   getFirstErrorInControl(control: any): string {
     return FormUtils.getFirstErrorInControl(control);
-  }
-
-  newSGCColumn (
-    param: string,
-    label: string,
-    direction?: Nullable<string>,
-    sortable?: Nullable<boolean>,
-    hide?: Nullable<boolean>,
-    size?: Nullable<number>,
-  ): SGCColumn {
-    return SGCListUtils.newSGCColumn(param, label, direction, hide, sortable, size);
   }
 }

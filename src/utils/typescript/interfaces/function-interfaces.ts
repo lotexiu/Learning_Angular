@@ -1,4 +1,4 @@
-﻿import { ArrayType } from "../natives/array/interfaces/array-interfaces";
+﻿import { ArrayType } from "@utils/interfaces/array-interfaces";
 
 /**
  * Tipo que representa uma função com tipos de argumentos e tipo de retorno especificados.

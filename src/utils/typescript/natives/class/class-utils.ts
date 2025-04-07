@@ -1,11 +1,9 @@
-import { ReturnType } from "../../interfaces/function-interfaces";
-import { random } from "../math/math-utils";
-import { Constructor, GetTypeFromKey, KeyOf, KeysOfType } from "../object/interfaces/object-interfaces";
-import { copy } from "../object/object-utils";
+import { mathRandom } from "@ts-natives/math/math-utils";
 
 class ClassUtils {
+  /* TODO - mover a função para outro lugar. Não pertence a está classe */
   static newId(): string {
-    const date: string = new Date(Math.pow(random(7,9.99999),13)).getTime().toString();
+    const date: string = new Date(Math.pow(mathRandom(7,9.99999),13)).getTime().toString();
     return date.slice(date.length - Math.floor(date.length/2));
   }
 }
@@ -16,7 +14,7 @@ export {
 
 const {
   newId,
-} = copy(ClassUtils)
+} = ClassUtils
 
 export {
   newId,

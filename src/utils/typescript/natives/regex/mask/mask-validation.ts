@@ -1,4 +1,4 @@
-﻿import { Nullable } from "src/utils/interfaces/misc-interfaces";
+﻿import { Nullable } from "src/utils/typescript/interfaces/misc-interfaces";
 import { MaskRegex } from "./mask-regex";
 
 class MaskValidationUtils {

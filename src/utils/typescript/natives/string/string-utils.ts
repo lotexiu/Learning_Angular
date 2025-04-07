@@ -1,5 +1,4 @@
-import { copy } from "../object/object-utils";
-import { RegexUtils } from "../regex/regex-utils"
+import { regOnlyDigits, regFormatPhone, regIsValidEmail } from "@ts-natives/regex/regex-utils";
 
 class StringUtils {
 
@@ -9,7 +8,7 @@ class StringUtils {
    * @returns The string with only digits.
    */
   static onlyDigits(value: string): string {
-    return RegexUtils.onlyDigits(value)
+    return regOnlyDigits(value)
   }
 
   /**
@@ -18,7 +17,7 @@ class StringUtils {
   * @returns The formatted phone number.
   */
   static formatPhone(phone: string) {
-    return RegexUtils.formatPhone(phone)
+    return regFormatPhone(phone)
   }
 
   /**
@@ -27,7 +26,7 @@ class StringUtils {
   * @returns True if the email is valid, false otherwise.
   */
   static isValidEmail(email: string): boolean {
-    return RegexUtils.isValidEmail(email)
+    return regIsValidEmail(email)
   }
 
   /**
@@ -70,7 +69,7 @@ class StringUtils {
   */
   static isValidCNPJ(cnpj: string): boolean {
     const weights: number[] = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-    const digits: string = RegexUtils.onlyDigits(cnpj);
+    const digits: string = regOnlyDigits(cnpj);
     let n = 0;
 
     for (let i = 0; i < 12; i++) {
@@ -246,35 +245,35 @@ export {
 }
 
 const {
-  strIsValidCNPJ,
-  strIsValidCPF,
-  strCapitalize,
-  strCapitalizeAll,
-  strRightPad,
-  strLeftPad,
-  strGetAddedCharacters,
-  strGetRemovedCharacters,
-  strRemoveNearestPatternFromIndex,
-  strCountMissingCharsBeforeIndex,
-  strGetFirstDifferentIndex,
-  strGetLastDifferentIndex,
-  strRemoveCharacters,
-  strNoAccent,
-} = copy(StringUtils, 'str');
+  isValidCNPJ,
+  isValidCPF,
+  capitalize,
+  capitalizeAll,
+  rightPad,
+  leftPad,
+  getAddedCharacters,
+  getRemovedCharacters,
+  removeNearestPatternFromIndex,
+  countMissingCharsBeforeIndex,
+  getFirstDifferentIndex,
+  getLastDifferentIndex,
+  removeCharacters,
+  noAccent,
+} = StringUtils;
 
 export {
-  strIsValidCNPJ,
-  strIsValidCPF,
-  strCapitalize,
-  strCapitalizeAll,
-  strRightPad,
-  strLeftPad,
-  strGetAddedCharacters,
-  strGetRemovedCharacters,
-  strRemoveNearestPatternFromIndex,
-  strCountMissingCharsBeforeIndex,
-  strGetFirstDifferentIndex,
-  strGetLastDifferentIndex,
-  strRemoveCharacters,
-  strNoAccent,
+  isValidCNPJ as strIsValidCNPJ,
+  isValidCPF as strIsValidCPF,
+  capitalize as strCapitalize,
+  capitalizeAll as strCapitalizeAll,
+  rightPad as strRightPad,
+  leftPad as strLeftPad,
+  getAddedCharacters as strGetAddedCharacters,
+  getRemovedCharacters as strGetRemovedCharacters,
+  removeNearestPatternFromIndex as strRemoveNearestPatternFromIndex,
+  countMissingCharsBeforeIndex as strCountMissingCharsBeforeIndex,
+  getFirstDifferentIndex as strGetFirstDifferentIndex,
+  getLastDifferentIndex as strGetLastDifferentIndex,
+  removeCharacters as strRemoveCharacters,
+  noAccent as strNoAccent,
 }
