@@ -54,8 +54,9 @@ class ObjectUtils {
       .forEach((key: KeyOf<T>): void => {
         const newKey = `${prefix}${strCapitalize(key as any)}` as keyof ConcatStrIntoKeys<T, Prefix>
         obj[newKey] = value[key] as any;
+        value[key] = null as any
     })
-    return  obj
+    return removeNullFields(obj) as any
   }
 
   static copy<T extends Object, Prefix extends Nullable<string, true> = null >(

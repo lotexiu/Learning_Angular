@@ -1,10 +1,11 @@
 ﻿import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, Subject, lastValueFrom, takeUntil } from "rxjs";
-import { CatchRequest, FinallyRequest, HttpClientFunctionArgs, HttpClientKeys, SuccessRequest } from "./interfaces/params-interfaces";
+import { Nullable } from "@ts-interfaces/misc-interfaces";
+import { isNull } from "@ts-natives/object/object-utils";
+import { Subject, Observable, takeUntil, lastValueFrom } from "rxjs";
 import { ServiceObjInterceptor } from "./interfaces/interceptor-interface";
-import { Nullable } from "../../interfaces/misc-interfaces";
-import { isNull } from "../../natives/object/object-utils";
+import { SuccessRequest, CatchRequest, FinallyRequest, HttpClientFunctionArgs, HttpClientKeys } from "./interfaces/params-interfaces";
+
 
 
 

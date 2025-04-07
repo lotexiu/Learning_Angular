@@ -1,10 +1,9 @@
-﻿import { Component, EventEmitter, Input, Output, inject } from "@angular/core";
-import { ControlContainer, ControlValueAccessor, FormControl, FormGroup } from "@angular/forms";
+﻿import { Component, Input, Output, EventEmitter, inject } from "@angular/core";
+import { ControlValueAccessor, ControlContainer, FormControl, FormGroup } from "@angular/forms";
+import { Nullable } from "@ts-interfaces/misc-interfaces";
+import { cLog } from "@ts-natives/console/console-utils";
 import { Subscription } from "rxjs";
-
 import { BaseComponent } from "./base-component";
-import { Nullable } from "src/utils/typescript/interfaces/misc-interfaces";
-import { cLog } from "src/utils/typescript/natives/console/console-utils";
 
 @Component({ template: '' })
 export abstract class BaseNgModelComponent<NgModelType = any> 

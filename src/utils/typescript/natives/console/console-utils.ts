@@ -4,7 +4,7 @@ import { GenericUtils } from "@ts-extras/generic-utils";
 import { Timer } from "@ts-extras/timer/timer";
 import { Nullable } from "@ts-interfaces/misc-interfaces";
 import { isNull, copy } from "@ts-natives/object/object-utils";
-import { ConsoleOptions } from "./console-interfaces";
+import { ConsoleOptions, ConsoleType } from "./console-interfaces";
 
 class ConsoleUtils {
   private static lastLogTimer: Timer = new Timer();
@@ -12,14 +12,14 @@ class ConsoleUtils {
   private static isConsoleOptions(options: any): options is ConsoleOptions {
     const keys: string[] = ['caller', 'callerLevel', 'TimeDifference', 'type'];
     if (!options || typeof options !== 'object') return false;
-    const objKeys = Object.keys(options);
-    if (!objKeys.every((k) => keys.includes(k))) {
+    const objKeys: string[] = Object.keys(options);
+    if (!objKeys.every((k: string): boolean => keys.includes(k))) {
       return false;
     }
     return keys.some((key) => options.hasOwnProperty(key));
   }
 
-  static log(options: Nullable<ConsoleOptions>, ...args: any[]): void;
+  static log<Args>(options: Nullable<ConsoleOptions>, ...args: Args[]): void;
   static log(...args: any[]): void;
   static log(...args: any[]): void {
     const options: Nullable<ConsoleOptions> = ConsoleUtils.isConsoleOptions(args[0]) ? args.shift() : null;
@@ -38,7 +38,7 @@ class ConsoleUtils {
       return 0;
     }
     lastLogTimer.stop();
-    const timeDifference = lastLogTimer.difference;
+    const timeDifference: number = lastLogTimer.difference;
     lastLogTimer.start();
     return timeDifference;
   }
@@ -67,7 +67,7 @@ class ConsoleUtils {
     color: Color
   ): void {
     const { R, G, B } = color;
-    const logType = options?.type || 'log';
+    const logType: ConsoleType = options?.type || 'log';
 
     if (options?.TimeDifference) {
       console[logType](

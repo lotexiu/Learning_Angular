@@ -1,5 +1,5 @@
 import { isNull } from "@ts-natives/object/object-utils"
-import { Compare } from "./interfaces/math-interfaces"
+import { By10Type, Compare } from "./interfaces/math-interfaces"
 
 /**
  * A utility for mathematical operations.
@@ -11,8 +11,8 @@ class MathUtils {
    * @param type - The type of operation ("multiply" or "divide").
    * @returns The result of the operation.
    */
-  static by10(value: number, type: 'multiply'|'divide'): number{
-    return type == "multiply" ? value*10 : value/10
+  static by10(value: number, type: By10Type): number{
+    return type == "multiply" ? value * 10 : value / 10
   }
 
   /**

@@ -1,10 +1,13 @@
-﻿type ConsoleOptions = {
+﻿type IConsoleOptions = {
   caller?: boolean;
   callerLevel?: number;
   TimeDifference?: boolean;
-  type?: 'log' | 'warn' | 'error';
+  type?: IConsoleType;
 }
 
+type IConsoleType = 'log' | 'warn' | 'error';
+
 export {
-  ConsoleOptions,
+  IConsoleOptions as ConsoleOptions,
+  IConsoleType as ConsoleType,
 }

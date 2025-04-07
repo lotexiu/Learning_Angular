@@ -1,12 +1,10 @@
 import { NavigationExtras, Router, RoutesRecognized } from "@angular/router";
-import { λ } from "../component-utils";
-import { Nullable } from "../interfaces/interfaces";
-import { LocalStorageUtils } from "../localStorage-utils";
-import { Routes, _Route } from "./route";
 import { RouteData } from "./interfaces/route.interface";
-import { RegexUtils } from "../regex/regex-utils";
-
-
+import { _Route, Routes } from "./route";
+import { Nullable } from "@ts-interfaces/misc-interfaces";
+import { LocalStorageUtils } from "@ts-utils/html/localstorage/localStorage-utils";
+import { RegexUtils } from "@ts-natives/regex/regex-utils";
+import { λ } from "@ts-natives/object/object-utils";
 
 const RouteData: RouteData = {
   createdRoutes: []
@@ -26,7 +24,7 @@ class RouteUtils {
 
   static setAngularRouter(angularRouter: Router): void {
     RouteData.router = angularRouter
-    RouteData.routerEvents = RouteData.router.events.subscribe(λ(this, 'routeEvents'))
+    RouteData.routerEvents = RouteData.router.events.subscribe(λ(this as any, 'routeEvents'))
   }
 
   static setAppTitle(title: string): void {

@@ -1,11 +1,8 @@
-// Angular imports
 import { Route as AngularRoute } from "@angular/router";
-
-// Local imports
-import { Nullable } from "../interfaces/interfaces";
-import { isNull } from "../object-utils";
 import { RouteData } from "./route-utils";
 import * as RouteI from "./interfaces/route.interface";
+import { Nullable } from "@ts-interfaces/misc-interfaces";
+import { isNull } from "@ts-natives/object/object-utils";
 
 /**
  * Classe responsável por gerenciar as rotas da aplicação

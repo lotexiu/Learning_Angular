@@ -1,7 +1,8 @@
-﻿import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, inject } from "@angular/core";
-import { Base } from "./base";
+﻿import { Component, ChangeDetectorRef, inject, Output, EventEmitter, Input } from "@angular/core";
+import { λ } from "@ts-natives/object/object-utils";
 import { ComponentUtils } from "../component-utils";
-import { λ } from "src/utils/typescript/natives/object/object-utils";
+import { Base } from "./base";
+
 
 @Component({
   template: '',

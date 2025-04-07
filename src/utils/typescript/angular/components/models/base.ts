@@ -1,12 +1,13 @@
-﻿import { Component, ElementRef, inject } from "@angular/core";
-import { ActivatedRoute, NavigationExtras, Route, Router, Routes } from "@angular/router";
-import { Subject } from "rxjs";
+﻿import { Component, inject, ElementRef } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { FormUtils } from "src/utils/typescript/html/form-utils";
-import { Nullable } from "src/utils/typescript/interfaces/misc-interfaces";
-import { isNull } from "src/utils/typescript/natives/object/object-utils";
-import { focusUntilSuccess } from "src/utils/typescript/html/html-utils";
+import { ActivatedRoute, Router, Routes, Route, NavigationExtras } from "@angular/router";
+import { Nullable } from "@ts-interfaces/misc-interfaces";
+import { isNull } from "@ts-natives/object/object-utils";
+import { FormUtils } from "@ts-utils/html/form/form-utils";
+import { focusUntilSuccess } from "@ts-utils/html/html-utils";
+import { Subject } from "rxjs";
 import { createDebounce } from "../component-utils";
+
 
 @Component({
   template: ''

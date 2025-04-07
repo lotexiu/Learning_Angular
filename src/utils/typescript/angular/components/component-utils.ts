@@ -1,9 +1,11 @@
+import { Constructor } from "@angular/cdk/table";
 import { InjectionToken, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { newId } from "@ts-natives/class/class-utils";
+import { KeysOfType } from "@ts-natives/object/interfaces/object-interfaces";
+import { copy } from "@ts-natives/object/object-utils";
 import { Subject, debounceTime } from "rxjs";
-import { Constructor, KeysOfType } from "../../natives/object/interfaces/object-interfaces";
-import { copy } from "../../natives/object/object-utils";
-import { mathRandom } from "../../natives/math/math-utils";
+
 
 type Provider<T> = {
   provide: InjectionToken<any>,
@@ -32,8 +34,7 @@ class ComponentUtils {
   }
 
   static newId(): string {
-    const date: string = new Date(Math.pow(mathRandom(7,9.99999),13)).getTime().toString();
-    return date.slice(date.length - Math.floor(date.length/2));
+    return newId()
   }
 }
 

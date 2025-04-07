@@ -1,8 +1,7 @@
 import { EnvironmentProviders, Provider, Type } from "@angular/core";
 import { Data, DefaultExport, LoadChildrenCallback, Resolve, ResolveData, ResolveFn, Router, Routes, RunGuardsAndResolvers, UrlMatcher } from "@angular/router";
 import { Observable, Subscription } from "rxjs";
-import { ArrayType } from "../interfaces/interfaces";
-import { Routes as Routes_ } from "../angular/route/route";
+import { Routes as Routes_ } from "@ts-angular/route/route";
 
 type MinimalRoute = [string, string, Component_];
 type AddChildren = Routes_[]| MinimalRoute[];
