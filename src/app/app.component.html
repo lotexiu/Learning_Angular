@@ -1,38 +1,11 @@
 <div class="container">
-  <h1>Exemplo de Filtros SVG</h1>
-  
-  <div class="filter-demo">
-    <div class="demo-item">
-      <h2>Normal (sem filtro)</h2>
-      <div class="demo-content">
-        <p>Este é um texto sem nenhum filtro aplicado</p>
-      </div>
-    </div>
-    
-    <div class="demo-item">
-      <h2>Filtro de Turbulência</h2>
-      <div class="demo-content" style="filter: url(#turbulenceFilter)">
-        <p>Este texto tem o filtro de turbulência aplicado</p>
-      </div>
-    </div>
-    
-    <div class="demo-item">
-      <h2>Filtro de Ondas</h2>
-      <div class="demo-content" style="filter: url(#waveFilter)">
-        <p>Este texto tem o filtro de ondas aplicado</p>
-      </div>
-    </div>
-
-    <div class="demo-item">
-      <h2>Fundo Azul com Filtro de Ruído</h2>
-      <div class="demo-content" style="background-color: #3498db; color: white; filter: url(#noiseFilter)">
-        <p>Este é um exemplo de fundo azul com filtro de ruído aplicado</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Os filtros SVG precisam estar disponíveis no DOM -->
   <lote-filters></lote-filters>
-  
+  <div style="
+    background-color: #7c7c7c; 
+    color: white; 
+    filter: url(#noiseFilter);
+    height: 300px;
+  ">
+  </div>
   <router-outlet/>
 </div>

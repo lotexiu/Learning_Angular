@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { mathInterpolate, mathRandom, MathUtils } from '@ts-natives/math/math-utils';
 
 interface Transition {
   value: number;
@@ -23,22 +24,23 @@ export class LoteFiltersComponent implements OnInit, OnDestroy {
 
   private intervalId: number = -1
   counter: number = 0
+  transition: string[] = []
 
   
   ngOnInit() {
     const a = setInterval(()=>{
-      // console.log(MathUtils)
-      // console.log(MathUtils.transition(this.counter['/'](5), 4))
-      // const result = MathUtils.transition(this.counter['/'](5), 4)
-      
-      // console.log(result)
+      this.transition[0] = `${mathRandom(0.2, 0.8)}`
+      this.transition[1] = `${mathRandom(0.2, 0.8)}`
+      this.transition[2] = `${mathRandom(0.2, 0.8)}`
 
-      if (this.counter == 5) {
-        this.counter = 0
-      } else {
-        this.counter += 1
-      }
-    }, 500)
+
+      // this.transition = MathUtils.transition(this.counter['/'](5), 4).join(" ")
+      // if (this.counter == 5) {
+      //   this.counter = 1
+      // } else {
+      //   this.counter += 1
+      // }
+    }, 100)
   }
 
   ngOnDestroy() {
