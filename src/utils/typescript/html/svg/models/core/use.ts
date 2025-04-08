@@ -1,6 +1,6 @@
 ﻿import { SVGBaseSVGElement } from "../base/base-svg-element";
 
-class Use extends SVGBaseSVGElement {
+class Use<T=Use<any>> extends SVGBaseSVGElement<T> {
   /** Reference to another element using URL syntax */
   href?: string;
 

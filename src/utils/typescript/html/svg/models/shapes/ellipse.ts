@@ -1,6 +1,6 @@
 ﻿import { SVGBaseSVGElement } from "../base/base-svg-element";
 
-class Ellipse extends SVGBaseSVGElement {
+class Ellipse<T=Ellipse<any>> extends SVGBaseSVGElement<T> {
   /** X-coordinate of the center */
   cx?: number;
 

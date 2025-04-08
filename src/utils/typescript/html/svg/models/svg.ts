@@ -11,8 +11,11 @@ import { SVGDefs } from "./core/defs";
 import { SVGText } from "./text/text";
 import { SVGPolyline } from "./shapes/polyline";
 import { SVGPath } from "./shapes/path";
+import { Function } from "@ts-interfaces/function-interfaces";
+import { Nullable } from "@ts-interfaces/misc-interfaces";
+import { cLog } from "@ts-natives/console/console-utils";
 
-class SVG extends SVGBaseSVGElement {
+class SVG extends SVGBaseSVGElement<SVG> {
   /** Width of the SVG container */
   width?: number;
 
@@ -49,9 +52,68 @@ class SVG extends SVGBaseSVGElement {
   lines?: SVGLine[];
   polygons?: SVGPolygon[];
   polylines?: SVGPolyline[];
-  images?: SVGImageElement[];
+  images?: SVGImageElement[];  
+
+  private intervalId: any;
+
+  private _tickInteveral: number = 200;
+  set tickInterval(value: number) {
+    this._tickInteveral = value;
+    this.buildInterval()
+  }
+  get tickInterval(): number {
+    return this._tickInteveral;
+  }
+
+  private _onTick: Nullable<Function<[SVG]>>;
+  set onTick(callback: Nullable<Function<[SVG]>>) {
+    this._onTick = callback;
+    this.buildInterval()
+  }
+  get onTick(): Nullable<Function<[SVG]>> {
+    return this._onTick;
+  }
+
+  usedByElements: HTMLElement[] = []
+
+  stopInterval() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+      this.onTick = null;
+    }
+  }
+
+  private buildInterval(): void {
+    this.usedByElements = this.usedByElements || []
+    if (this.usedByElements.length == 0) {
+      cLog(
+        {type:'warn'}, 
+        'No elements have been added to the SVG during the interval.\n'+
+        'Please attach an element or remove onTick callback to stop '+
+        'the interval or call stopInterval to prevent memory leaks.'
+      );
+    }
+
+    this.stopInterval()
+    if (this._onTick) {
+      this.intervalId = setInterval(() => {
+        if (!this.elementsStillExist()) {
+          this.stopInterval()
+        }
+        this._onTick!(this);
+      }, this._tickInteveral);
+    }
+  }
+
+  private elementsStillExist(): boolean {
+    return this.usedByElements.some((element: HTMLElement): boolean => {
+      return document.body.contains(element);
+    });
+  }
 }
 
 export {
-  SVG 
-}
+  SVG
+};
+

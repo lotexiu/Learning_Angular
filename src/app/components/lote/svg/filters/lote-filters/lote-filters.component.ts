@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { mathInterpolate, mathRandom, MathUtils } from '@ts-natives/math/math-utils';
+import { mathRandom } from '@ts-natives/math/math-utils';
+import { SVG } from '@ts-utils/html/svg/models/svg';
 
 interface Transition {
   value: number;
@@ -22,18 +23,25 @@ export class LoteFiltersComponent implements OnInit, OnDestroy {
 
   constructor(private cdr: ChangeDetectorRef) {}
 
-  private intervalId: number = -1
   counter: number = 0
   transition: string[] = []
 
   
   ngOnInit() {
+    const svg: SVG = new SVG({
+      tickInterval: 100, /* TODO tentar atualizar TS ou alguma lib para resolver problema de atualizar variaveis */
+    })
+    console.log(svg)
+  }
+
+  ngOnDestroy() {
+  }
+
+  test() {
     const a = setInterval(()=>{
       this.transition[0] = `${mathRandom(0.2, 0.8)}`
       this.transition[1] = `${mathRandom(0.2, 0.8)}`
       this.transition[2] = `${mathRandom(0.2, 0.8)}`
-
-
       // this.transition = MathUtils.transition(this.counter['/'](5), 4).join(" ")
       // if (this.counter == 5) {
       //   this.counter = 1
@@ -41,11 +49,6 @@ export class LoteFiltersComponent implements OnInit, OnDestroy {
       //   this.counter += 1
       // }
     }, 100)
-  }
-
-  ngOnDestroy() {
-    // Limpar todos os intervalos quando o componente for destruído
-    clearInterval(this.intervalId)
   }
 
 

@@ -1,4 +1,5 @@
 ﻿import { Function } from "@ts-interfaces/function-interfaces";
+import { Never } from "@ts-interfaces/misc-interfaces";
 
 /**
  * Usado para limitar os campos que podem ser criados em um objeto e seus tipos.
@@ -123,6 +124,10 @@ type IKeyOf<T> = keyof T;
  */
 type _IPartial<T> = Partial<T>;
 
+type IDeepPartial<T> = {
+  [K in keyof T]?: T[K] extends object ? IDeepPartial<T[K]> : T[K];
+}
+
 /**
  * Torna todas as propriedades de T obrigatórias.
  * 
@@ -215,24 +220,22 @@ type IEntriesReturn<T> =  [IKeyOf<T>, IGetTypeFromKey<T, IKeyOf<T>>];
 
 type IRemoveCicularReferences = Function<[string, any], false, any, any> ;
 
-export { 
-  ILockedParams as LockedParams, 
-  IKeysOfType as KeysOfType, 
-  IInputFields as InputFields, 
-  ICustomReturn as CustomReturn, 
-  IGetTypeFromKey as GetTypeFromKey, 
-  IKeyOf as KeyOf, 
-  _IPartial as Partial, 
-  _IRequired as Required, 
-  _IReadonly as Readonly, 
-  _IPick as Pick, 
-  _IRecord as Record, 
-  _IExclude as Exclude, 
-  _IExtract as Extract, 
-  _IOmit as Omit, 
-  _INonNullable as NonNullable,
-  IConcatStrIntoKeys as ConcatStrIntoKeys,
-  IConstructor as Constructor,
-  IEntriesReturn as EntriesReturn,
-  IRemoveCicularReferences as RemoveCicularReferences
+type IAddFallBack<T, AddType, OnType> = {
+  [K in IKeyOf<T>]: Extract<T[K], OnType> extends never ?
+    T[K] :
+    AddType extends Partial<null> ?
+      Partial<Extract<T[K], OnType>>|T[K] :
+      AddType|T[K]
 }
+
+type IBetterClassAssign<T> = IAddFallBack<T, Partial<null>, Object>
+
+type IObject<T, _nv extends Never=never> = T extends Object ? T & Object : _nv;
+
+export {
+  IAddFallBack as AddFallBack,
+  IBetterClassAssign as BetterAssign, IConcatStrIntoKeys as ConcatStrIntoKeys,
+  IConstructor as Constructor, ICustomReturn as CustomReturn, IDeepPartial as DeepPartial, IEntriesReturn as EntriesReturn, _IExclude as Exclude,
+  _IExtract as Extract, IGetTypeFromKey as GetTypeFromKey, IInputFields as InputFields, IKeyOf as KeyOf, IKeysOfType as KeysOfType, ILockedParams as LockedParams, _INonNullable as NonNullable, IObject as Object, _IOmit as Omit, _IPartial as Partial, _IPick as Pick, _IReadonly as Readonly, _IRecord as Record, IRemoveCicularReferences as RemoveCicularReferences, _IRequired as Required
+};
+

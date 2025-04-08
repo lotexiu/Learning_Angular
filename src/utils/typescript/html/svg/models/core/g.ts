@@ -10,7 +10,7 @@ import { SVGEllipse } from "../shapes/ellipse";
 import { SVGText } from "../text/text";
 import { SVGPolyline } from "../shapes/polyline";
 
-class G extends SVGBaseSVGElement {
+class G<T=G<any>> extends SVGBaseSVGElement<T> {
   groups?: G[];
   paths?: SVGPath[];
   texts?: SVGText[];

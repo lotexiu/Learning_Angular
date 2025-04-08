@@ -1,6 +1,6 @@
 ﻿import { SVGBaseSVGElement } from "../base/base-svg-element";
 
-class Polyline extends SVGBaseSVGElement {
+class Polyline<T=Polyline<any>> extends SVGBaseSVGElement<T> {
   /** List of points in the polyline (x,y pairs) */
   points?: string;
 
