@@ -45,12 +45,6 @@ Returns extends Pair<KeyOf, any>[]
       never
 }[number]
 
-type test = ICustomReturn<"Y"|"X", [
-  ["X",string],
-  ["Y",number]
-]>
-
-
 /**
  * @template Target - Recebe uma interface de um objeto ou classe
  * @template TValue - Tipo dos campos a serem procurados em TTarget
@@ -69,8 +63,11 @@ type test = ICustomReturn<"Y"|"X", [
  * 
  * type StringKeys = KeysOfType<Example, string>; // "name"
  */
-type IKeysOfType<Target, Type> = {
-  [Key in keyof Target]: SafePropertyType<Target, Key, Type>
+type IKeysOfType<
+  Target, 
+  Type
+> = {
+  [Key in KeyOf<Target>]: SafePropertyType<Target, Key, Type>
 }[keyof Target]
 
 type SafePropertyType <
