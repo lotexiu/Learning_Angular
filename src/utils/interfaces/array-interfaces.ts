@@ -6,7 +6,7 @@
  * @example
  * type FirstElement = First<[number, string, boolean]>; // number
  */
-type First<T extends any[], _nv extends Never = never> = T extends [infer Rest, ...infer Last] ? Rest : _nv;
+type IFirst<T extends any[], _nv extends Never = never> = T extends [infer Rest, ...infer Last] ? Rest : _nv;
 
 /**
  * Tipo que retorna o último elemento de um array.
@@ -14,7 +14,7 @@ type First<T extends any[], _nv extends Never = never> = T extends [infer Rest, 
  * @example
  * type LastElement = Last<[number, string, boolean]>; // boolean
  */
-type Last<T extends any[], _nv extends Never = never> = T extends [...infer Rest, infer Last] ? Last : _nv;
+type ILast<T extends any[], _nv extends Never = never> = T extends [...infer Rest, infer Last] ? Last : _nv;
 
 /**
  * Tipo que representa um array de tipos.
@@ -31,7 +31,7 @@ type ArrayType<
 > = [
   ...Types extends any[] ? Types : [Types],
   ...Inf extends true ? InfType extends Never ? Types extends any[] ? 
-    Last<Types, _nv>[] : Types[] : InfType[] : []
+    ILast<Types, _nv>[] : Types[] : InfType[] : []
 ]
 
 /**
@@ -42,12 +42,15 @@ type ArrayType<
  */
 type _ArrayLike<T> = ArrayLike<T>;
 
-type ExtractValues<T extends any[]> = T[number];
+type IExtractValues<T extends any[]> = T[number];
+
+type IPair<T=any,T2=any> = [T, T2]
 
 export { 
-  First, 
-  Last, 
+  IFirst as First, 
+  ILast as Last, 
   ArrayType,
   _ArrayLike as ArrayLike,
-  ExtractValues,
+  IExtractValues as ExtractValues,
+  IPair as Pair
 }

@@ -28,8 +28,10 @@ export class LoteFiltersComponent implements OnInit, OnDestroy {
 
   
   ngOnInit() {
-    const svg: SVG = new SVG({
-      tickInterval: 100, /* TODO tentar atualizar TS ou alguma lib para resolver problema de atualizar variaveis */
+    const svg: SVG = new SVG().assign({
+      defs: {
+        circles: []
+      }
     })
     console.log(svg)
   }
