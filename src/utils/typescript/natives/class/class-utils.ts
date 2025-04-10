@@ -2,13 +2,14 @@ import { mathPow, mathRandom } from "@ts-natives/math/math-utils";
 import { ClassRegistry } from "./interfaces/class-interfaces";
 import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
 import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
-import { DecoratorArgsFunction, DecoratorClassDetails, DecoratorClassInfo, DecoratorClassKey, DecoratorClassKeyFunction } from "./decorators/interfaces/decorators-interfaces";
-import { ClassReflect } from "./decorators/class-decorators";
+import { DecoratorClassArgsFunction, DecoratorClassDetails, DecoratorClass, DecoratorClassKey, DecoratorClassKeyFunction, DecoratorPropertyKey } from "./decorators/interfaces/decorators-interfaces";
+import { ClassReflect, MethodReflect } from "./decorators/decorators";
 import { FunctionUtils } from "@ts-natives/functions/function-utils";
 import { As } from "@ts-extras/generic-utils";
 import { isNull } from "@ts-natives/object/object-utils";
+import { Nullable } from "@ts-interfaces/misc-interfaces";
 
-@ClassReflect()
+@ClassReflect('Utility class for handling class-related operations')
 class ClassUtils {
   static classRegistry: ClassRegistry = {}
 
@@ -17,13 +18,48 @@ class ClassUtils {
     As(window)[betterName] = class_;
   }
 
-  static registry<T>(class_: GenericClass<T>): DecoratorClassInfo<T> {
+  static getOrAddRegistry<T>(class_: GenericClass<T>): DecoratorClass<T> {
+    if (!this.classRegistry[class_.name]) {
+      this.buildClassDetails(class_);
+    }
+    return this.classRegistry[class_.name];
+  }
+
+  @MethodReflect(true, {
+    description: 'Get the class registry for a given class',
+    returnType: 'DecoratorClass<T>',
+    defaultValue: null,
+  })
+  static registry<T>(class_: GenericClass<T>): DecoratorClass<T> {
     return this.classRegistry[class_.name]
+  }
+
+  static registerProperty<T>(class_: GenericClass<T>, static_: boolean, propertyKey: DecoratorPropertyKey, description?: string): void {
+    throw new Error("Method not implemented.");
+  }
+
+  static registerParameter<T>(class_: GenericClass<T>, static_: boolean, propertyKey: DecoratorPropertyKey | undefined, parameterIndex: number, description?: string): void {
+    throw new Error("Method not implemented.");
+  }
+  
+  static registerMethod<T>(class_: GenericClass<T>, static_: boolean, details: Partial<DecoratorClassKeyFunction>, propertyKey: DecoratorPropertyKey, descriptor: TypedPropertyDescriptor<T>): void {
+    const classDetails: DecoratorClass = this.getOrAddRegistry(class_);
+    const methodDetails: Nullable<DecoratorClassKeyFunction> = static_ ?
+      classDetails.staticDetail.methods.find((method: DecoratorClassKeyFunction): boolean => method.name === propertyKey) :
+      classDetails.instanceDetails?.methods.find((method: DecoratorClassKeyFunction): boolean => method.name === propertyKey);
+
+    if (!methodDetails) {
+      return /* TODO Criar caso esteja nulo */
+    }
+    methodDetails.returnType = details.returnType || 'unkown';
+    methodDetails.defaultValue = details.defaultValue || null;
+    methodDetails.description =  details.description || '';
   }
 
   static registerClass<T>(class_: GenericClass<T>, description?: string): void {
     if (class_ && class_.name) {
-      ClassUtils.buildClassDetails(class_, description);
+      const registry: DecoratorClass<T> = this.getOrAddRegistry(class_)
+      registry.description = description || '';
     }
     this.addClassInToWindows(class_);
   }
@@ -34,7 +70,7 @@ class ClassUtils {
       type: "Class",
       description: description||'',
       class: class_,
-      staticDetail: ClassUtils.buildDetail(class_)
+      staticDetail: this.buildDetail(class_)
     }
   }
 
@@ -46,8 +82,8 @@ class ClassUtils {
     const keys: KeyOf<T>[] = As(Object.getOwnPropertyNames(instanceOrClass));
     
     return {
-      methods: ClassUtils.buildMethodsDetail(instanceOrClass, keys),
-      properties: ClassUtils.buildPropertiesDetail(instanceOrClass, keys),
+      methods: this.buildMethodsDetail(instanceOrClass, keys),
+      properties: this.buildPropertiesDetail(instanceOrClass, keys),
     };
   }
 
@@ -64,9 +100,10 @@ class ClassUtils {
         const funcDetails: DecoratorClassKeyFunction = As(FunctionUtils.functionsDetails(func));
         const args: string[] = As<string[]>(funcDetails.args);
 
-        funcDetails.args = args.map(arg => ClassUtils.buildArgsDetail(arg));
+        funcDetails.args = args.map(arg => this.buildArgsDetail(arg));
         funcDetails.type = "Method";
         funcDetails.description = "";
+        funcDetails.returnType = 'unkown';
         
         return funcDetails;
       });
@@ -76,7 +113,7 @@ class ClassUtils {
    * Constrói os detalhes de um argumento de função
    * @param arg - String representando o nome do argumento
    */
-  private static buildArgsDetail(arg: string): DecoratorArgsFunction {
+  private static buildArgsDetail(arg: string): DecoratorClassArgsFunction {
     const isRestParam = arg.startsWith('...');
     
     return {
@@ -115,13 +152,13 @@ class ClassUtils {
 }
 
 export {
-  ClassUtils,
-}
+  ClassUtils
+};
 
 const {
   newId,
 } = ClassUtils
 
 export {
-  newId,
-}
+  newId
+};

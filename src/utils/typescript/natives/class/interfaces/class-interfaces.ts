@@ -1,8 +1,8 @@
 ﻿import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
-import { DecoratorClassInfo } from "../decorators/interfaces/decorators-interfaces";
+import { DecoratorClass } from "../decorators/interfaces/decorators-interfaces";
 
 interface IClassRegistry {
-  [className: GenericClass<any>['name'] ]: DecoratorClassInfo
+  [className: GenericClass<any>['name'] ]: DecoratorClass
 }
 
 export {

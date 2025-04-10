@@ -3,7 +3,10 @@ import { Extends } from "@ts-interfaces/misc-interfaces";
 import { Pair } from "@utils/interfaces/array-interfaces";
 import { KeyOf } from "./native-object-interfaces";
 
-type IObject<T> = Extends<T, Object>
+type IObject<T=null> =  
+  T extends null ? 
+    Object :
+    Extends<T, Object>
 
 /**
  * Usado para limitar os campos que podem ser criados em um objeto e seus tipos.

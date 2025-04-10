@@ -1,29 +1,23 @@
-﻿// declare type ClassDecorator = <TFunction extends Function>(target: TFunction) => TFunction | void;
-// declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) => void;
-// declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
-// declare type ParameterDecorator = (target: Object, propertyKey: string | symbol | undefined, parameterIndex: number) => void;
-
-import { Nullable } from "@ts-interfaces/misc-interfaces";
-import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
+﻿import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
 
 
-interface IDecoratorInfo {
+interface IDecoratorClassInfo {
   name: string|number|symbol
   type: string
   description: string
   defaultValue?: any
 }
 
-interface IDecoratorClassKey extends IDecoratorInfo{
+interface IDecoratorClassKey extends IDecoratorClassInfo{
 }
 
-interface IDecoratorArgsFunction extends IDecoratorInfo {
+interface IDecoratorClassArgsFunction extends IDecoratorClassInfo {
   inf: boolean
 }
 
 interface IDecoratorClassKeyFunction extends IDecoratorClassKey{
   returnType?: string
-  args: IDecoratorArgsFunction[]
+  args: IDecoratorClassArgsFunction[]
   totalArgs: number
 }
 
@@ -32,21 +26,37 @@ interface IDecoratorClassDetails {
   properties: IDecoratorClassKey[]
 }
 
-interface IDecoratorClassInfo<T=any> extends IDecoratorClassKey{
+interface IDecoratorClass<T=any> extends IDecoratorClassKey{
   class: GenericClass<T>
-  staticDetail: any// IDecoratorClassDetails
-  instanceDetails?: any// IDecoratorClassKeyFunction
+  staticDetail: IDecoratorClassDetails
+  instanceDetails?: IDecoratorClassDetails
 }
 
-type IClassDecorator<T> = (target: Function) => T|void;
+type IClassDecorator<T> = (target: Function) => T | void;
+
+type IDecoratorPropertyKey = string | symbol
+
+type IMethodDecorator<T> = (
+  target: Object, 
+  propertyKey: IDecoratorPropertyKey, 
+  descriptor: TypedPropertyDescriptor<T>
+) => TypedPropertyDescriptor<T> | void;
+
+type IParameterDecorator = (
+  target: Object, 
+  propertyKey: IDecoratorPropertyKey | undefined, 
+  parameterIndex: number
+) => void;
+
+type IPropertyDecorator = (
+  target: Object, 
+  propertyKey: IDecoratorPropertyKey
+) => void;
+
 
 export {
-  IClassDecorator as ClassDecorator,
-  IDecoratorInfo as DecoratorInfo,
-  IDecoratorClassKey as DecoratorClassKey,
-  IDecoratorArgsFunction as DecoratorArgsFunction,
-  IDecoratorClassKeyFunction as DecoratorClassKeyFunction,
-  IDecoratorClassDetails as DecoratorClassDetails,
-  IDecoratorClassInfo as DecoratorClassInfo,
-
-}
+  IClassDecorator as ClassDecorator, IDecoratorClass as DecoratorClass, IDecoratorClassArgsFunction as DecoratorClassArgsFunction, IDecoratorClassDetails as DecoratorClassDetails, IDecoratorClassInfo as DecoratorClassInfo,
+  IDecoratorClassKey as DecoratorClassKey, IDecoratorClassKeyFunction as DecoratorClassKeyFunction, IDecoratorPropertyKey as DecoratorPropertyKey, IMethodDecorator as MethodDecorator,
+  IParameterDecorator as ParameterDecorator,
+  IPropertyDecorator as PropertyDecorator
+};
