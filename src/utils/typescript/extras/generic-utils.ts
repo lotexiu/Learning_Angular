@@ -26,9 +26,21 @@
     });
     return data;
   }
+
+  static As<T=any>(value: any): T{
+    return value
+  }
   
 }
 
 export {
   GenericUtils,
+}
+
+const {
+  As
+} = GenericUtils
+
+export {
+  As
 }

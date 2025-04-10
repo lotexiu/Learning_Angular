@@ -33,5 +33,5 @@ class ClipboardUtils {
 
 export {
   Clipboard,
-  ClipboardUtils,
+  ClipboardUtils
 }

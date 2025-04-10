@@ -3,17 +3,19 @@ import { ClipboardUtils } from "../html/clipborad/clipboard-utils";
 import { HTMLUtils } from "../html/html-utils";
 import { ConsoleUtils } from "../natives/console/console-utils";
 import { mathDivide, MathUtils, mathMinus, mathMod, mathMultiply, mathSum } from "../natives/math/math-utils";
-import { GetTypeFromKey, Constructor } from "../natives/object/interfaces/object-interfaces";
+import { GetTypeFromKey, GenericClass } from "../natives/object/interfaces/object-interfaces";
 import { ObjectUtils } from "../natives/object/object-utils";
 import { RegexUtils } from "../natives/regex/regex-utils";
 import { strCapitalize, strCapitalizeAll, StringUtils } from "../natives/string/string-utils";
 import { GenericUtils } from "./generic-utils";
 import { Timer } from "./timer/timer";
+import { ClassUtils } from "@ts-natives/class/class-utils";
+import { Class } from "@ts-natives/class/model/class";
 
 
 class GlobalUtils  {
   static registerMethod<T, Key extends KeyOf<T>>(
-    constructor: Constructor<T>, 
+    constructor: GenericClass<T>, 
     name: Key, 
     handler: GetTypeFromKey<T,Key>
   ): void {
@@ -21,10 +23,9 @@ class GlobalUtils  {
   }
 }
 
-/* Adding Class into Windows */
-
-const utilsClasses: Function[] = [
-  // ComponentUtils,
+/* Registry Class */
+const utilsClasses: GenericClass<any>[] = [
+  GlobalUtils,
   ClipboardUtils,
   HTMLUtils,
   MathUtils,
@@ -34,19 +35,13 @@ const utilsClasses: Function[] = [
   ObjectUtils,
   StringUtils,
   Timer,
+  Class,
 ];
-
-utilsClasses.forEach((utilsClass) => {
-  (window as any)[utilsClass.name.replaceAll("_","")] = utilsClass;
-  // Object.getOwnPropertyNames(utilsClass).forEach((key: string): void => {
-  //   if (typeof utilsClass[key] === 'function') {
-  //     utilsClass[key] = utilsClass[key].bind(utilsClass);
-  //   }
-  // });
+utilsClasses.forEach((utilsClass: GenericClass<any>): void => {
+  ClassUtils.registerClass(utilsClass)
 })
 
 /* Declarations */
-
 declare global {
   interface Number extends String {
     hasDecimals(): boolean

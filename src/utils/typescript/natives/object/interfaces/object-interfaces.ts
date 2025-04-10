@@ -121,7 +121,7 @@ type IAddFallBack<T, AddType, OnType> = {
       Partial<Extract<T[K], OnType>>|T[K] :
       AddType|T[K]
 }
-interface IConstructor<T> extends Object {
+interface IGenericClass<T> extends Object {
   new (value?: any): T;
 }
 
@@ -135,7 +135,7 @@ export {
   IRemoveCicularReferences as RemoveCicularReferences,
   IObject as Object,
   IBetterClassAssign as BetterClassAssign,
-  IConstructor as Constructor,
+  IGenericClass as GenericClass,
   IEntriesReturn as EntriesReturn,
   IAddFallBack as AddFallBack,
   IGetTypeFromKey as GetTypeFromKey,

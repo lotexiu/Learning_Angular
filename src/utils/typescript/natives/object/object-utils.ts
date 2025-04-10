@@ -3,6 +3,7 @@ import { Nullable } from "@ts-interfaces/misc-interfaces";
 import { strCapitalize } from "@ts-natives/string/string-utils";
 import { ConcatStrIntoKeys, CustomReturn, EntriesReturn, KeysOfType, RemoveCicularReferences } from "./interfaces/object-interfaces";
 import { KeyOf } from "./interfaces/native-object-interfaces";
+
 class ObjectUtils {
   static removeCircularReferences(): RemoveCicularReferences {
     const seen = new Set();

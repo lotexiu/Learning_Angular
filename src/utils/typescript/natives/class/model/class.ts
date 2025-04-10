@@ -1,5 +1,7 @@
 ﻿import { BetterClassAssign, EntriesReturn } from "@ts-natives/object/interfaces/object-interfaces";
+import { ClassReflect } from "../decorators/class-decorators";
 
+@ClassReflect()
 class Class<T extends Object> {
   get own(): T {
     return this as any;
