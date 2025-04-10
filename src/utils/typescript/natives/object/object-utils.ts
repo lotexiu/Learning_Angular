@@ -1,7 +1,8 @@
 import { Function } from "@ts-interfaces/function-interfaces";
 import { Nullable } from "@ts-interfaces/misc-interfaces";
 import { strCapitalize } from "@ts-natives/string/string-utils";
-import { KeyOf, ConcatStrIntoKeys, CustomReturn, EntriesReturn, KeysOfType, RemoveCicularReferences } from "./interfaces/object-interfaces";
+import { ConcatStrIntoKeys, CustomReturn, EntriesReturn, KeysOfType, RemoveCicularReferences } from "./interfaces/object-interfaces";
+import { KeyOf } from "./interfaces/native-object-interfaces";
 class ObjectUtils {
   static removeCircularReferences(): RemoveCicularReferences {
     const seen = new Set();
@@ -64,8 +65,8 @@ class ObjectUtils {
     prefixOnKeys?: Prefix,
   )
   : CustomReturn<Prefix,[
-    [[string], ConcatStrIntoKeys<T, Prefix>],
-    [[null,undefined], T],
+    [string, ConcatStrIntoKeys<T, Prefix>],
+    [null|undefined, T]
   ]> {
     let copiedValue: any;
     try {

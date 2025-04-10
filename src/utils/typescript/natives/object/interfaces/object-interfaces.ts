@@ -1,7 +1,7 @@
 ﻿import { Function } from "@ts-interfaces/function-interfaces";
-import { Extends, Never } from "@ts-interfaces/misc-interfaces";
-import { KeyOf } from "./native-object-interfaces";
+import { Extends } from "@ts-interfaces/misc-interfaces";
 import { Pair } from "@utils/interfaces/array-interfaces";
+import { KeyOf } from "./native-object-interfaces";
 
 type IObject<T> = Extends<T, Object>
 
@@ -37,7 +37,7 @@ type ILockedParams<
  */
 type ICustomReturn <
 Type, 
-Returns extends Pair<KeyOf, any>[]
+Returns extends Pair<any, any>[]
 > = {
   [Return in KeyOf<Returns>]: 
     Type extends Returns[Return][0] ?
@@ -67,36 +67,14 @@ type IKeysOfType<
   Target, 
   Type
 > = {
-  [Key in KeyOf<Target>]: SafePropertyType<Target, Key, Type>
-}[keyof Target]
+  [Key in KeyOf<Target>]: Target[Key] extends Type ? Key : never
+}[KeyOf<Target>]
 
-type SafePropertyType <
+type IHasExactKey <
   Target, 
-  Key extends keyof Target,
-  Type
+  Key extends KeyOf<Target>,
+  Type extends Target[Key]
 > = Target[Key] extends Type ? Key : never
-
-/**
- * @template Target - Recebe uma interface de um objeto ou classe
- * 
- * Pode ser usado para:
- * - Tipar o retorno de uma função
- * - Tipar a atribuição de uma variavel
- * - Criar um tipo.
- * 
- * @example
- * interface Example {
- *   id: number;
- *   name: string;
- *   isActive: boolean;
- *   getName(): string;
- * }
- * 
- * type NonFunctionKeys = InputFields<Example>; // "id" | "name" | "isActive"
- */
-type IInputFields<Target> = {
-  [K in keyof Target]-?: Target[K] extends Function ? never : K
-}[keyof Target];
 
 /** Concatena o prefixo e capitaliza a primeira letra dos métodos 
  * 
@@ -113,10 +91,13 @@ type IInputFields<Target> = {
  * // }
  */
 type IConcatStrIntoKeys<Base, Prefix extends string|null|undefined> = {
-  [Key in keyof Base as Key extends string
-    ? `${Prefix}${Capitalize<Key>}`
-    : never]: Base[Key];
+  [Key in KeyOf<Base> as 
+    Key extends string ? `${Prefix}${Capitalize<Key>}`
+    : never
+  ]: Base[Key];
 };
+
+
 
 /**
  * Extrai o tipo de uma chave específica de um objeto ou classe.
@@ -131,7 +112,7 @@ type IConcatStrIntoKeys<Base, Prefix extends string|null|undefined> = {
  * 
  * type IdType = getTypeFromKey<Example, 'id'>; // number
  */
-type IGetTypeFromKey<T, K extends keyof T> = T[K];
+type IGetTypeFromKey<T, K extends KeyOf<T>> = T[K];
 
 type IAddFallBack<T, AddType, OnType> = {
   [K in KeyOf<T>]: Extract<T[K], OnType> extends never ?
@@ -159,7 +140,6 @@ export {
   IAddFallBack as AddFallBack,
   IGetTypeFromKey as GetTypeFromKey,
   IConcatStrIntoKeys as ConcatStrIntoKeys,
-  IInputFields as InputFields,
   IKeysOfType as KeysOfType,
   ICustomReturn as CustomReturn,
   ILockedParams as LockedParams,

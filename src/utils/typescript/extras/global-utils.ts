@@ -1,8 +1,9 @@
+import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { ClipboardUtils } from "../html/clipborad/clipboard-utils";
 import { HTMLUtils } from "../html/html-utils";
 import { ConsoleUtils } from "../natives/console/console-utils";
 import { mathDivide, MathUtils, mathMinus, mathMod, mathMultiply, mathSum } from "../natives/math/math-utils";
-import { KeyOf, GetTypeFromKey, Constructor } from "../natives/object/interfaces/object-interfaces";
+import { GetTypeFromKey, Constructor } from "../natives/object/interfaces/object-interfaces";
 import { ObjectUtils } from "../natives/object/object-utils";
 import { RegexUtils } from "../natives/regex/regex-utils";
 import { strCapitalize, strCapitalizeAll, StringUtils } from "../natives/string/string-utils";
