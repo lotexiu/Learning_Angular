@@ -11,13 +11,13 @@ interface IDecoratorClassInfo {
 interface IDecoratorClassKey extends IDecoratorClassInfo{
 }
 
-interface IDecoratorClassArgsFunction extends IDecoratorClassInfo {
+interface IDecoratorClassArgFunction extends IDecoratorClassInfo {
   inf: boolean
 }
 
 interface IDecoratorClassKeyFunction extends IDecoratorClassKey{
   returnType?: string
-  args: IDecoratorClassArgsFunction[]
+  args: IDecoratorClassArgFunction[]
   totalArgs: number
 }
 
@@ -29,7 +29,7 @@ interface IDecoratorClassDetails {
 interface IDecoratorClass<T=any> extends IDecoratorClassKey{
   class: GenericClass<T>
   staticDetail: IDecoratorClassDetails
-  instanceDetails?: IDecoratorClassDetails
+  instanceDetails: IDecoratorClassDetails
 }
 
 type IClassDecorator<T> = (target: Function) => T | void;
@@ -55,8 +55,15 @@ type IPropertyDecorator = (
 
 
 export {
-  IClassDecorator as ClassDecorator, IDecoratorClass as DecoratorClass, IDecoratorClassArgsFunction as DecoratorClassArgsFunction, IDecoratorClassDetails as DecoratorClassDetails, IDecoratorClassInfo as DecoratorClassInfo,
-  IDecoratorClassKey as DecoratorClassKey, IDecoratorClassKeyFunction as DecoratorClassKeyFunction, IDecoratorPropertyKey as DecoratorPropertyKey, IMethodDecorator as MethodDecorator,
+  IClassDecorator as ClassDecorator,
+  IDecoratorClassKey as DecoratorClassKey,
   IParameterDecorator as ParameterDecorator,
-  IPropertyDecorator as PropertyDecorator
+  IPropertyDecorator as PropertyDecorator,
+  IMethodDecorator as MethodDecorator,
+  IDecoratorClass as DecoratorClass,
+  IDecoratorClassKeyFunction as DecoratorClassKeyFunction,
+  IDecoratorClassArgFunction as DecoratorClassArgFunction,
+  IDecoratorClassDetails as DecoratorClassDetails,
+  IDecoratorClassInfo as DecoratorClassInfo,
+  IDecoratorPropertyKey as DecoratorPropertyKey,
 };

@@ -33,7 +33,7 @@ type IModifyReturnType<Func extends (...args: any) => any, NewReturnType> =
  * @example
  * type ParametersExample = Parameters<(a: number, b: string) => void> //[a: number, b: string]
  */
-type _IParameters<T extends (...args: any) => any> = Parameters<T>;
+type _IParameters<T> = T extends (...args: infer P) => any ? P : never;
 
 /**
  * Obtém os parâmetros de um tipo de função construtora em uma tupla.

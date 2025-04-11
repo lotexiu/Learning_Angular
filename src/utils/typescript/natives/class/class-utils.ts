@@ -1,13 +1,14 @@
-import { mathPow, mathRandom } from "@ts-natives/math/math-utils";
+import { mathPow, mathRandom, MathUtils } from "@ts-natives/math/math-utils";
 import { ClassRegistry } from "./interfaces/class-interfaces";
-import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
+import { ConcatStrIntoKeys, GenericClass, KeysOfType } from "@ts-natives/object/interfaces/object-interfaces";
 import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
-import { DecoratorClassArgsFunction, DecoratorClassDetails, DecoratorClass, DecoratorClassKey, DecoratorClassKeyFunction, DecoratorPropertyKey } from "./decorators/interfaces/decorators-interfaces";
+import { DecoratorClassArgFunction, DecoratorClassDetails, DecoratorClass, DecoratorClassKey, DecoratorClassKeyFunction, DecoratorPropertyKey } from "./decorators/interfaces/decorators-interfaces";
 import { ClassReflect, MethodReflect } from "./decorators/decorators";
 import { FunctionUtils } from "@ts-natives/functions/function-utils";
 import { As } from "@ts-extras/generic-utils";
 import { isNull, ObjectUtils } from "@ts-natives/object/object-utils";
 import { Nullable } from "@ts-interfaces/misc-interfaces";
+import { Class } from "./model/class";
 
 @ClassReflect('Utility class for handling class-related operations')
 class ClassUtils {
@@ -39,7 +40,43 @@ class ClassUtils {
     if (!this.classRegistry[class_.name]) {
       this.buildClassDetails(class_);
     }
-    return this.classRegistry[class_.name];
+    const registry: DecoratorClass = this.classRegistry[class_.name];
+    registry.instanceDetails = registry.instanceDetails || {
+      methods: [],
+      properties: [],
+    }
+    return registry
+  }
+
+  static getMethod(class_: GenericClass<any>, static_: boolean, methodName: string): DecoratorClassKeyFunction {
+    const classDetails: DecoratorClass = this.getOrAddRegistry(class_);
+    let methodDetails: Nullable<DecoratorClassKeyFunction>;
+    if (static_){
+      methodDetails = classDetails.staticDetail.methods.find(
+        (method: DecoratorClassKeyFunction): boolean => method.name === methodName
+      );
+    } else {
+      methodDetails = classDetails.instanceDetails.methods.find(
+        (method: DecoratorClassKeyFunction): boolean => method.name === methodName
+      );
+    }
+
+    if (!methodDetails) {
+      methodDetails = As({
+        name: methodName,
+        type: "Method",
+        description: "",
+        returnType: 'unknown',
+        args: [],
+      });
+      if (static_) {
+        classDetails.staticDetail.methods.push(methodDetails!);
+      } else {
+        classDetails.instanceDetails.methods.push(methodDetails!);
+      }
+    }
+
+    return methodDetails!
   }
 
   /**
@@ -59,7 +96,12 @@ class ClassUtils {
     description: 'Registers a property for a class with an optional description',
     returnType: 'void',
   })
-  static registerProperty<T>(class_: GenericClass<T>, static_: boolean, propertyKey: DecoratorPropertyKey, description?: string): void {
+  static registerProperty<T>(
+    class_: GenericClass<T>, 
+    static_: boolean, 
+    details: Partial<DecoratorClassArgFunction>,
+    propertyKey: DecoratorPropertyKey, 
+  ): void {
     throw new Error("Method not implemented.");
   }
 
@@ -67,8 +109,17 @@ class ClassUtils {
     description: 'Registers a parameter for a class method with an optional description',
     returnType: 'void',
   })
-  static registerParameter<T>(class_: GenericClass<T>, static_: boolean, propertyKey: DecoratorPropertyKey | undefined, parameterIndex: number, description?: string): void {
-    throw new Error("Method not implemented.");
+  static registerParameter<T>(
+    class_: GenericClass<T>, 
+    static_: boolean, 
+    details: Partial<DecoratorClassArgFunction>, 
+    propertyKey: DecoratorPropertyKey | undefined, 
+    parameterIndex: number
+  ): void {
+    const methodDetails: DecoratorClassKeyFunction = this.getMethod(class_, static_, As(propertyKey));
+    methodDetails.args.find((arg: DecoratorClassArgFunction, idx: number): boolean=> idx === parameterIndex);
+
+    
   }
   
   /**
@@ -83,25 +134,15 @@ class ClassUtils {
     description: 'Registers a method for a class',
     returnType: 'void',
   })
-  static registerMethod<T>(class_: GenericClass<T>, static_: boolean, details: Partial<DecoratorClassKeyFunction>, propertyKey: DecoratorPropertyKey, descriptor: TypedPropertyDescriptor<T>): void {
-    const classDetails: DecoratorClass = this.getOrAddRegistry(class_);
-    const methodDetails: Nullable<DecoratorClassKeyFunction> = static_ ?
-      classDetails.staticDetail.methods.find((method: DecoratorClassKeyFunction): boolean => method.name === propertyKey) :
-      classDetails.instanceDetails?.methods.find((method: DecoratorClassKeyFunction): boolean => method.name === propertyKey);
-
-    if (!methodDetails) {
-      if (static_) {
-        classDetails.staticDetail.methods.push(As(details));
-      } else {
-        if (classDetails.instanceDetails){
-          classDetails.instanceDetails.methods.push(As(details));
-        } else {
-          classDetails.instanceDetails = this.buildDetail(null, As(details));
-        }
-      }
-    } else {
-      ObjectUtils.updateObject(methodDetails, details);
-    }
+  static registerMethod<T>(
+    class_: GenericClass<T>, 
+    static_: boolean, 
+    details: Partial<DecoratorClassKeyFunction>, 
+    propertyKey: DecoratorPropertyKey, 
+    descriptor: TypedPropertyDescriptor<T>
+  ): void {
+    const methodDetails: DecoratorClassKeyFunction = this.getMethod(class_, static_, As(propertyKey));
+    ObjectUtils.updateObject(methodDetails, details);
   }
 
   /**
@@ -126,13 +167,13 @@ class ClassUtils {
     returnType: 'void',
   })
   static buildClassDetails(class_: GenericClass<any>, description?: string): void {
-    this.classRegistry[class_.name] = {
+    this.classRegistry[class_.name] = As({
       name: class_.name,
       type: "Class",
       description: description||'',
       class: class_,
       staticDetail: this.buildDetail(class_)
-    }
+    })
   }
 
   /**
@@ -192,7 +233,7 @@ class ClassUtils {
     description: 'Builds the details of a function argument',
     returnType: 'DecoratorClassArgsFunction',
   })
-  private static buildArgsDetail(arg: string): DecoratorClassArgsFunction {
+  private static buildArgsDetail(arg: string): DecoratorClassArgFunction {
     const isRestParam = arg.startsWith('...');
     
     return {

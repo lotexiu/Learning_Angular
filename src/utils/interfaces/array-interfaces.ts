@@ -44,6 +44,12 @@ type _ArrayLike<T> = ArrayLike<T>;
 
 type IExtractValues<T extends any[]> = T[number];
 
+type IBuildArray<
+  Length extends number,
+  Acc extends unknown[] = [],
+  Type = any
+> = Acc['length'] extends Length ? Acc : IBuildArray<Length, [...Acc, Type], Type>;
+
 type IPair<T=any,T2=any> = [T, T2]
 
 export { 
@@ -52,5 +58,6 @@ export {
   ArrayType,
   _ArrayLike as ArrayLike,
   IExtractValues as ExtractValues,
-  IPair as Pair
+  IPair as Pair,
+  IBuildArray as BuildArray
 }

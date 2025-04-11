@@ -1,5 +1,5 @@
 ﻿import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
-import { ClassDecorator, DecoratorClassArgsFunction, DecoratorClassKeyFunction, DecoratorPropertyKey, MethodDecorator, ParameterDecorator, PropertyDecorator } from "./interfaces/decorators-interfaces";
+import { ClassDecorator, DecoratorClassArgFunction, DecoratorClassKeyFunction, DecoratorPropertyKey, MethodDecorator, ParameterDecorator, PropertyDecorator } from "./interfaces/decorators-interfaces";
 import { ClassUtils } from "../class-utils";
 import { As } from "@ts-extras/generic-utils";
 import { Partial } from "@ts-natives/object/interfaces/native-object-interfaces";
@@ -18,15 +18,15 @@ function MethodReflect<T>(static_: boolean, details?: Partial<DecoratorClassKeyF
   })
 }
 
-function ParameterReflect<T>(static_: boolean, description?: string): ParameterDecorator {
+function ParameterReflect<T>(static_: boolean, details?: Partial<DecoratorClassArgFunction>): ParameterDecorator {
   return As((target: GenericClass<T>, propertyKey: DecoratorPropertyKey | undefined, parameterIndex: number): void => {
-    ClassUtils.registerParameter(target, static_, propertyKey, parameterIndex, description);
+    ClassUtils.registerParameter(target, static_, details||{}, propertyKey, parameterIndex);
   })
 }
 
-function PropertyReflect<T>(static_: boolean, description?: string): PropertyDecorator {
+function PropertyReflect<T>(static_: boolean, details: Partial<DecoratorClassArgFunction>): PropertyDecorator {
   return As((target: GenericClass<T>, propertyKey: DecoratorPropertyKey): void => {
-    ClassUtils.registerProperty(target, static_, propertyKey, description);
+    ClassUtils.registerProperty(target, static_, details, propertyKey);
   })
 }
 
