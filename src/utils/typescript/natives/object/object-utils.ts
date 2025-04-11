@@ -1,7 +1,7 @@
 import { Function } from "@ts-interfaces/function-interfaces";
 import { Nullable } from "@ts-interfaces/misc-interfaces";
 import { strCapitalize } from "@ts-natives/string/string-utils";
-import { ConcatStrIntoKeys, CustomReturn, EntriesReturn, KeysOfType, RemoveCicularReferences } from "./interfaces/object-interfaces";
+import { ConcatStrIntoKeys, CustomReturn, EntriesReturn, KeysOfType, Object, RemoveCicularReferences } from "./interfaces/object-interfaces";
 import { KeyOf } from "./interfaces/native-object-interfaces";
 
 class ObjectUtils {
@@ -129,6 +129,13 @@ class ObjectUtils {
     functionName: KeysOfType<T, Function>
   ): R {
     return λ(value, functionName)
+  }
+
+  static updateObject<T>(
+    obj: Object<T>, 
+    newObj: Object<T>
+  ): Object<T> {
+    return Object.assign(obj, newObj)
   }
 }
 

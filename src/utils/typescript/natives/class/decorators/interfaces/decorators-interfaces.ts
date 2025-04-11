@@ -3,7 +3,7 @@
 
 interface IDecoratorClassInfo {
   name: string|number|symbol
-  type: string
+  type: any|string
   description: string
   defaultValue?: any
 }

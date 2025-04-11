@@ -6,18 +6,35 @@ import { DecoratorClassArgsFunction, DecoratorClassDetails, DecoratorClass, Deco
 import { ClassReflect, MethodReflect } from "./decorators/decorators";
 import { FunctionUtils } from "@ts-natives/functions/function-utils";
 import { As } from "@ts-extras/generic-utils";
-import { isNull } from "@ts-natives/object/object-utils";
+import { isNull, ObjectUtils } from "@ts-natives/object/object-utils";
 import { Nullable } from "@ts-interfaces/misc-interfaces";
 
 @ClassReflect('Utility class for handling class-related operations')
 class ClassUtils {
   static classRegistry: ClassRegistry = {}
 
+  /**
+   * Adds a class to the global window object.
+   * @param class_ - The class to add to the global window object.
+   */
+  @MethodReflect(true, {
+    description: 'Adds a class to the global window object',
+    returnType: 'void',
+  })
   private static addClassInToWindows<T>(class_: GenericClass<T>): void {
     const betterName: string = class_.name.replace(/^_|\d+$/g, '');
     As(window)[betterName] = class_;
   }
 
+  /**
+   * Gets or adds a registry for a given class.
+   * @param class_ - The class to get or add to the registry.
+   * @returns The registry for the class.
+   */
+  @MethodReflect(true, {
+    description: 'Gets or adds a registry for a given class',
+    returnType: 'DecoratorClass<T>',
+  })
   static getOrAddRegistry<T>(class_: GenericClass<T>): DecoratorClass<T> {
     if (!this.classRegistry[class_.name]) {
       this.buildClassDetails(class_);
@@ -25,23 +42,47 @@ class ClassUtils {
     return this.classRegistry[class_.name];
   }
 
+  /**
+   * Gets the class registry for a given class.
+   * @param class_ - The class to retrieve the registry for.
+   * @returns The registry for the class.
+   */
   @MethodReflect(true, {
-    description: 'Get the class registry for a given class',
+    description: 'Gets the class registry for a given class',
     returnType: 'DecoratorClass<T>',
-    defaultValue: null,
   })
   static registry<T>(class_: GenericClass<T>): DecoratorClass<T> {
     return this.classRegistry[class_.name]
   }
 
+  @MethodReflect(true, {
+    description: 'Registers a property for a class with an optional description',
+    returnType: 'void',
+  })
   static registerProperty<T>(class_: GenericClass<T>, static_: boolean, propertyKey: DecoratorPropertyKey, description?: string): void {
     throw new Error("Method not implemented.");
   }
 
+  @MethodReflect(true, {
+    description: 'Registers a parameter for a class method with an optional description',
+    returnType: 'void',
+  })
   static registerParameter<T>(class_: GenericClass<T>, static_: boolean, propertyKey: DecoratorPropertyKey | undefined, parameterIndex: number, description?: string): void {
     throw new Error("Method not implemented.");
   }
   
+  /**
+   * Registers a method for a class.
+   * @param class_ - The class to register the method for.
+   * @param static_ - Whether the method is static.
+   * @param details - Partial details of the method.
+   * @param propertyKey - The property key of the method.
+   * @param descriptor - The property descriptor of the method.
+   */
+  @MethodReflect(true, {
+    description: 'Registers a method for a class',
+    returnType: 'void',
+  })
   static registerMethod<T>(class_: GenericClass<T>, static_: boolean, details: Partial<DecoratorClassKeyFunction>, propertyKey: DecoratorPropertyKey, descriptor: TypedPropertyDescriptor<T>): void {
     const classDetails: DecoratorClass = this.getOrAddRegistry(class_);
     const methodDetails: Nullable<DecoratorClassKeyFunction> = static_ ?
@@ -49,13 +90,29 @@ class ClassUtils {
       classDetails.instanceDetails?.methods.find((method: DecoratorClassKeyFunction): boolean => method.name === propertyKey);
 
     if (!methodDetails) {
-      return /* TODO Criar caso esteja nulo */
+      if (static_) {
+        classDetails.staticDetail.methods.push(As(details));
+      } else {
+        if (classDetails.instanceDetails){
+          classDetails.instanceDetails.methods.push(As(details));
+        } else {
+          classDetails.instanceDetails = this.buildDetail(null, As(details));
+        }
+      }
+    } else {
+      ObjectUtils.updateObject(methodDetails, details);
     }
-    methodDetails.returnType = details.returnType || 'unkown';
-    methodDetails.defaultValue = details.defaultValue || null;
-    methodDetails.description =  details.description || '';
   }
 
+  /**
+   * Registers a class with an optional description.
+   * @param class_ - The class to register.
+   * @param description - An optional description for the class.
+   */
+  @MethodReflect(true, {
+    description: 'Registers a class with an optional description',
+    returnType: 'void',
+  })
   static registerClass<T>(class_: GenericClass<T>, description?: string): void {
     if (class_ && class_.name) {
       const registry: DecoratorClass<T> = this.getOrAddRegistry(class_)
@@ -64,6 +121,10 @@ class ClassUtils {
     this.addClassInToWindows(class_);
   }
 
+  @MethodReflect(true, {
+    description: 'Builds the class details and adds it to the registry',
+    returnType: 'void',
+  })
   static buildClassDetails(class_: GenericClass<any>, description?: string): void {
     this.classRegistry[class_.name] = {
       name: class_.name,
@@ -75,23 +136,37 @@ class ClassUtils {
   }
 
   /**
-   * Extrai os detalhes (métodos e propriedades) de uma instância ou classe
-   * @param instanceOrClass - A instância ou classe para análise
+   * Extracts the details (methods and properties) of an instance or class.
+   * @param instanceOrClass - The instance or class to analyze.
    */
-  private static buildDetail<T>(instanceOrClass: T): DecoratorClassDetails {
+  @MethodReflect(true, {
+    description: 'Extracts the details (methods and properties) of an instance or class',
+    returnType: 'DecoratorClassDetails',
+  })
+  private static buildDetail<T>(instanceOrClass?: T, details?: DecoratorClassKeyFunction): DecoratorClassDetails {
     const keys: KeyOf<T>[] = As(Object.getOwnPropertyNames(instanceOrClass));
-    
-    return {
-      methods: this.buildMethodsDetail(instanceOrClass, keys),
-      properties: this.buildPropertiesDetail(instanceOrClass, keys),
-    };
+    if (instanceOrClass) {
+      return {
+        methods: this.buildMethodsDetail(instanceOrClass, keys),
+        properties: this.buildPropertiesDetail(instanceOrClass, keys),
+      };
+    } else {
+      return {
+        methods: [details!],
+        properties: [],
+      }
+    }
   }
 
   /**
-   * Extrai informações detalhadas sobre os métodos de uma instância ou classe
-   * @param instanceOrClass - A instância ou classe para análise
-   * @param keys - Lista de chaves a serem verificadas
+   * Extracts detailed information about the methods of an instance or class.
+   * @param instanceOrClass - The instance or class to analyze.
+   * @param keys - List of keys to check.
    */
+  @MethodReflect(true, {
+    description: 'Extracts detailed information about the methods of an instance or class',
+    returnType: 'DecoratorClassKeyFunction[]',
+  })
   private static buildMethodsDetail<T>(instanceOrClass: T, keys: KeyOf<T>[]): DecoratorClassKeyFunction[] {
     return keys
       .filter((key: KeyOf<T>): boolean => typeof instanceOrClass[key] === 'function')
@@ -110,9 +185,13 @@ class ClassUtils {
   }
 
   /**
-   * Constrói os detalhes de um argumento de função
-   * @param arg - String representando o nome do argumento
+   * Builds the details of a function argument.
+   * @param arg - String representing the argument name.
    */
+  @MethodReflect(true, {
+    description: 'Builds the details of a function argument',
+    returnType: 'DecoratorClassArgsFunction',
+  })
   private static buildArgsDetail(arg: string): DecoratorClassArgsFunction {
     const isRestParam = arg.startsWith('...');
     
@@ -125,6 +204,15 @@ class ClassUtils {
     };
   }
   
+  /**
+   * Builds the details of a property.
+   * @param instanceOrClass - The instance or class to analyze.
+   * @param keys - List of keys to check.
+   */
+  @MethodReflect(true, {
+    description: 'Builds the details of a property',
+    returnType: 'DecoratorClassKey[]',
+  })
   static buildPropertiesDetail<T>(instanceOrClass: T, keys: KeyOf<T>[]): DecoratorClassKey[] {
     const properties: DecoratorClassKey[] = [];
     keys.filter((key: KeyOf<T>): boolean => typeof instanceOrClass[key] != 'function')
@@ -143,8 +231,12 @@ class ClassUtils {
 
   /**
    * Generates a new ID based on the current date and a random number.
-   * @returns {string}
+   * @returns {string} A new unique ID.
    */
+  @MethodReflect(true, {
+    description: 'Generates a new ID based on the current date and a random number',
+    returnType: 'string',
+  })
   static newId(): string {
     const date: string = new Date(mathPow(mathRandom(6.5, 9.99),13)).getTime().toString();
     return date.slice(date.length - Math.floor(date.length["/"](2)));
