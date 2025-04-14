@@ -67,19 +67,19 @@ type _ISum<
             IDigitSum<SRes,SRes2> extends infer NewC extends BasicDigit ?
               'A' :
               'B' :
-          `${SumRes}${_ISum<ARest, BRest, SRes>}` :
-        'C' :
-      SumRes extends BasicDigit ?
-        `${IDigitSum<SumRes,C>}${_ISum<ARest, BRest, 0>}` :
-        'D':
-    'E':
+            `${SumRes}${_ISum<ARest, BRest, SRes>}` :
+          never :
+        SumRes extends BasicDigit ?
+          `${IDigitSum<SumRes,C>}${_ISum<ARest, BRest, 0>}` :
+          never:
+      never:
   A extends BasicDigit ?
     `${IDigitSum<A,C>}` extends `${infer SumRes}` ?
       SumRes extends `${infer SRes extends BasicDigit}${infer SRest extends BasicDigit}` ?
         `${SRest}${_ISum<ARest, B, SRes>}` :
         SumRes:
-      'F':
-    'G':
+      never:
+    never:
   C extends 0 ? '' : `${C}`
 ;
 
