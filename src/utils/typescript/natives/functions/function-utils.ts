@@ -5,7 +5,7 @@
       name: func.name,
       totalMandatoryArgs: func.length,
       args: FunctionUtils.getArgs(func),
-      returnType: "unkown",
+      returnType: "Unkown",
     };
     return details;
   }

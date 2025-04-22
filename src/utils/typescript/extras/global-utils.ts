@@ -23,24 +23,6 @@ class GlobalUtils  {
   }
 }
 
-/* Registry Class */
-const utilsClasses: GenericClass<any>[] = [
-  GlobalUtils,
-  ClipboardUtils,
-  HTMLUtils,
-  MathUtils,
-  RegexUtils,
-  ConsoleUtils,
-  GenericUtils,
-  ObjectUtils,
-  StringUtils,
-  Timer,
-  Class,
-];
-utilsClasses.forEach((utilsClass: GenericClass<any>): void => {
-  ClassUtils.registerClass(utilsClass)
-})
-
 /* Declarations */
 declare global {
   interface Number extends String {
@@ -66,7 +48,6 @@ declare global {
   }
 
 }
-
 
 GlobalUtils.registerMethod(Number, "hasDecimals", function(this: number): boolean {
   return this.toFixed(0) != this.toString()
@@ -113,5 +94,23 @@ GlobalUtils.registerMethod(String, "capitalize", function(this: string): string 
 })
 GlobalUtils.registerMethod(String, "capitalizeAll", function(this: string, split: string): string {
   return strCapitalizeAll(this, split)
+})
+
+/* Registry Class */
+const utilsClasses: GenericClass<any>[] = [
+  GlobalUtils,
+  ClipboardUtils,
+  HTMLUtils,
+  MathUtils,
+  RegexUtils,
+  ConsoleUtils,
+  GenericUtils,
+  ObjectUtils,
+  StringUtils,
+  Timer,
+  Class,
+];
+utilsClasses.forEach((utilsClass: GenericClass<any>): void => {
+  ClassUtils.registerClass(utilsClass)
 })
 

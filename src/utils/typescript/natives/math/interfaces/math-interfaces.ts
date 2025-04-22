@@ -1,5 +1,4 @@
-import { ValidNumber, BasicDigit, _IReverse, _ICompare, _IDigitCount, Number, NumDigit } from "@ts-natives/number/interfaces/number-interfaces";
-import { C } from "node_modules/@angular/cdk/focus-monitor.d-463f4526";
+import { ValidNumber, BasicDigit, _IReverse, _ICompare, NumDigit } from "@ts-natives/number/interfaces/number-interfaces";
 import { Never } from "src/utils/typescript/interfaces/misc-interfaces";
   
 type IBy10Type = 'multiply'|'divide'

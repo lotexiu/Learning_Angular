@@ -238,6 +238,12 @@ class StringUtils {
     }
     return parts;
   }
+
+  static stringToCharCodeArray(str: string): string[] {
+    return str.split('').map((char: string): string => {
+      return char.charCodeAt(0).toString(16);
+    });
+  }
 }
 
 export {

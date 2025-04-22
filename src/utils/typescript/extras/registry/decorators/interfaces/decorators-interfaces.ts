@@ -16,7 +16,7 @@ interface IDecoratorClassArgFunction extends IDecoratorClassInfo {
 }
 
 interface IDecoratorClassKeyFunction extends IDecoratorClassKey{
-  returnType?: string
+  returnType: string
   args: IDecoratorClassArgFunction[]
   totalArgs: number
 }
