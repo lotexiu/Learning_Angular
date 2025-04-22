@@ -10,7 +10,7 @@ import { SVGUse } from "./use";
 import { SVGEllipse } from "../shapes/ellipse";
 import { SVGG } from "./g";
 
-class Defs extends SVGBaseSVGElement<Defs> {
+class Defs extends SVGBaseSVGElement {
   filters?: SVGFilter[];
   groups?: SVGG[];
   paths?: SVGPath[];

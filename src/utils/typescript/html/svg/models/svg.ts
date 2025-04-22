@@ -15,7 +15,7 @@ import { Function } from "@ts-interfaces/function-interfaces";
 import { Nullable } from "@ts-interfaces/misc-interfaces";
 import { cLog } from "@ts-natives/console/console-utils";
 
-class SVG extends SVGBaseSVGElement<SVG> {
+class SVG extends SVGBaseSVGElement {
   /** Width of the SVG container */
   width?: number;
 

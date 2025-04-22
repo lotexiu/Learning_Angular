@@ -1,6 +1,6 @@
 ﻿import { SVGBaseSVGElement } from "../base/base-svg-element";
 
-class Line<T=Line<any>> extends SVGBaseSVGElement<T> {
+class Line extends SVGBaseSVGElement {
   /** Starting x-coordinate */
   x1?: number;
 

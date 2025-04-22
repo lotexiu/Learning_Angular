@@ -2,7 +2,7 @@
 import { SVGBaseSVGElement } from "./base-svg-element";
 
 
-class TextBasedElement<T=TextBasedElement<any>> extends SVGBaseSVGElement<T> {
+class TextBasedElement extends SVGBaseSVGElement {
   /** Font size (e.g., 12px, 1em) */
   fontSize?: string;
 

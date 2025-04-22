@@ -1,6 +1,6 @@
 ﻿import { Class } from "@ts-natives/class/model/class";
 
-class SVGFilterFE extends Class<SVGFilterFE> {
+class SVGFilterFE extends Class {
   /** Input source for the filter */
   in?: string;
 

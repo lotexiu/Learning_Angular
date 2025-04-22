@@ -11,6 +11,7 @@ import { GenericUtils } from "./generic-utils";
 import { Timer } from "./timer/timer";
 import { ClassUtils } from "@ts-natives/class/class-utils";
 import { Class } from "@ts-natives/class/model/class";
+import { RegistryUtils } from "./registry/registry-utils";
 
 
 class GlobalUtils  {
@@ -111,6 +112,6 @@ const utilsClasses: GenericClass<any>[] = [
   Class,
 ];
 utilsClasses.forEach((utilsClass: GenericClass<any>): void => {
-  ClassUtils.registerClass(utilsClass)
+  RegistryUtils.getOrAddRegistryClass(utilsClass)
 })
 

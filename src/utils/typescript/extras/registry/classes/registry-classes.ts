@@ -1,12 +1,13 @@
-﻿import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
+﻿import { Class } from "@ts-natives/class/model/class";
+import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
 
-class RegistryBaseInfo<T> {
+class RegistryBaseInfo<T> extends Class {
   type?: GenericClass<T>|string;
   description?: string;
 }
 
 class RegistryClass<T> extends RegistryBaseInfo<T> {
-  class?: GenericClass<T>;
+  class!: GenericClass<T>;
   staticDetails: RegistryClassDetails<T> = new RegistryClassDetails<T>();
   instanceDetails: RegistryClassDetails<T> = new RegistryClassDetails<T>();
 }
@@ -18,7 +19,7 @@ class RegistryClassDetails<T> {
 }
 
 class RegistryKey<T> extends RegistryBaseInfo<T> {
-  name: string = ''
+  name: string | number | symbol = ''
   default: any
 }
 
