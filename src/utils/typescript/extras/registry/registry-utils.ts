@@ -2,7 +2,7 @@
 import { GenericClass, Object } from "@ts-natives/object/interfaces/object-interfaces";
 import { ClassRegistry } from "./interfaces/registry-interfaces";
 import { RegistryClass, RegistryFunction, RegistryFunctionArg, RegistryProperty } from "./classes/registry-classes";
-import { isAClassDeclaration } from "@ts-natives/object/object-utils";
+import { getValueFromPath, isAClassDeclaration } from "@ts-natives/object/object-utils";
 import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { EnumRegistry } from "./enum/enum-registry";
 import { FunctionUtils } from "@ts-natives/functions/function-utils";
@@ -22,6 +22,9 @@ class RegistryUtils {
       this.classRegistry[class_.name] = this.initRegistryClass(class_, description);
       this.addClassInToWindows(class_);
     }
+    if (description) {
+      this.classRegistry[class_.name].description = description;
+    }
   }
 
   static getOrAddRegistryClass<T>(class_: GenericClass<T>): RegistryClass<T> {
@@ -40,6 +43,15 @@ class RegistryUtils {
     methodDetails.assign(details);
   }
 
+  static registerProperty<T>(
+    target: GenericClass<T>, 
+    static_: boolean, 
+    details: Partial<RegistryProperty<T>>, 
+    propertyKey: DecoratorPropertyKey): void {
+    const propertyDetails: RegistryProperty<T> = this.getProperty(target, static_, As(propertyKey));
+    propertyDetails.assign(details);
+  }
+
   static getMethod(class_: GenericClass<any>, static_: boolean, methodName: string): RegistryFunction<any> {
     const find: Function = (method: RegistryFunction<any>): boolean => method.name === methodName
 
@@ -56,6 +68,24 @@ class RegistryUtils {
         registryClass.instanceDetails.methods.push(method);
       }
       return method;
+    }
+  }
+
+  static getProperty<T>(target: GenericClass<T>, static_: boolean, propertyKey: any): RegistryProperty<T> {
+    const find: Function = (property: RegistryProperty<T>): boolean => property.name === propertyKey
+    const registryClass: RegistryClass<T> = this.getOrAddRegistryClass(target);
+    if (static_) {
+      const property: RegistryProperty<T> = registryClass.staticDetails.properties.find(find) || new RegistryProperty<T>();
+      if (!registryClass.staticDetails.properties.includes(property)) {
+        registryClass.staticDetails.properties.push(property);
+      }
+      return property;
+    } else {
+      const property: RegistryProperty<T> = registryClass.instanceDetails.properties.find(find) || new RegistryProperty<T>();
+      if (!registryClass.instanceDetails.properties.includes(property)) {
+        registryClass.instanceDetails.properties.push(property);
+      }
+      return property;
     }
   }
 

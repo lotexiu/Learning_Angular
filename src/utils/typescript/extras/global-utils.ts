@@ -110,6 +110,7 @@ const utilsClasses: GenericClass<any>[] = [
   StringUtils,
   Timer,
   Class,
+  ClassUtils,
 ];
 utilsClasses.forEach((utilsClass: GenericClass<any>): void => {
   RegistryUtils.getOrAddRegistryClass(utilsClass)

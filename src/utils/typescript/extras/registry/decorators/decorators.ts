@@ -14,9 +14,9 @@ function ClassReflect<T>(description?: string): ClassDecorator<T> {
   })
 }
 
-function MethodReflect<T>(static_: boolean, details?: Partial<RegistryFunction<any>>): MethodDecorator<T> {
+function MethodReflect<T>(static_: boolean, details: Partial<RegistryFunction<any>>): MethodDecorator<T> {
   return As((target: GenericClass<T>, propertyKey: DecoratorPropertyKey, descriptor: TypedPropertyDescriptor<T>): void => {
-    RegistryUtils.registerMethod(target, static_, details||{}, propertyKey, descriptor);
+    RegistryUtils.registerMethod(target, static_, details, propertyKey, descriptor);
   })
 }
 
@@ -26,11 +26,11 @@ function MethodReflect<T>(static_: boolean, details?: Partial<RegistryFunction<a
 //   })
 // }
 
-// function PropertyReflect<T>(static_: boolean, details: Partial<DecoratorClassArgFunction>): PropertyDecorator {
-//   return As((target: GenericClass<T>, propertyKey: DecoratorPropertyKey): void => {
-//     RegistryUtils.registerProperty(target, static_, details, propertyKey);
-//   })
-// }
+function PropertyReflect<T>(static_: boolean, details: Partial<DecoratorClassArgFunction>): PropertyDecorator {
+  return As((target: GenericClass<T>, propertyKey: DecoratorPropertyKey): void => {
+    RegistryUtils.registerProperty(target, static_, details, propertyKey);
+  })
+}
 
 
 export {

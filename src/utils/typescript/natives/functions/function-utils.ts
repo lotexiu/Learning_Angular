@@ -14,7 +14,8 @@
   static getArgs(func: Function): string[] {
     return func.toString()
       .replace(/[\s\S]*(?<!\([\s\S]*)\(|(?<!\)[\s\S]*)\)[\s\S]*/g, '')
-      .split(',').map((arg: string): string => arg.trim());
+      .split(',').map((arg: string): string => arg.trim())
+      .filter((arg: string): boolean => arg.length > 0);
   }
 }
 
