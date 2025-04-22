@@ -1,4 +1,5 @@
 ﻿import { Never } from "@ts-interfaces/misc-interfaces";
+import { Last } from "@utils/interfaces/array-interfaces";
 
 /**
  * Tipo que retorna o primeiro elemento de um array.
@@ -30,8 +31,11 @@ type IArrayType<
   _nv extends Never = never
 > = [
   ...Types extends any[] ? Types : [Types],
-  ...Inf extends true ? InfType extends Never ? Types extends any[] ? 
-    ILast<Types, _nv>[] : Types[] : InfType[] : []
+  ...Inf extends true ? 
+    InfType extends Never ?
+      Types extends any[] ? 
+        ILast<Types, _nv>[] : Types[] : 
+      InfType[] : []
 ]
 
 /**
