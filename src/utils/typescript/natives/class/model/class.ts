@@ -1,15 +1,18 @@
-﻿import { BetterClassAssign, EntriesReturn } from "@ts-natives/object/interfaces/object-interfaces";
+﻿import { As } from "@ts-extras/generic-utils";
+import { RegistryClass } from "@ts-extras/registry/classes/registry-classes";
+import { RegistryUtils } from "@ts-extras/registry/registry-utils";
+import { BetterClassAssign, EntriesReturn, GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
 
-class Class {
-  get own(): this {
-    return this as any;
+class Class extends Object{
+  get class(): GenericClass<this> {
+    return this.constructor as any;
   }
 
   assign(...values: Partial<BetterClassAssign<this>>[]): this {
     values.forEach((value: Partial<BetterClassAssign<this>>): void => {
       (Object.entries(value) as EntriesReturn<this>[])
       .forEach(([key, val]: EntriesReturn<this>): void => {
-        this.own[key] = val;
+        this[key] = val;
       })
     })
     return this

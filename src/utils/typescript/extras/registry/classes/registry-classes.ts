@@ -1,15 +1,24 @@
-﻿import { Class } from "@ts-natives/class/model/class";
-import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
+﻿import { BetterClassAssign, EntriesReturn, GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
 
-class RegistryBaseInfo<T> extends Class {
+class RegistryBaseInfo<T> {
   type?: GenericClass<T>|string;
   description?: string;
+
+  assign(...values: Partial<BetterClassAssign<this>>[]): this {
+    values.forEach((value: Partial<BetterClassAssign<this>>): void => {
+      (Object.entries(value) as EntriesReturn<this>[])
+      .forEach(([key, val]: EntriesReturn<this>): void => {
+        this[key] = val;
+      })
+    })
+    return this
+  }
 }
 
 class RegistryClass<T> extends RegistryBaseInfo<T> {
-  class!: GenericClass<T>;
-  staticDetails: RegistryClassDetails<T> = new RegistryClassDetails<T>();
-  instanceDetails: RegistryClassDetails<T> = new RegistryClassDetails<T>();
+  Class!: GenericClass<T>;
+  staticDetails!: RegistryClassDetails<T>;
+  instanceDetails!: RegistryClassDetails<T>;
 }
 
 class RegistryClassDetails<T> {

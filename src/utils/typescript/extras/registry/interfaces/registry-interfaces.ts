@@ -2,7 +2,7 @@
 import { RegistryClass } from "../classes/registry-classes";
 
 interface IClassRegistry {
-  [className: GenericClass<any>['name'] ]: RegistryClass<any>
+  [className: GenericClass<Object>['name'] ]: RegistryClass<any>
 }
 
 export {

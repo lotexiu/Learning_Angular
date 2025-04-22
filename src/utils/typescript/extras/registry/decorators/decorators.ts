@@ -1,6 +1,5 @@
 ﻿import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
-import { ClassDecorator, DecoratorClassArgFunction, DecoratorClassKeyFunction, DecoratorPropertyKey, MethodDecorator, ParameterDecorator, PropertyDecorator } from "./interfaces/decorators-interfaces";
-import { ClassUtils } from "../../../natives/class/class-utils";
+import { ClassDecorator, DecoratorClassArgFunction, DecoratorPropertyKey, MethodDecorator, PropertyDecorator } from "./interfaces/decorators-interfaces";
 import { As } from "@ts-extras/generic-utils";
 import { Partial } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { RegistryUtils } from "../registry-utils";

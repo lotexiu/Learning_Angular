@@ -1,8 +1,8 @@
 ﻿import { As } from "@ts-extras/generic-utils";
 import { GenericClass, Object } from "@ts-natives/object/interfaces/object-interfaces";
 import { ClassRegistry } from "./interfaces/registry-interfaces";
-import { RegistryClass, RegistryFunction, RegistryFunctionArg, RegistryProperty } from "./classes/registry-classes";
-import { getValueFromPath, isAClassDeclaration } from "@ts-natives/object/object-utils";
+import { RegistryClass, RegistryClassDetails, RegistryFunction, RegistryFunctionArg, RegistryProperty } from "./classes/registry-classes";
+import { isAClassDeclaration } from "@ts-natives/object/object-utils";
 import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { EnumRegistry } from "./enum/enum-registry";
 import { FunctionUtils } from "@ts-natives/functions/function-utils";
@@ -18,6 +18,7 @@ class RegistryUtils {
   }
 
   static registryClass<T>(class_: GenericClass<T>, description?: string): void {
+    class_.name
     if (!this.classRegistry[class_.name]) {
       this.classRegistry[class_.name] = this.initRegistryClass(class_, description);
       this.addClassInToWindows(class_);
@@ -26,10 +27,26 @@ class RegistryUtils {
       this.classRegistry[class_.name].description = description;
     }
   }
+  
+  static registryClassByInstance<T>(instance: Object<T>, description?: string): void {
+    const class_: GenericClass<T> = instance.constructor as GenericClass<T>;
+    if (!this.classRegistry[class_.name]) {
+      this.registryClass(class_, description);
+    }
+    if (!this.classRegistry[class_.name].instanceDetails) {
+      const instanceDetails: RegistryClassDetails<T> = this.initRegistryClass(instance, description).instanceDetails
+      this.classRegistry[class_.name].instanceDetails = instanceDetails;
+    }
+  }
 
-  static getOrAddRegistryClass<T>(class_: GenericClass<T>): RegistryClass<T> {
-    this.registryClass(class_);
-    return this.classRegistry[class_.name]
+  static getOrAddRegistryClass<T>(classOrInstance: Object<T>): RegistryClass<T> {
+    if (isAClassDeclaration(classOrInstance)) {
+      this.registryClass(As<GenericClass<T>>(classOrInstance));
+      return this.classRegistry[As<GenericClass<T>>(classOrInstance).name]
+    } else {
+      this.registryClassByInstance(classOrInstance);
+      return this.classRegistry[classOrInstance.constructor.name]
+    }
   }
   
   static registerMethod<T>(
@@ -73,7 +90,7 @@ class RegistryUtils {
 
   static getProperty<T>(target: GenericClass<T>, static_: boolean, propertyKey: any): RegistryProperty<T> {
     const find: Function = (property: RegistryProperty<T>): boolean => property.name === propertyKey
-    const registryClass: RegistryClass<T> = this.getOrAddRegistryClass(target);
+    const registryClass: RegistryClass<T> = As(this.getOrAddRegistryClass(target));
     if (static_) {
       const property: RegistryProperty<T> = registryClass.staticDetails.properties.find(find) || new RegistryProperty<T>();
       if (!registryClass.staticDetails.properties.includes(property)) {
@@ -93,14 +110,15 @@ class RegistryUtils {
     const registryClass = new RegistryClass<T>();
     let key: 'staticDetails'|'instanceDetails';
     if (isAClassDeclaration(classOrInstance)) {
-      registryClass.class = As(classOrInstance);
+      registryClass.Class = As(classOrInstance);
       key = 'staticDetails'
     } else {
-      registryClass.class = classOrInstance.constructor as GenericClass<T>;
+      registryClass.Class = classOrInstance.constructor as GenericClass<T>;
       key = 'instanceDetails'
     }
-    registryClass.type = registryClass.class;
-    registryClass.description = description || `${registryClass.class.name} class (Default)`;
+    registryClass.type = registryClass.Class;
+    registryClass.description = description || `${registryClass.Class.name} class (Default)`;
+    registryClass[key] = new RegistryClassDetails<T>()
     registryClass[key].methods = this.initialMethodDetails(As(classOrInstance))
     registryClass[key].properties = this.initialPropertyDetails(As(classOrInstance))
     registryClass[key].symbols = this.initialSymbolDetails(As(classOrInstance));
@@ -136,7 +154,7 @@ class RegistryUtils {
     return methods;
   }
 
-  static initialPropertyDetails<T>(classOrInstance: T): RegistryProperty<T>[] {
+  private static initialPropertyDetails<T>(classOrInstance: T): RegistryProperty<T>[] {
     const keys: KeyOf<T>[] = As(Object.getOwnPropertyNames(classOrInstance))
     const properties: RegistryProperty<T>[] = keys
     .filter((key: KeyOf<T>): boolean => !['function','symbol'].includes(typeof classOrInstance[key]))
@@ -154,7 +172,7 @@ class RegistryUtils {
     return properties;
   }
 
-  static initialSymbolDetails<T>(classOrInstance: T): RegistryProperty<T>[] {
+  private static initialSymbolDetails<T>(classOrInstance: T): RegistryProperty<T>[] {
     const keys: KeyOf<T>[] = As(Object.getOwnPropertyNames(classOrInstance))
     const symbols: RegistryProperty<T>[] = keys
     .filter((key: KeyOf<T>): boolean => typeof classOrInstance[key] === 'symbol')
