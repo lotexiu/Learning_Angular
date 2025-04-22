@@ -6,6 +6,8 @@ import { isAClassDeclaration } from "@ts-natives/object/object-utils";
 import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { EnumRegistry } from "./enum/enum-registry";
 import { FunctionUtils } from "@ts-natives/functions/function-utils";
+import { DecoratorPropertyKey } from "./decorators/interfaces/decorators-interfaces";
+import { Function } from "@ts-interfaces/function-interfaces";
 
 class RegistryUtils {
   static classRegistry: ClassRegistry = {}
@@ -15,15 +17,49 @@ class RegistryUtils {
     As(window)[betterName] = class_;
   }
 
-  static getOrAddRegistryClass<T>(class_: GenericClass<T>): RegistryClass<T> {
+  static registryClass<T>(class_: GenericClass<T>, description?: string): void {
     if (!this.classRegistry[class_.name]) {
-      this.classRegistry[class_.name] = this.initRegistryClass(class_);
+      this.classRegistry[class_.name] = this.initRegistryClass(class_, description);
       this.addClassInToWindows(class_);
     }
-    return this.classRegistry[class_.name]
   }
 
-  private static initRegistryClass<T>(classOrInstance: Object<T>): RegistryClass<T> {
+  static getOrAddRegistryClass<T>(class_: GenericClass<T>): RegistryClass<T> {
+    this.registryClass(class_);
+    return this.classRegistry[class_.name]
+  }
+  
+  static registerMethod<T>(
+    class_: GenericClass<T>, 
+    static_: boolean, 
+    details: Partial<RegistryFunction<T>>, 
+    propertyKey: DecoratorPropertyKey, 
+    descriptor: TypedPropertyDescriptor<T>
+  ): void {
+    const methodDetails: RegistryFunction<T> = this.getMethod(class_, static_, As(propertyKey));
+    methodDetails.assign(details);
+  }
+
+  static getMethod(class_: GenericClass<any>, static_: boolean, methodName: string): RegistryFunction<any> {
+    const find: Function = (method: RegistryFunction<any>): boolean => method.name === methodName
+
+    const registryClass: RegistryClass<any> = this.getOrAddRegistryClass(class_);
+    if (static_) {
+      const method: RegistryFunction<any> = registryClass.staticDetails.methods.find(find) || new RegistryFunction<any>();
+      if (!registryClass.staticDetails.methods.includes(method)) {
+        registryClass.staticDetails.methods.push(method);
+      }
+      return method;
+    } else {
+      const method: RegistryFunction<any> = registryClass.instanceDetails.methods.find(find) || new RegistryFunction<any>();
+      if (!registryClass.instanceDetails.methods.includes(method)) {
+        registryClass.instanceDetails.methods.push(method);
+      }
+      return method;
+    }
+  }
+
+  private static initRegistryClass<T>(classOrInstance: Object<T>, description?: string): RegistryClass<T> {
     const registryClass = new RegistryClass<T>();
     let key: 'staticDetails'|'instanceDetails';
     if (isAClassDeclaration(classOrInstance)) {
@@ -34,7 +70,7 @@ class RegistryUtils {
       key = 'instanceDetails'
     }
     registryClass.type = registryClass.class;
-    registryClass.description = `${registryClass.class.name} class (Default)`;
+    registryClass.description = description || `${registryClass.class.name} class (Default)`;
     registryClass[key].methods = this.initialMethodDetails(As(classOrInstance))
     registryClass[key].properties = this.initialPropertyDetails(As(classOrInstance))
     registryClass[key].symbols = this.initialSymbolDetails(As(classOrInstance));
@@ -78,7 +114,7 @@ class RegistryUtils {
       const property: RegistryProperty<T> = new RegistryProperty<T>();
       property.assign({
         name: key,
-        description: `${String(property.name)} property (Default description)`,
+        description: `${String(property.name)} property (Default)`,
         default: EnumRegistry.UNKOWN,
         type: EnumRegistry.UNKOWN,
       })
@@ -96,7 +132,7 @@ class RegistryUtils {
       const symbol = new RegistryProperty<T>();
       symbol.assign({
         name: key,
-        description: `${String(symbol.name)} symbol (Default description)`,
+        description: `${String(symbol.name)} symbol (Default)`,
         default: EnumRegistry.UNKOWN,
         type: EnumRegistry.UNKOWN,
       });
