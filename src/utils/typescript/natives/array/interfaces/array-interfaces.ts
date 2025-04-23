@@ -47,10 +47,20 @@ type _IArrayLike<T> = ArrayLike<T>;
 
 type IExtractValues<T extends readonly any[]> = T[number];
 
+type IBuildArray<
+  Length extends number,
+  Acc extends unknown[] = [],
+  Type = any
+> = Acc['length'] extends Length ? Acc : IBuildArray<Length, [...Acc, Type], Type>;
+
+type IPair<T=any,T2=any> = [T, T2]
+
 export { 
   IFirst as First, 
   ILast as Last, 
   IArrayType as ArrayType,
   _IArrayLike as ArrayLike,
   IExtractValues as ExtractValues,
+  IBuildArray as BuildArray,
+  IPair as Pair,
 }

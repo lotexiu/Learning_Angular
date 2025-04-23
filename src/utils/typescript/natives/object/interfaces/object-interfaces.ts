@@ -1,7 +1,7 @@
 ﻿import { Function } from "@ts-interfaces/function-interfaces";
 import { Extends } from "@ts-interfaces/misc-interfaces";
-import { Pair } from "@utils/interfaces/array-interfaces";
 import { KeyOf } from "./native-object-interfaces";
+import { Pair } from "@ts-natives/array/interfaces/array-interfaces";
 
 type IObject<T=null> =  
   T extends null ? 
