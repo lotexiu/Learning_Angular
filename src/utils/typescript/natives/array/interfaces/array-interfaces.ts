@@ -1,5 +1,4 @@
 ﻿import { Never } from "@ts-interfaces/misc-interfaces";
-import { Last } from "@utils/interfaces/array-interfaces";
 
 /**
  * Tipo que retorna o primeiro elemento de um array.
