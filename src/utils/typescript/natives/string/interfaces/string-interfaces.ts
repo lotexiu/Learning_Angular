@@ -1,4 +1,8 @@
-﻿/** Coloca o primeiro caracter da string recebida em maiúsculo. 
+﻿type IString<V> = V extends string ? V & string : never;
+
+type IValidAsString = string | number | bigint | boolean | null | undefined
+
+/** Coloca o primeiro caracter da string recebida em maiúsculo. 
  * 
  * @example
  * type Capitalized = Capitalize<'hello'>; // 'Hello'
@@ -29,9 +33,14 @@ type _ILowercase<S extends string> = Lowercase<S>;
  */
 type _IUncapitalize<S extends string> = Uncapitalize<S>;
 
+type ITostring<T extends string | number | bigint | boolean | null | undefined> = `${T}`
+
 export { 
   _ICapitalize as Capitalize, 
   _IUppercase as Uppercase, 
   _ILowercase as Lowercase, 
-  _IUncapitalize as Uncapitalize 
+  _IUncapitalize as Uncapitalize,
+  ITostring as Tostring,
+  IString as String,
+  IValidAsString as ValidAsString
 }

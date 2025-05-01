@@ -1,6 +1,6 @@
 ﻿import { SVGBaseSVGElement } from "../base/base-svg-element";
 
-class Polygon<T=Polygon<any>> extends SVGBaseSVGElement<T> {
+class Polygon extends SVGBaseSVGElement {
   /** List of points in the polygon (x,y pairs) */
   points?: string;
 

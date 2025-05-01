@@ -12,14 +12,10 @@ import { createDebounce } from "../component-utils";
 @Component({
   template: ''
 })
-export abstract class Base<T extends Base<T>=any> {
+export abstract class Base {
   public readonly route: ActivatedRoute = inject(ActivatedRoute);
   public readonly router = inject(Router);
   public readonly elementRef: ElementRef<HTMLElement> = inject(ElementRef<HTMLElement>)
-
-  get own(): T{
-    return this as any;
-  }
 
   get element(): HTMLElement {
     return this.elementRef.nativeElement;
@@ -104,7 +100,7 @@ export abstract class Base<T extends Base<T>=any> {
   }
 
   createDebounce(functionName: string, debounce: number): Subject<any> {
-    return createDebounce<T>(this as any, functionName as any, debounce);
+    return createDebounce(this as any, functionName as any, debounce);
   }
   
   getControlsWithErrors(form: FormGroup) {

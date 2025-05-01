@@ -1,0 +1,197 @@
+﻿import { As } from "@ts-extras/generic-utils";
+import { GenericClass, Object } from "@ts-natives/object/interfaces/object-interfaces";
+import { ClassRegistry } from "./interfaces/registry-interfaces";
+import { RegistryClass, RegistryClassDetails, RegistryFunction, RegistryFunctionArg, RegistryProperty } from "./classes/registry-classes";
+import { isAClassDeclaration } from "@ts-natives/object/object-utils";
+import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
+import { EnumRegistry } from "./enum/enum-registry";
+import { FunctionUtils } from "@ts-natives/functions/function-utils";
+import { DecoratorPropertyKey } from "./decorators/interfaces/decorators-interfaces";
+import { Function } from "@ts-interfaces/function-interfaces";
+
+class RegistryUtils {
+  static classRegistry: ClassRegistry = {}
+
+  private static addClassInToWindows<T>(class_: GenericClass<T>): void {
+    const betterName: string = class_.name.replace(/^_|\d+$/g, '');
+    As(window)[betterName] = class_;
+  }
+
+  static registryClass<T>(class_: GenericClass<T>, description?: string): void {
+    class_.name
+    if (!this.classRegistry[class_.name]) {
+      this.classRegistry[class_.name] = this.initRegistryClass(class_, description);
+      this.addClassInToWindows(class_);
+    }
+    if (description) {
+      this.classRegistry[class_.name].description = description;
+    }
+  }
+  
+  static registryClassByInstance<T>(instance: Object<T>, description?: string): void {
+    const class_: GenericClass<T> = instance.constructor as GenericClass<T>;
+    if (!this.classRegistry[class_.name]) {
+      this.registryClass(class_, description);
+    }
+    if (!this.classRegistry[class_.name].instanceDetails) {
+      const instanceDetails: RegistryClassDetails<T> = this.initRegistryClass(instance, description).instanceDetails
+      this.classRegistry[class_.name].instanceDetails = instanceDetails;
+    }
+  }
+
+  static getOrAddRegistryClass<T>(classOrInstance: Object<T>): RegistryClass<T> {
+    if (isAClassDeclaration(classOrInstance)) {
+      this.registryClass(As<GenericClass<T>>(classOrInstance));
+      return this.classRegistry[As<GenericClass<T>>(classOrInstance).name]
+    } else {
+      this.registryClassByInstance(classOrInstance);
+      return this.classRegistry[classOrInstance.constructor.name]
+    }
+  }
+  
+  static registerMethod<T>(
+    class_: GenericClass<T>, 
+    static_: boolean, 
+    details: Partial<RegistryFunction<T>>, 
+    propertyKey: DecoratorPropertyKey, 
+    descriptor: TypedPropertyDescriptor<T>
+  ): void {
+    const methodDetails: RegistryFunction<T> = this.getMethod(class_, static_, As(propertyKey));
+    methodDetails.assign(details);
+  }
+
+  static registerProperty<T>(
+    target: GenericClass<T>, 
+    static_: boolean, 
+    details: Partial<RegistryProperty<T>>, 
+    propertyKey: DecoratorPropertyKey): void {
+    const propertyDetails: RegistryProperty<T> = this.getProperty(target, static_, As(propertyKey));
+    propertyDetails.assign(details);
+  }
+
+  static getMethod(class_: GenericClass<any>, static_: boolean, methodName: string): RegistryFunction<any> {
+    const find: Function = (method: RegistryFunction<any>): boolean => method.name === methodName
+
+    const registryClass: RegistryClass<any> = this.getOrAddRegistryClass(class_);
+    if (static_) {
+      const method: RegistryFunction<any> = registryClass.staticDetails.methods.find(find) || new RegistryFunction<any>();
+      if (!registryClass.staticDetails.methods.includes(method)) {
+        registryClass.staticDetails.methods.push(method);
+      }
+      return method;
+    } else {
+      const method: RegistryFunction<any> = registryClass.instanceDetails.methods.find(find) || new RegistryFunction<any>();
+      if (!registryClass.instanceDetails.methods.includes(method)) {
+        registryClass.instanceDetails.methods.push(method);
+      }
+      return method;
+    }
+  }
+
+  static getProperty<T>(target: GenericClass<T>, static_: boolean, propertyKey: any): RegistryProperty<T> {
+    const find: Function = (property: RegistryProperty<T>): boolean => property.name === propertyKey
+    const registryClass: RegistryClass<T> = As(this.getOrAddRegistryClass(target));
+    if (static_) {
+      const property: RegistryProperty<T> = registryClass.staticDetails.properties.find(find) || new RegistryProperty<T>();
+      if (!registryClass.staticDetails.properties.includes(property)) {
+        registryClass.staticDetails.properties.push(property);
+      }
+      return property;
+    } else {
+      const property: RegistryProperty<T> = registryClass.instanceDetails.properties.find(find) || new RegistryProperty<T>();
+      if (!registryClass.instanceDetails.properties.includes(property)) {
+        registryClass.instanceDetails.properties.push(property);
+      }
+      return property;
+    }
+  }
+
+  private static initRegistryClass<T>(classOrInstance: Object<T>, description?: string): RegistryClass<T> {
+    const registryClass = new RegistryClass<T>();
+    let key: 'staticDetails'|'instanceDetails';
+    if (isAClassDeclaration(classOrInstance)) {
+      registryClass.Class = As(classOrInstance);
+      key = 'staticDetails'
+    } else {
+      registryClass.Class = classOrInstance.constructor as GenericClass<T>;
+      key = 'instanceDetails'
+    }
+    registryClass.type = registryClass.Class;
+    registryClass.description = description || `${registryClass.Class.name} class (Default)`;
+    registryClass[key] = new RegistryClassDetails<T>()
+    registryClass[key].methods = this.initialMethodDetails(As(classOrInstance))
+    registryClass[key].properties = this.initialPropertyDetails(As(classOrInstance))
+    registryClass[key].symbols = this.initialSymbolDetails(As(classOrInstance));
+    return registryClass;
+  }
+
+  private static initialMethodDetails<T>(classOrInstance: T): RegistryFunction<T>[] {
+    const keys: KeyOf<T>[] = As(Object.getOwnPropertyNames(classOrInstance))
+    const methods: RegistryFunction<T>[] = keys
+    .filter((key: KeyOf<T>): boolean => typeof classOrInstance[key] === 'function')
+    .map((key: KeyOf<T>): RegistryFunction<T> => {
+      const method: RegistryFunction<T> = new RegistryFunction<T>();
+      method.assign(FunctionUtils.functionsDetails(As(classOrInstance[key])))
+      method.assign({
+        description: `${String(method.name)} method (Default)`,
+        default: classOrInstance[key],
+        type: 'Function',
+        returnType: EnumRegistry.UNKOWN,
+        args: As<string[]>(method.args!).map((argName: string): RegistryFunctionArg<T> => {
+          const arg = new RegistryFunctionArg<T>();
+          arg.assign({
+            name: argName,
+            description: `${String(arg.name)} argument (Default)`,
+            default: EnumRegistry.UNKOWN,
+            type: EnumRegistry.UNKOWN,
+          })
+          return arg;
+        })
+      })
+      return method;
+    });
+
+    return methods;
+  }
+
+  private static initialPropertyDetails<T>(classOrInstance: T): RegistryProperty<T>[] {
+    const keys: KeyOf<T>[] = As(Object.getOwnPropertyNames(classOrInstance))
+    const properties: RegistryProperty<T>[] = keys
+    .filter((key: KeyOf<T>): boolean => !['function','symbol'].includes(typeof classOrInstance[key]))
+    .map((key: KeyOf<T>): RegistryProperty<T> => {
+      const property: RegistryProperty<T> = new RegistryProperty<T>();
+      property.assign({
+        name: key,
+        description: `${String(property.name)} property (Default)`,
+        default: EnumRegistry.UNKOWN,
+        type: EnumRegistry.UNKOWN,
+      })
+      return property;
+    });
+
+    return properties;
+  }
+
+  private static initialSymbolDetails<T>(classOrInstance: T): RegistryProperty<T>[] {
+    const keys: KeyOf<T>[] = As(Object.getOwnPropertyNames(classOrInstance))
+    const symbols: RegistryProperty<T>[] = keys
+    .filter((key: KeyOf<T>): boolean => typeof classOrInstance[key] === 'symbol')
+    .map((key: KeyOf<T>): RegistryProperty<T> => {
+      const symbol = new RegistryProperty<T>();
+      symbol.assign({
+        name: key,
+        description: `${String(symbol.name)} symbol (Default)`,
+        default: EnumRegistry.UNKOWN,
+        type: EnumRegistry.UNKOWN,
+      });
+      return symbol;
+    });
+
+    return symbols;
+  }
+}
+RegistryUtils.getOrAddRegistryClass(RegistryUtils)
+
+export {
+  RegistryUtils
+}

@@ -11,6 +11,7 @@ import { GenericUtils } from "./generic-utils";
 import { Timer } from "./timer/timer";
 import { ClassUtils } from "@ts-natives/class/class-utils";
 import { Class } from "@ts-natives/class/model/class";
+import { RegistryUtils } from "./registry/registry-utils";
 
 
 class GlobalUtils  {
@@ -22,24 +23,6 @@ class GlobalUtils  {
     constructor.prototype[name] = handler
   }
 }
-
-/* Registry Class */
-const utilsClasses: GenericClass<any>[] = [
-  GlobalUtils,
-  ClipboardUtils,
-  HTMLUtils,
-  MathUtils,
-  RegexUtils,
-  ConsoleUtils,
-  GenericUtils,
-  ObjectUtils,
-  StringUtils,
-  Timer,
-  Class,
-];
-utilsClasses.forEach((utilsClass: GenericClass<any>): void => {
-  ClassUtils.registerClass(utilsClass)
-})
 
 /* Declarations */
 declare global {
@@ -66,7 +49,6 @@ declare global {
   }
 
 }
-
 
 GlobalUtils.registerMethod(Number, "hasDecimals", function(this: number): boolean {
   return this.toFixed(0) != this.toString()
@@ -113,5 +95,24 @@ GlobalUtils.registerMethod(String, "capitalize", function(this: string): string 
 })
 GlobalUtils.registerMethod(String, "capitalizeAll", function(this: string, split: string): string {
   return strCapitalizeAll(this, split)
+})
+
+/* Registry Class */
+const utilsClasses: GenericClass<any>[] = [
+  GlobalUtils,
+  ClipboardUtils,
+  HTMLUtils,
+  MathUtils,
+  RegexUtils,
+  ConsoleUtils,
+  GenericUtils,
+  ObjectUtils,
+  StringUtils,
+  Timer,
+  Class,
+  ClassUtils,
+];
+utilsClasses.forEach((utilsClass: GenericClass<any>): void => {
+  RegistryUtils.getOrAddRegistryClass(utilsClass)
 })
 

@@ -1,6 +1,6 @@
 ﻿import { SVGBaseSVGElement } from "../base/base-svg-element";
 
-class Circle<T=Circle<any>> extends SVGBaseSVGElement<T> {
+class Circle extends SVGBaseSVGElement {
   /** X-coordinate of the center */
   cx?: number;
 

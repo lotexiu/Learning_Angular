@@ -1,6 +1,6 @@
 ﻿import { SVGBaseSVGElement } from "../base/base-svg-element";
 
-class ImageElement<T=ImageElement<any>> extends SVGBaseSVGElement<T> {
+class ImageElement extends SVGBaseSVGElement {
   /** Image source URL */
   href?: string;
 

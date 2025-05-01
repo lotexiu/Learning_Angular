@@ -137,6 +137,10 @@ class ObjectUtils {
   ): Object<T> {
     return Object.assign(obj, newObj)
   }
+
+  static isAClassDeclaration(obj: any): boolean {
+    return typeof obj === 'function' && /^class\s/.test(obj.toString());
+  }
 }
 
 export {
@@ -157,6 +161,7 @@ const {
   setValueFromPath,
   λ,
   lambda,
+  isAClassDeclaration,
 } = ObjectUtils;
 
 export {
@@ -173,4 +178,5 @@ export {
   setValueFromPath,
   λ,
   lambda,
+  isAClassDeclaration,
 }

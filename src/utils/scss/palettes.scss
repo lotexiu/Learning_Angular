@@ -1,7 +1,7 @@
 ﻿@use "theme" as theme;
 
 $light: theme.palette(
-  2,
+  3,
   rgb(7,71,166),
   rgb(255, 140, 45),
   rgb(255, 255, 0),
@@ -10,7 +10,7 @@ $light: theme.palette(
 );
 
 $dark: theme.palette(
-  2,
+  3,
   rgb(0, 100, 255),
   rgb(255, 140, 45),
   rgb(255, 255, 0),
@@ -19,7 +19,7 @@ $dark: theme.palette(
 );
 
 $synthwave: theme.palette(
-  2,
+  3,
   rgb(106, 39, 192),
   rgb(229, 233, 27),
   rgb(255, 145, 0),
@@ -28,7 +28,7 @@ $synthwave: theme.palette(
 );
 
 $cyan: theme.palette(
-  2,
+  3,
   rgb(39, 192, 141),
   rgb(27, 116, 233),
   rgb(62, 177, 33),

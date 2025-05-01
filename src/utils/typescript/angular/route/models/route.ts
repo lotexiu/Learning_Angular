@@ -1,6 +1,6 @@
 import { Route as AngularRoute } from "@angular/router"
+import { ArrayType } from "@ts-natives/array/interfaces/array-interfaces"
 import { Nullable } from "src/utils/typescript/interfaces/misc-interfaces"
-import { ArrayType } from "src/utils/typescript/natives/array/interfaces/array-interfaces"
 
 type ArrayChildren = [
   path: string,

@@ -22,10 +22,10 @@
     700 : mix($color, $baseDark, 70%),
     800 : mix($color, $baseDark, 54%),
     900 : mix($color, $baseDark, 25%),
-    A100 : lighten(saturate(mix($black, $baseDark, 15%), 80%), 65%),
-    A200 : lighten(saturate(mix($black, $baseDark, 15%), 80%), 55%),
-    A400 : lighten(saturate(mix($black, $baseDark, 15%), 100%), 45%),
-    A700 : lighten(saturate(mix($black, $baseDark, 15%), 100%), 40%)
+    A100 : adjust(saturate(mix($black, $baseDark, 15%), 80%), 65%),
+    A200 : adjust(saturate(mix($black, $baseDark, 15%), 80%), 55%),
+    A400 : adjust(saturate(mix($black, $baseDark, 15%), 100%), 45%),
+    A700 : adjust(saturate(mix($black, $baseDark, 15%), 100%), 40%)
   );
  
   $contrast: ();
@@ -36,7 +36,7 @@
   $palette: map-merge($palette, (contrast: $contrast));
  
   @if function-exists("define-palette", mat) {
-    @return mat.define-palette($palette);
+    @return mat.m2-define-palette($palette);
   } @else {
     @error "Angular Material 2 required. Angular: 12.0.0 ~= 18.0.0";
   }

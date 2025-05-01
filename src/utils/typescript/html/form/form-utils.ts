@@ -1,5 +1,5 @@
 ﻿import { FormGroup, NgControl, ValidationErrors } from "@angular/forms";
-import { isNull } from "../natives/object/object-utils";
+import { isNull } from "@ts-natives/object/object-utils";
 
 class FormUtils {
 

@@ -1,9 +1,7 @@
 ﻿import { Class } from "@ts-natives/class/model/class";
 import { SVGVisibilityType, SVGDisplayType } from "../../interfaces/svg-interfaces";
-import { Object } from "@ts-natives/object/interfaces/object-interfaces";
 
-// extends BaseSVGElement<T>=any
-class BaseSVGElement<T> extends Class<Object<T>>{
+class BaseSVGElement extends Class{
   /** Fill color of the element */
   fill?: string;
 

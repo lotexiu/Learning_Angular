@@ -1,3 +1,5 @@
+import { Compare } from "@ts-natives/math/interfaces/math-interfaces"
+
 class Time {
   /**
    * @example
@@ -150,4 +152,8 @@ namespace DateUtils {
       bValue < aValue ? 1 : 0
     )
   }
+}
+
+function minMax(arg0: number, arg1: number, arg2: number): number {
+  throw new Error("Function not implemented.")
 }

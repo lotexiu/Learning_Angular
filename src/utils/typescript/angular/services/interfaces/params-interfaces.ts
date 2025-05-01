@@ -1,5 +1,6 @@
 ﻿import { HttpClient } from "@angular/common/http";
-import { GetTypeFromKey, KeyOf } from "@ts-natives/object/interfaces/object-interfaces";
+import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
+import { GetTypeFromKey } from "@ts-natives/object/interfaces/object-interfaces";
 
 
 type HttpClientKeys = KeyOf<HttpClient>;

@@ -1,6 +1,6 @@
 ﻿import { SVGBaseSVGElement } from "../base/base-svg-element";
 
-class Path<T=Path<any>> extends SVGBaseSVGElement<T> {
+class Path extends SVGBaseSVGElement {
   /** A string containing the path commands */
   d?: string;
 

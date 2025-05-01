@@ -1,6 +1,6 @@
 ﻿import { SVGBaseSVGElement } from "../base/base-svg-element";
 
-class Rect<T=Rect<any>> extends SVGBaseSVGElement<T> {
+class Rect extends SVGBaseSVGElement {
   /** X position of the rectangle */
   x?: number;
 

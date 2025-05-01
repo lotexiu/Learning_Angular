@@ -1,7 +1,7 @@
 ﻿/**
  * Type representing `null` or `never`.
  */
-type INever<T extends null|never = never> = T;
+type INever<T extends null|never = null> = T;
 // type INever<T extends null|never = null> = T;
 
 /**

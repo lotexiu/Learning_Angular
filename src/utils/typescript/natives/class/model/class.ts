@@ -1,19 +1,21 @@
-﻿import { BetterClassAssign, EntriesReturn } from "@ts-natives/object/interfaces/object-interfaces";
-import { ClassReflect } from "../decorators/decorators";
+﻿import { BetterClassAssign, EntriesReturn, GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
 
-@ClassReflect()
-class Class<T extends Object> {
-  get own(): T {
-    return this as any;
+class Class extends Object{
+  get class(): GenericClass<this> {
+    return this.constructor as any;
   }
 
-  assign(value: Partial<BetterClassAssign<T>>): this {
-    (Object.entries(value) as EntriesReturn<T>[])
-    .forEach(([key, val]: EntriesReturn<T>): void => {
-      this.own[key] = val;
+  assign(...values: Partial<BetterClassAssign<this>>[]): this {
+    values.forEach((value: Partial<BetterClassAssign<this>>): void => {
+      (Object.entries(value) as EntriesReturn<this>[])
+      .forEach(([key, val]: EntriesReturn<this>): void => {
+        this[key] = val;
+      })
     })
     return this
   }
+
+
 }
 
 export {
