@@ -1,4 +1,7 @@
-﻿import { BetterClassAssign, EntriesReturn, GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
+import { As } from "@ts-extras/generic-utils";
+import { RegistryClass } from "@ts-extras/registry/classes/registry-classes";
+import { RegistryUtils } from "@ts-extras/registry/registry-utils";
+import { BetterClassAssign, EntriesReturn, GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
 
 class Class extends Object{
   get class(): GenericClass<this> {
