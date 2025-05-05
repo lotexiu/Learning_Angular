@@ -3,7 +3,7 @@ import { ClipboardUtils } from "../html/clipborad/clipboard-utils";
 import { HTMLUtils } from "../html/html-utils";
 import { ConsoleUtils } from "../natives/console/console-utils";
 import { mathDivide, MathUtils, mathMinus, mathMod, mathMultiply, mathSum } from "../natives/math/math-utils";
-import { GetTypeFromKey, GenericClass } from "../natives/object/interfaces/object-interfaces";
+import { GetTypeFromKey, GenericClass, BetterClassAssign } from "../natives/object/interfaces/object-interfaces";
 import { ObjectUtils } from "../natives/object/object-utils";
 import { RegexUtils } from "../natives/regex/regex-utils";
 import { strCapitalize, strCapitalizeAll, StringUtils } from "../natives/string/string-utils";
@@ -26,7 +26,7 @@ class GlobalUtils  {
 
 /* Declarations */
 declare global {
-  interface Number extends String {
+  interface Number {
     hasDecimals(): boolean
     getDecimals(): number|undefined
 
@@ -46,6 +46,10 @@ declare global {
   interface String {
     capitalize(): string;
     capitalizeAll(split: string): string;
+  }
+
+  interface Object {
+    assign<T extends object=this>(...values: Partial<BetterClassAssign<T>>[]): T
   }
 
 }
@@ -96,6 +100,12 @@ GlobalUtils.registerMethod(String, "capitalize", function(this: string): string 
 GlobalUtils.registerMethod(String, "capitalizeAll", function(this: string, split: string): string {
   return strCapitalizeAll(this, split)
 })
+
+GlobalUtils.registerMethod(Object, "assign", 
+  function<T extends object>(this: T, ...values: Partial<BetterClassAssign<T>>[]): T {
+    return Object.assign(this, ...values);
+  }
+)
 
 /* Registry Class */
 const utilsClasses: GenericClass<any>[] = [

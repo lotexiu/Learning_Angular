@@ -131,13 +131,6 @@ class ObjectUtils {
     return λ(value, functionName)
   }
 
-  static updateObject<T>(
-    obj: Object<T>, 
-    newObj: Object<T>
-  ): Object<T> {
-    return Object.assign(obj, newObj)
-  }
-
   static isAClassDeclaration(obj: any): boolean {
     return typeof obj === 'function' && /^class\s/.test(obj.toString());
   }
