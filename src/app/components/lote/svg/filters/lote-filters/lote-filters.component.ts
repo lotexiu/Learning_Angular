@@ -28,7 +28,7 @@ export class LoteFiltersComponent implements OnInit, OnDestroy {
 
   
   ngOnInit() {
-    const svg: SVG = new SVG().assign({
+    const svg: SVG = new SVG().assign<SVG>({
       defs: {
         circles: []
       }

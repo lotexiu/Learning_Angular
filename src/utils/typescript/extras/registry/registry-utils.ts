@@ -1,10 +1,9 @@
 ﻿import { As } from "@ts-extras/generic-utils";
-import { GenericClass, Object } from "@ts-natives/object/interfaces/object-interfaces";
+import { BetterClassAssign, GenericClass, Object } from "@ts-natives/object/interfaces/object-interfaces";
 import { ClassRegistry } from "./interfaces/registry-interfaces";
-import { RegistryClass, RegistryClassDetails, RegistryFunction, RegistryFunctionArg, RegistryProperty } from "./classes/registry-classes";
+import { RegistryClass, RegistryClassDetails, RegistryFunction, RegistryFunctionArg, RegistryProperty } from "./model/registry-classes";
 import { isAClassDeclaration } from "@ts-natives/object/object-utils";
-import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
-import { EnumRegistry } from "./enum/enum-registry";
+import { KeyOf, Partial } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { FunctionUtils } from "@ts-natives/functions/function-utils";
 import { DecoratorPropertyKey } from "./decorators/interfaces/decorators-interfaces";
 import { Function } from "@ts-interfaces/function-interfaces";
@@ -17,7 +16,7 @@ class RegistryUtils {
     As(window)[betterName] = class_;
   }
 
-  static registryClass<T>(class_: GenericClass<T>, description?: string): void {
+  static registryClass<T>(class_: GenericClass<T>, description?: string): RegistryClass<T> {
     class_.name
     if (!this.classRegistry[class_.name]) {
       this.classRegistry[class_.name] = this.initRegistryClass(class_, description);
@@ -26,6 +25,7 @@ class RegistryUtils {
     if (description) {
       this.classRegistry[class_.name].description = description;
     }
+    return this.classRegistry[class_.name];
   }
   
   static registryClassByInstance<T>(instance: Object<T>, description?: string): void {
@@ -41,10 +41,14 @@ class RegistryUtils {
 
   static getOrAddRegistryClass<T>(classOrInstance: Object<T>): RegistryClass<T> {
     if (isAClassDeclaration(classOrInstance)) {
-      this.registryClass(As<GenericClass<T>>(classOrInstance));
+      if (!this.classRegistry[As<GenericClass<T>>(classOrInstance).name]) {
+        this.registryClass(As<GenericClass<T>>(classOrInstance));
+      }
       return this.classRegistry[As<GenericClass<T>>(classOrInstance).name]
     } else {
-      this.registryClassByInstance(classOrInstance);
+      if (!this.classRegistry[classOrInstance.constructor.name]) {
+        this.registryClassByInstance(classOrInstance);
+      }
       return this.classRegistry[classOrInstance.constructor.name]
     }
   }
@@ -92,13 +96,13 @@ class RegistryUtils {
     const find: Function = (property: RegistryProperty<T>): boolean => property.name === propertyKey
     const registryClass: RegistryClass<T> = As(this.getOrAddRegistryClass(target));
     if (static_) {
-      const property: RegistryProperty<T> = registryClass.staticDetails.properties.find(find) || new RegistryProperty<T>();
+      const property: RegistryProperty<T> = registryClass.staticDetails.properties.find(find) || new RegistryProperty<T>().assign({name:propertyKey});
       if (!registryClass.staticDetails.properties.includes(property)) {
         registryClass.staticDetails.properties.push(property);
       }
       return property;
     } else {
-      const property: RegistryProperty<T> = registryClass.instanceDetails.properties.find(find) || new RegistryProperty<T>();
+      const property: RegistryProperty<T> = registryClass.instanceDetails.properties.find(find) || new RegistryProperty<T>().assign({name:propertyKey});
       if (!registryClass.instanceDetails.properties.includes(property)) {
         registryClass.instanceDetails.properties.push(property);
       }
@@ -136,14 +140,14 @@ class RegistryUtils {
         description: `${String(method.name)} method (Default)`,
         default: classOrInstance[key],
         type: 'Function',
-        returnType: EnumRegistry.UNKOWN,
-        args: As<string[]>(method.args!).map((argName: string): RegistryFunctionArg<T> => {
+        returnType: undefined,
+        args: As<KeyOf<T>[]>(method.args!).map((argName: KeyOf<T>): RegistryFunctionArg<T> => {
           const arg = new RegistryFunctionArg<T>();
           arg.assign({
             name: argName,
             description: `${String(arg.name)} argument (Default)`,
-            default: EnumRegistry.UNKOWN,
-            type: EnumRegistry.UNKOWN,
+            default: undefined,
+            type: undefined,
           })
           return arg;
         })
@@ -163,8 +167,8 @@ class RegistryUtils {
       property.assign({
         name: key,
         description: `${String(property.name)} property (Default)`,
-        default: EnumRegistry.UNKOWN,
-        type: EnumRegistry.UNKOWN,
+        default: undefined,
+        type: undefined,
       })
       return property;
     });
@@ -181,13 +185,39 @@ class RegistryUtils {
       symbol.assign({
         name: key,
         description: `${String(symbol.name)} symbol (Default)`,
-        default: EnumRegistry.UNKOWN,
-        type: EnumRegistry.UNKOWN,
+        default: undefined,
+        type: undefined,
       });
       return symbol;
     });
 
     return symbols;
+  }
+
+  static assignObject<T>(target: Object<T>, ...sources: Partial<BetterClassAssign<T>>[]): void {
+    let registry: RegistryClass<T> = this.registryClass(target.constructor as any) as any
+    if (registry.instanceDetails) {
+      sources.forEach((source: Partial<BetterClassAssign<T>>): void => {
+        registry.instanceDetails.properties.forEach((property: RegistryProperty<T>): void => {
+          if (property.name && property.name in source) {
+            const value: any = source[property.name];
+            if (value !== undefined) {
+              if (property.onAssign) {
+                target[property.name as KeyOf<Object<T>>] = property.onAssign(value, registry.type);
+              } else {
+                if (typeof property.type == 'function') {
+                  target[property.name as KeyOf<Object<T>>] = ((new property.type()) as any).assign(value);
+                } else {
+                  target[property.name as KeyOf<Object<T>>] = value;
+                }
+              }
+            }
+          }
+        })
+      })
+    } else {
+      Object.assign(target, ...sources);
+    }
   }
 }
 RegistryUtils.getOrAddRegistryClass(RegistryUtils)

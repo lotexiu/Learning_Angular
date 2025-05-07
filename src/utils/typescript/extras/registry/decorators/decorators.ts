@@ -1,9 +1,9 @@
 ﻿import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
-import { ClassDecorator, DecoratorClassArgFunction, DecoratorPropertyKey, MethodDecorator, PropertyDecorator } from "./interfaces/decorators-interfaces";
+import { ClassDecorator, DecoratorPropertyKey, MethodDecorator, PropertyDecorator } from "./interfaces/decorators-interfaces";
 import { As } from "@ts-extras/generic-utils";
 import { Partial } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { RegistryUtils } from "../registry-utils";
-import { RegistryFunction } from "../classes/registry-classes";
+import { RegistryFunction, RegistryProperty } from "../model/registry-classes";
 
 function ClassReflect<T>(description?: string): ClassDecorator<T> {
   return As((target: GenericClass<T>): void => {
@@ -25,7 +25,7 @@ function MethodReflect<T>(static_: boolean, details: Partial<RegistryFunction<an
 //   })
 // }
 
-function PropertyReflect<T>(static_: boolean, details: Partial<DecoratorClassArgFunction>): PropertyDecorator {
+function PropertyReflect<T>(static_: boolean, details: Partial<RegistryProperty<T>>): PropertyDecorator {
   return As((target: GenericClass<T>, propertyKey: DecoratorPropertyKey): void => {
     RegistryUtils.registerProperty(target, static_, details, propertyKey);
   })
@@ -36,6 +36,6 @@ export {
   ClassReflect,
   MethodReflect,
   // ParameterReflect,
-  // PropertyReflect,
+  PropertyReflect,
   ClassDecorator,
 }

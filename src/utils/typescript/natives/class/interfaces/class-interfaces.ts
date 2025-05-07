@@ -1,8 +1,8 @@
 ﻿import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
-import { DecoratorClass } from "../../../extras/registry/decorators/interfaces/decorators-interfaces";
+import { RegistryClass } from "@ts-extras/registry/model/registry-classes";
 
 interface IClassRegistry {
-  [className: GenericClass<any>['name'] ]: DecoratorClass
+  [className: GenericClass<any>['name'] ]: RegistryClass<any>
 }
 
 export {

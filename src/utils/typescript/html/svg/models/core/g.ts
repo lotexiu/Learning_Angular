@@ -9,6 +9,8 @@ import { SVGUse } from "./use";
 import { SVGEllipse } from "../shapes/ellipse";
 import { SVGText } from "../text/text";
 import { SVGPolyline } from "../shapes/polyline";
+import { BetterClassAssign } from "@ts-natives/object/interfaces/object-interfaces";
+import { SVG } from "../svg";
 
 class G extends SVGBaseSVGElement {
   groups?: G[];

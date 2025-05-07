@@ -1,4 +1,4 @@
-import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
+import { BetterClassAssign, GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
 
 class Class extends Object{
   get class(): GenericClass<this> {

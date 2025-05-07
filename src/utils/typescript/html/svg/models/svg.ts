@@ -14,45 +14,84 @@ import { SVGPath } from "./shapes/path";
 import { Function } from "@ts-interfaces/function-interfaces";
 import { Nullable } from "@ts-interfaces/misc-interfaces";
 import { cLog } from "@ts-natives/console/console-utils";
+import { PropertyReflect } from "@ts-extras/registry/decorators/decorators";
+import { arrayAssign } from "@ts-extras/registry/functions/on-assign-functions";
 
 class SVG extends SVGBaseSVGElement {
-  /** Width of the SVG container */
+  @PropertyReflect(false, {description: 'Width of the SVG container'})
   width?: number;
-
-  /** Height of the SVG container */
+  @PropertyReflect(false, {description: 'Height of the SVG container'})
   height?: number;
-
-  /** Defines the aspect ratio and position of the SVG viewBox */
+  @PropertyReflect(false, {description: 'Defines the aspect ratio and position of the SVG viewBox'})
   viewBox?: string;
-
-  /** Controls how the viewBox is preserved when scaled */
+  @PropertyReflect(false, {description: 'Controls how the viewBox is preserved when scaled'})
   preserveAspectRatio?: string;
-
-  /** Horizontal position of the SVG container */
+  @PropertyReflect(false, {description: 'Horizontal position of the SVG container'})
   x?: number;
-
-  /** Vertical position of the SVG container */
+  @PropertyReflect(false, {description: 'Vertical position of the SVG container'})
   y?: number;
-
-  /** XML namespace for SVG */
+  @PropertyReflect(false, {description: 'XML namespace for SVG'})
   xmlns?: string;
-
-  /** XML namespace for xlink */
+  @PropertyReflect(false, {description: 'XML namespace for xlink'})
   xmlnsXlink?: string;
 
-  // Allowed children
+  @PropertyReflect(false, {type: SVGDefs})
   defs?: SVGDefs;
+  @PropertyReflect(false, {
+    type: SVGG,
+    onAssign:arrayAssign
+  })
   groups?: SVGG[];
+  @PropertyReflect(false, {
+    type: SVGCircle,
+    onAssign:arrayAssign
+  })
   circles?: SVGCircle[];
+  @PropertyReflect(false, {
+    type: SVGEllipse,
+    onAssign:arrayAssign
+  })
   ellipses?: SVGEllipse[];
+  @PropertyReflect(false, {
+    type: SVGPath,
+    onAssign:arrayAssign
+  })
   paths?: SVGPath[];
+  @PropertyReflect(false, {
+    type: SVGText,
+    onAssign:arrayAssign
+  })
   texts?: SVGText[];
+  @PropertyReflect(false, {
+    type: SVGUse,
+    onAssign:arrayAssign
+  })
   uses?: SVGUse[];
+  @PropertyReflect(false, {
+    type: SVGRect,
+    onAssign:arrayAssign
+  })
   rects?: SVGRect[];
+  @PropertyReflect(false, {
+    type: SVGLine,
+    onAssign:arrayAssign
+  })
   lines?: SVGLine[];
+  @PropertyReflect(false, {
+    type: SVGPolygon,
+    onAssign:arrayAssign
+  })
   polygons?: SVGPolygon[];
+  @PropertyReflect(false, {
+    type: SVGPolyline,
+    onAssign:arrayAssign
+  })
   polylines?: SVGPolyline[];
-  images?: SVGImageElement[];  
+  @PropertyReflect(false, {
+    type: SVGImageElement,
+    onAssign:arrayAssign
+  })
+  images?: SVGImageElement[];
 
   private intervalId: any;
 

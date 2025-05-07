@@ -1,37 +1,5 @@
 ﻿import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
 
-
-interface IDecoratorClassInfo {
-  name: string|number|symbol
-  type: any|string
-  description: string
-  defaultValue?: any
-}
-
-interface IDecoratorClassKey extends IDecoratorClassInfo{
-}
-
-interface IDecoratorClassArgFunction extends IDecoratorClassInfo {
-  inf: boolean
-}
-
-interface IDecoratorClassKeyFunction extends IDecoratorClassKey{
-  returnType: string
-  args: IDecoratorClassArgFunction[]
-  totalArgs: number
-}
-
-interface IDecoratorClassDetails {
-  methods: IDecoratorClassKeyFunction[]
-  properties: IDecoratorClassKey[]
-}
-
-interface IDecoratorClass<T=any> extends IDecoratorClassKey{
-  class: GenericClass<T>
-  staticDetail: IDecoratorClassDetails
-  instanceDetails: IDecoratorClassDetails
-}
-
 type IClassDecorator<T> = (target: Function) => T | void;
 
 type IDecoratorPropertyKey = string | symbol
@@ -56,14 +24,8 @@ type IPropertyDecorator = (
 
 export {
   IClassDecorator as ClassDecorator,
-  IDecoratorClassKey as DecoratorClassKey,
   IParameterDecorator as ParameterDecorator,
   IPropertyDecorator as PropertyDecorator,
   IMethodDecorator as MethodDecorator,
-  IDecoratorClass as DecoratorClass,
-  IDecoratorClassKeyFunction as DecoratorClassKeyFunction,
-  IDecoratorClassArgFunction as DecoratorClassArgFunction,
-  IDecoratorClassDetails as DecoratorClassDetails,
-  IDecoratorClassInfo as DecoratorClassInfo,
   IDecoratorPropertyKey as DecoratorPropertyKey,
 };

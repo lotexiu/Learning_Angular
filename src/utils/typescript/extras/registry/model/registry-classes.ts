@@ -1,8 +1,10 @@
-﻿import { BetterClassAssign, EntriesReturn, GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
+﻿import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
+import { BetterClassAssign, EntriesReturn, GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
 
 class RegistryBaseInfo<T> {
   type?: GenericClass<T>|string;
   description?: string;
+  onAssign?: Function
 
   assign(...values: Partial<BetterClassAssign<this>>[]): this {
     values.forEach((value: Partial<BetterClassAssign<this>>): void => {
@@ -28,7 +30,7 @@ class RegistryClassDetails<T> {
 }
 
 class RegistryKey<T> extends RegistryBaseInfo<T> {
-  name: string | number | symbol = ''
+  name?: KeyOf<T>
   default: any
 }
 

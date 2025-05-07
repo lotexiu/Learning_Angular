@@ -55,6 +55,8 @@ type IBuildArray<
 
 type IPair<T=any,T2=any> = [T, T2]
 
+type IItemType<T> = T extends (infer U)[] ? U : never;
+
 export { 
   IFirst as First, 
   ILast as Last, 
@@ -63,4 +65,5 @@ export {
   IExtractValues as ExtractValues,
   IBuildArray as BuildArray,
   IPair as Pair,
+  IItemType as ItemType,
 }

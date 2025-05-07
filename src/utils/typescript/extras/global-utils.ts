@@ -13,6 +13,7 @@ import { ClassUtils } from "@ts-natives/class/class-utils";
 import { Class } from "@ts-natives/class/model/class";
 import { RegistryUtils } from "./registry/registry-utils";
 import { Constructor } from "@ts-interfaces/misc-interfaces";
+import { RegistryClass } from "./registry/model/registry-classes";
 
 
 class GlobalUtils  {
@@ -50,8 +51,8 @@ declare global {
   }
 
   interface Object {
-    assign<T extends object=this>(...values: Partial<BetterClassAssign<T>>[]): T
-    copy<T extends object=this>(): T
+    assign<T extends object>(...values: Partial<BetterClassAssign<T>>[]): T;
+    copy(): any;
   }
 
 }
@@ -105,7 +106,8 @@ GlobalUtils.registerMethod(String, "capitalizeAll", function(this: string, split
 
 GlobalUtils.registerMethod(Object, "assign", 
   function<T extends object>(this: T, ...values: Partial<BetterClassAssign<T>>[]): T {
-    return Object.assign(this, ...values);
+    RegistryUtils.assignObject(this as any, ...values)
+    return this
   }
 )
 

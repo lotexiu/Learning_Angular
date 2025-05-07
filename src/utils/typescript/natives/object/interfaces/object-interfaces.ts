@@ -1,7 +1,7 @@
 ﻿import { Function } from "@ts-interfaces/function-interfaces";
 import { Extends } from "@ts-interfaces/misc-interfaces";
 import { KeyOf } from "./native-object-interfaces";
-import { Pair } from "@ts-natives/array/interfaces/array-interfaces";
+import { ItemType, Pair } from "@ts-natives/array/interfaces/array-interfaces";
 
 type IObject<T=null> =  
   T extends null ? 
@@ -121,7 +121,9 @@ type IAddFallBack<T, AddType, OnType> = {
   [K in KeyOf<T>]: Extract<T[K], OnType> extends never ?
     T[K] :
     AddType extends Partial<null> ?
-      Partial<Extract<T[K], OnType>>|T[K] :
+      Extract<T[K], OnType[]> extends never ?
+        Partial<Extract<T[K], OnType>>|T[K] :
+        Partial<ItemType<T[K]>>[]|T[K]:
       AddType|T[K]
 }
 interface IGenericClass<T> extends Object {
