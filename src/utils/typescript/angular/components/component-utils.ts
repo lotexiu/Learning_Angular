@@ -1,6 +1,6 @@
-import { Constructor } from "@angular/cdk/table";
 import { InjectionToken, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Constructor } from "@ts-interfaces/misc-interfaces";
 import { newId } from "@ts-natives/class/class-utils";
 import { KeysOfType } from "@ts-natives/object/interfaces/object-interfaces";
 import { copy } from "@ts-natives/object/object-utils";

@@ -12,11 +12,12 @@ import { Timer } from "./timer/timer";
 import { ClassUtils } from "@ts-natives/class/class-utils";
 import { Class } from "@ts-natives/class/model/class";
 import { RegistryUtils } from "./registry/registry-utils";
+import { Constructor } from "@ts-interfaces/misc-interfaces";
 
 
 class GlobalUtils  {
   static registerMethod<T, Key extends KeyOf<T>>(
-    constructor: GenericClass<T>, 
+    constructor: Constructor<T>, 
     name: Key, 
     handler: GetTypeFromKey<T,Key>
   ): void {
@@ -50,6 +51,7 @@ declare global {
 
   interface Object {
     assign<T extends object=this>(...values: Partial<BetterClassAssign<T>>[]): T
+    copy<T extends object=this>(): T
   }
 
 }

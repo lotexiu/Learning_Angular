@@ -1,4 +1,4 @@
-﻿import { random } from "../math/math-exports";
+﻿import { mathRandom } from "@ts-natives/math/math-utils";
 
 class DocUtils {
 
@@ -6,7 +6,7 @@ class DocUtils {
   static randomCnpj() {
     const nums: number[] = [
       1,0,0,0,
-      ...Array.from({ length: 8 }, (): number => random(0, 9))
+      ...Array.from({ length: 8 }, (): number => mathRandom(0, 9))
     ];
     let d1: number = 0;
     let d2: number = 0;

@@ -35,10 +35,13 @@ type _INoInfer<T> = NoInfer<T>;
 
 type IExtends<T, U, _nv extends INever=INever> = T extends U ? T&U : never;
 
+type IConstructor<T> = new (...args: any[]) => T;
+
 export { 
   INever as Never, 
   INullable as Nullable, 
   _IAwaited as Awaited, 
   _INoInfer as NoInfer,
   IExtends as Extends,
+  IConstructor as Constructor,
 }
