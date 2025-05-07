@@ -1,4 +1,5 @@
-﻿/**
+﻿
+/**
  * Type representing `null` or `never`.
  */
 type INever<T extends null|never = null> = T;
@@ -33,15 +34,36 @@ type _IAwaited<T> = Awaited<T>;
  */
 type _INoInfer<T> = NoInfer<T>;
 
+/**
+ * Exclui null e undefined de T.
+ * 
+ * @example
+ * type NonNullableExample = _NonNullable<string | null | undefined>; // string
+ */
+type _INonNullable<T> = NonNullable<T>;
+
+type INotUndefined<T> = T extends undefined ? never : T;
+
 type IExtends<T, U, _nv extends INever=INever> = T extends U ? T&U : never;
 
 type IConstructor<T> = new (...args: any[]) => T;
+
+type IAnyClass<T=null> = 
+  T extends null ?
+    IConstructor<any> & Function & NewableFunction:
+    IConstructor<T> & Function & NewableFunction & T;
+
+type IAnyType = Function;
 
 export { 
   INever as Never, 
   INullable as Nullable, 
   _IAwaited as Awaited, 
   _INoInfer as NoInfer,
+  _INonNullable as NonNullable,
+  INotUndefined as NotUndefined,
   IExtends as Extends,
   IConstructor as Constructor,
+  IAnyClass as AnyClass,
+  IAnyType as AnyType,
 }

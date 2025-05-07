@@ -3,6 +3,8 @@ import { Extends } from "@ts-interfaces/misc-interfaces";
 import { KeyOf } from "./native-object-interfaces";
 import { ItemType, Pair } from "@ts-natives/array/interfaces/array-interfaces";
 
+type ICommonFields<T, U> = Pick<T, Extract<keyof T, keyof U>>;
+
 type IObject<T=null> =  
   T extends null ? 
     Object :
@@ -126,9 +128,6 @@ type IAddFallBack<T, AddType, OnType> = {
         Partial<ItemType<T[K]>>[]|T[K]:
       AddType|T[K]
 }
-interface IGenericClass<T> extends Object {
-  new (value?: any): T;
-}
 
 type IEntriesReturn<T> =  [KeyOf<T>, IGetTypeFromKey<T, KeyOf<T>>];
 
@@ -137,10 +136,10 @@ type IRemoveCicularReferences = Function<[string, any], false, any, any> ;
 type IBetterClassAssign<T> = IAddFallBack<T, Partial<null>, Object>
 
 export {
+  ICommonFields as CommonFields,
   IRemoveCicularReferences as RemoveCicularReferences,
   IObject as Object,
   IBetterClassAssign as BetterClassAssign,
-  IGenericClass as GenericClass,
   IEntriesReturn as EntriesReturn,
   IAddFallBack as AddFallBack,
   IGetTypeFromKey as GetTypeFromKey,

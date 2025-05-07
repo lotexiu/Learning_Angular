@@ -1,5 +1,5 @@
 ﻿import { As } from "@ts-extras/generic-utils";
-import { BetterClassAssign, GenericClass, Object } from "@ts-natives/object/interfaces/object-interfaces";
+import { BetterClassAssign, Object } from "@ts-natives/object/interfaces/object-interfaces";
 import { ClassRegistry } from "./interfaces/registry-interfaces";
 import { RegistryClass, RegistryClassDetails, RegistryFunction, RegistryFunctionArg, RegistryProperty } from "./model/registry-classes";
 import { isAClassDeclaration } from "@ts-natives/object/object-utils";
@@ -7,16 +7,17 @@ import { KeyOf, Partial } from "@ts-natives/object/interfaces/native-object-inte
 import { FunctionUtils } from "@ts-natives/functions/function-utils";
 import { DecoratorPropertyKey } from "./decorators/interfaces/decorators-interfaces";
 import { Function } from "@ts-interfaces/function-interfaces";
+import { AnyClass } from "@ts-interfaces/misc-interfaces";
 
 class RegistryUtils {
   static classRegistry: ClassRegistry = {}
 
-  private static addClassInToWindows<T>(class_: GenericClass<T>): void {
+  private static addClassInToWindows<T>(class_: AnyClass<T>): void {
     const betterName: string = class_.name.replace(/^_|\d+$/g, '');
     As(window)[betterName] = class_;
   }
 
-  static registryClass<T>(class_: GenericClass<T>, description?: string): RegistryClass<T> {
+  static registryClass<T>(class_: AnyClass<T>, description?: string): RegistryClass<T> {
     class_.name
     if (!this.classRegistry[class_.name]) {
       this.classRegistry[class_.name] = this.initRegistryClass(class_, description);
@@ -29,7 +30,7 @@ class RegistryUtils {
   }
   
   static registryClassByInstance<T>(instance: Object<T>, description?: string): void {
-    const class_: GenericClass<T> = instance.constructor as GenericClass<T>;
+    const class_: AnyClass<T> = instance.constructor as AnyClass<T>;
     if (!this.classRegistry[class_.name]) {
       this.registryClass(class_, description);
     }
@@ -39,12 +40,12 @@ class RegistryUtils {
     }
   }
 
-  static getOrAddRegistryClass<T>(classOrInstance: Object<T>): RegistryClass<T> {
+  static getOrAddRegistryClass<T>(classOrInstance: AnyClass<T>|Object<T>): RegistryClass<T> {
     if (isAClassDeclaration(classOrInstance)) {
-      if (!this.classRegistry[As<GenericClass<T>>(classOrInstance).name]) {
-        this.registryClass(As<GenericClass<T>>(classOrInstance));
+      if (!this.classRegistry[As<AnyClass<T>>(classOrInstance).name]) {
+        this.registryClass(As<AnyClass<T>>(classOrInstance));
       }
-      return this.classRegistry[As<GenericClass<T>>(classOrInstance).name]
+      return this.classRegistry[As<AnyClass<T>>(classOrInstance).name]
     } else {
       if (!this.classRegistry[classOrInstance.constructor.name]) {
         this.registryClassByInstance(classOrInstance);
@@ -54,7 +55,7 @@ class RegistryUtils {
   }
   
   static registerMethod<T>(
-    class_: GenericClass<T>, 
+    class_: AnyClass<T>, 
     static_: boolean, 
     details: Partial<RegistryFunction<T>>, 
     propertyKey: DecoratorPropertyKey, 
@@ -65,7 +66,7 @@ class RegistryUtils {
   }
 
   static registerProperty<T>(
-    target: GenericClass<T>, 
+    target: AnyClass<T>, 
     static_: boolean, 
     details: Partial<RegistryProperty<T>>, 
     propertyKey: DecoratorPropertyKey): void {
@@ -73,7 +74,7 @@ class RegistryUtils {
     propertyDetails.assign(details);
   }
 
-  static getMethod(class_: GenericClass<any>, static_: boolean, methodName: string): RegistryFunction<any> {
+  static getMethod(class_: AnyClass<any>, static_: boolean, methodName: string): RegistryFunction<any> {
     const find: Function = (method: RegistryFunction<any>): boolean => method.name === methodName
 
     const registryClass: RegistryClass<any> = this.getOrAddRegistryClass(class_);
@@ -92,7 +93,7 @@ class RegistryUtils {
     }
   }
 
-  static getProperty<T>(target: GenericClass<T>, static_: boolean, propertyKey: any): RegistryProperty<T> {
+  static getProperty<T>(target: AnyClass<T>, static_: boolean, propertyKey: any): RegistryProperty<T> {
     const find: Function = (property: RegistryProperty<T>): boolean => property.name === propertyKey
     const registryClass: RegistryClass<T> = As(this.getOrAddRegistryClass(target));
     if (static_) {
@@ -110,14 +111,14 @@ class RegistryUtils {
     }
   }
 
-  private static initRegistryClass<T>(classOrInstance: Object<T>, description?: string): RegistryClass<T> {
+  private static initRegistryClass<T>(classOrInstance: AnyClass<T>|Object<T>, description?: string): RegistryClass<T> {
     const registryClass = new RegistryClass<T>();
     let key: 'staticDetails'|'instanceDetails';
     if (isAClassDeclaration(classOrInstance)) {
       registryClass.Class = As(classOrInstance);
       key = 'staticDetails'
     } else {
-      registryClass.Class = classOrInstance.constructor as GenericClass<T>;
+      registryClass.Class = classOrInstance.constructor as AnyClass<T> & T;
       key = 'instanceDetails'
     }
     registryClass.type = registryClass.Class;
@@ -194,7 +195,7 @@ class RegistryUtils {
     return symbols;
   }
 
-  static assignObject<T>(target: Object<T>, ...sources: Partial<BetterClassAssign<T>>[]): void {
+  static assignObject<T extends Object>(target: T, ...sources: Partial<BetterClassAssign<T>>[]): void {
     let registry: RegistryClass<T> = this.registryClass(target.constructor as any) as any
     if (registry.instanceDetails) {
       sources.forEach((source: Partial<BetterClassAssign<T>>): void => {
@@ -203,12 +204,12 @@ class RegistryUtils {
             const value: any = source[property.name];
             if (value !== undefined) {
               if (property.onAssign) {
-                target[property.name as KeyOf<Object<T>>] = property.onAssign(value, registry.type);
+                target[property.name] = property.onAssign(value, registry.type);
               } else {
                 if (typeof property.type == 'function') {
-                  target[property.name as KeyOf<Object<T>>] = ((new property.type()) as any).assign(value);
+                  target[property.name] = ((new property.type()) as any).assign(value);
                 } else {
-                  target[property.name as KeyOf<Object<T>>] = value;
+                  target[property.name] = value;
                 }
               }
             }

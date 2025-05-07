@@ -35,7 +35,7 @@ class SVG extends SVGBaseSVGElement {
   @PropertyReflect(false, {description: 'XML namespace for xlink'})
   xmlnsXlink?: string;
 
-  @PropertyReflect(false, {type: SVGDefs})
+  @PropertyReflect(false, {type: SVGDefs })
   defs?: SVGDefs;
   @PropertyReflect(false, {
     type: SVGG,

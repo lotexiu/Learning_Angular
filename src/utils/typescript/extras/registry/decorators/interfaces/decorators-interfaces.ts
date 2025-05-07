@@ -1,6 +1,4 @@
-﻿import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
-
-type IClassDecorator<T> = (target: Function) => T | void;
+﻿type IClassDecorator<T> = (target: Function) => T | void;
 
 type IDecoratorPropertyKey = string | symbol
 

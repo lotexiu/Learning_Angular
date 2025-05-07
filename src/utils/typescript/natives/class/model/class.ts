@@ -1,7 +1,7 @@
-import { BetterClassAssign, GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
+import { AnyClass } from "@ts-interfaces/misc-interfaces";
 
 class Class extends Object{
-  get class(): GenericClass<this> {
+  get class(): this {
     return this.constructor as any;
   }
 }

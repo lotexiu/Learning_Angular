@@ -3,7 +3,7 @@ import { ClipboardUtils } from "../html/clipborad/clipboard-utils";
 import { HTMLUtils } from "../html/html-utils";
 import { ConsoleUtils } from "../natives/console/console-utils";
 import { mathDivide, MathUtils, mathMinus, mathMod, mathMultiply, mathSum } from "../natives/math/math-utils";
-import { GetTypeFromKey, GenericClass, BetterClassAssign } from "../natives/object/interfaces/object-interfaces";
+import { GetTypeFromKey, BetterClassAssign } from "../natives/object/interfaces/object-interfaces";
 import { ObjectUtils } from "../natives/object/object-utils";
 import { RegexUtils } from "../natives/regex/regex-utils";
 import { strCapitalize, strCapitalizeAll, StringUtils } from "../natives/string/string-utils";
@@ -12,7 +12,7 @@ import { Timer } from "./timer/timer";
 import { ClassUtils } from "@ts-natives/class/class-utils";
 import { Class } from "@ts-natives/class/model/class";
 import { RegistryUtils } from "./registry/registry-utils";
-import { Constructor } from "@ts-interfaces/misc-interfaces";
+import { AnyClass, Constructor } from "@ts-interfaces/misc-interfaces";
 import { RegistryClass } from "./registry/model/registry-classes";
 
 
@@ -112,7 +112,7 @@ GlobalUtils.registerMethod(Object, "assign",
 )
 
 /* Registry Class */
-const utilsClasses: GenericClass<any>[] = [
+const utilsClasses: AnyClass[] = [
   GlobalUtils,
   ClipboardUtils,
   HTMLUtils,
@@ -126,7 +126,7 @@ const utilsClasses: GenericClass<any>[] = [
   Class,
   ClassUtils,
 ];
-utilsClasses.forEach((utilsClass: GenericClass<any>): void => {
+utilsClasses.forEach((utilsClass: AnyClass): void => {
   RegistryUtils.getOrAddRegistryClass(utilsClass)
 })
 

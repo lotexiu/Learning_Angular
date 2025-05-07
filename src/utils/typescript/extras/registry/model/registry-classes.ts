@@ -1,8 +1,9 @@
-﻿import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
-import { BetterClassAssign, EntriesReturn, GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
+﻿import { AnyClass } from "@ts-interfaces/misc-interfaces";
+import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
+import { BetterClassAssign, EntriesReturn } from "@ts-natives/object/interfaces/object-interfaces";
 
 class RegistryBaseInfo<T> {
-  type?: GenericClass<T>|string;
+  type?: AnyClass & T |string;
   description?: string;
   onAssign?: Function
 
@@ -18,7 +19,7 @@ class RegistryBaseInfo<T> {
 }
 
 class RegistryClass<T> extends RegistryBaseInfo<T> {
-  Class!: GenericClass<T>;
+  Class!: AnyClass<T> & T;
   staticDetails!: RegistryClassDetails<T>;
   instanceDetails!: RegistryClassDetails<T>;
 }

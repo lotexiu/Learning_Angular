@@ -55,14 +55,6 @@ type _IExtract<T, U> = Extract<T, U>;
 type _IOmit<T, K extends keyof any> = Omit<T, K>;
 
 /**
- * Exclui null e undefined de T.
- * 
- * @example
- * type NonNullableExample = _NonNullable<string | null | undefined>; // string
- */
-type _INonNullable<T> = NonNullable<T>;
-
-/**
  * Tipo que retorna as chaves de um tipo como uma união de strings.
  * 
  * @template T - O tipo do objeto ou classe
@@ -93,7 +85,6 @@ export {
   _IExclude as Exclude,
   _IExtract as Extract,
   _IOmit as Omit,
-  _INonNullable as NonNullable,
   _IPartial as Partial,
   IKeyOf as KeyOf,
 }

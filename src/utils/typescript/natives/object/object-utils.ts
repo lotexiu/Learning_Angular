@@ -1,5 +1,5 @@
 import { Function } from "@ts-interfaces/function-interfaces";
-import { Nullable } from "@ts-interfaces/misc-interfaces";
+import { AnyClass, Nullable } from "@ts-interfaces/misc-interfaces";
 import { strCapitalize } from "@ts-natives/string/string-utils";
 import { ConcatStrIntoKeys, CustomReturn, EntriesReturn, KeysOfType, Object, RemoveCicularReferences } from "./interfaces/object-interfaces";
 import { KeyOf } from "./interfaces/native-object-interfaces";
@@ -131,7 +131,7 @@ class ObjectUtils {
     return λ(value, functionName)
   }
 
-  static isAClassDeclaration(obj: any): boolean {
+  static isAClassDeclaration(obj: any): obj is AnyClass {
     return typeof obj === 'function' && /^class\s/.test(obj.toString());
   }
 }

@@ -1,8 +1,8 @@
-﻿import { GenericClass } from "@ts-natives/object/interfaces/object-interfaces";
+﻿import { AnyClass } from "@ts-interfaces/misc-interfaces";
 import { RegistryClass } from "../model/registry-classes";
 
 interface IClassRegistry {
-  [className: GenericClass<Object>['name'] ]: RegistryClass<any>
+  [className: AnyClass['name'] ]: RegistryClass<any>
 }
 
 export {
