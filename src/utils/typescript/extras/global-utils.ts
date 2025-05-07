@@ -52,7 +52,7 @@ declare global {
 
   interface Object {
     assign<T extends object>(...values: Partial<BetterClassAssign<T>>[]): T;
-    copy(): any;
+    copy(): this;
   }
 
 }

@@ -61,7 +61,7 @@ class ObjectUtils {
     return removeNullFields(obj) as any
   }
 
-  static copyObject<T extends Object, Prefix extends Nullable<string, true> = null >(
+  static copyValue<T extends (AnyClass|Object), Prefix extends Nullable<string, true> = null >(
     value:T, 
     prefixOnKeys?: Prefix,
   )
@@ -148,7 +148,7 @@ const {
   removeCircularReferences,
   makeObjectBasedOn,
   addPrefixToKeys,
-  copyObject,
+  copyValue,
   json,
   getValueFromPath,
   setValueFromPath,
@@ -165,7 +165,7 @@ export {
   removeCircularReferences,
   makeObjectBasedOn,
   addPrefixToKeys,
-  copyObject as copy,
+  copyValue as copy,
   json,
   getValueFromPath,
   setValueFromPath,
