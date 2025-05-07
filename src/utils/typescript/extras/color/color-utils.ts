@@ -1,5 +1,5 @@
 ﻿import { Nullable } from "../../interfaces/misc-interfaces";
-import { mathInterpolate } from "../../natives/math/math-utils";
+import { mathBetweenMinMax, mathDivide, mathInterpolate } from "../../natives/math/math-utils";
 import { copy } from "../../natives/object/object-utils";
 import { Color } from "./interfaces/color-interface";
 
@@ -33,6 +33,27 @@ class ColorUtils {
       color[part] = mathInterpolate(t, ...keyValues)
     })
     return color;
+  }
+
+  static gradiantOfColor(color: Color, steps:number=16): Color[] {
+    const white = {R: 255, G: 255, B: 255, A: 1};
+    const black = {R: 0, G: 0, B: 0, A: 1};
+
+    const colors: Color[] = [];
+    for (let i: number = 0; i < steps; i++) {
+      const t: number = mathDivide(1, steps)["*"](i);
+      const middle: number = mathDivide(1, steps)["*"](steps["/"](2));
+      let interpolatedColor: Color = color
+      switch (mathBetweenMinMax(i,middle,middle)) {
+        case 1:
+          interpolatedColor = this.interpolate(t, color, white);
+          break
+        case -1:
+          interpolatedColor = this.interpolate(t, color, black);
+      }
+      colors.push(interpolatedColor);
+    }
+    return colors;
   }
 }
 
