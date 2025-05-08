@@ -121,7 +121,7 @@ type IGetTypeFromKey<T, K extends KeyOf<T>> = T[K];
 
 type IEntriesReturn<T> =  [KeyOf<T>, IGetTypeFromKey<T, KeyOf<T>>];
 
-type IRemoveCicularReferences = Function<[string, any], false, any, any> ;
+type IRemoveCicularReferences = Function<[string, any], any, false, any> ;
 
 type IDeepPartial<T> =
   T extends (...args: any[]) => any ? any :

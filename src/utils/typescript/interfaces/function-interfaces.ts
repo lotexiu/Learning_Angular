@@ -9,9 +9,9 @@
  */
 type IFunction<
   Types extends any[] = any[],
+  RType = void,
   Inf extends boolean = false,
   InfType = any,
-  RType = void
 > = (...args: ArrayType<Types, Inf, InfType>) => RType
 
 /**
