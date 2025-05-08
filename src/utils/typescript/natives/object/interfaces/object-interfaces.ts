@@ -1,7 +1,7 @@
 ﻿import { Function } from "@ts-interfaces/function-interfaces";
 import { Extends } from "@ts-interfaces/misc-interfaces";
 import { KeyOf } from "./native-object-interfaces";
-import { ItemType, Pair } from "@ts-natives/array/interfaces/array-interfaces";
+import { Pair } from "@ts-natives/array/interfaces/array-interfaces";
 
 type ICommonFields<T, U> = Pick<T, Extract<keyof T, keyof U>>;
 
@@ -119,33 +119,28 @@ type IConcatStrIntoKeys<Base, Prefix extends string|null|undefined> = {
  */
 type IGetTypeFromKey<T, K extends KeyOf<T>> = T[K];
 
-type IAddFallBack<T, AddType, OnType> = {
-  [K in KeyOf<T>]: Extract<T[K], OnType> extends never ?
-    T[K] :
-    AddType extends Partial<null> ?
-      Extract<T[K], OnType[]> extends never ?
-        Partial<Extract<T[K], OnType>>|T[K] :
-        Partial<ItemType<T[K]>>[]|T[K]:
-      AddType|T[K]
-}
-
 type IEntriesReturn<T> =  [KeyOf<T>, IGetTypeFromKey<T, KeyOf<T>>];
 
 type IRemoveCicularReferences = Function<[string, any], false, any, any> ;
 
-type IBetterClassAssign<T> = IAddFallBack<T, Partial<null>, Object>
+type IDeepPartial<T> =
+  T extends (...args: any[]) => any ? any :
+  T extends Array<infer U> ? Array<IDeepPartial<U>> :
+  T extends object ? {
+    [K in keyof T]?: IDeepPartial<T[K]>|T[K]
+  } :
+  T;
 
 export {
   ICommonFields as CommonFields,
   IRemoveCicularReferences as RemoveCicularReferences,
   IObject as Object,
-  IBetterClassAssign as BetterClassAssign,
   IEntriesReturn as EntriesReturn,
-  IAddFallBack as AddFallBack,
   IGetTypeFromKey as GetTypeFromKey,
   IConcatStrIntoKeys as ConcatStrIntoKeys,
   IKeysOfType as KeysOfType,
   ICustomReturn as CustomReturn,
   ILockedParams as LockedParams,
+  IDeepPartial as DeepPartial,
 };
 

@@ -4,6 +4,7 @@ import { Partial } from "@ts-natives/object/interfaces/native-object-interfaces"
 import { RegistryUtils } from "../registry-utils";
 import { RegistryFunction, RegistryProperty } from "../model/registry-classes";
 import { AnyClass } from "@ts-interfaces/misc-interfaces";
+import { DeepPartial } from "@ts-natives/object/interfaces/object-interfaces";
 
 function ClassReflect<T>(description?: string): ClassDecorator<T> {
   return As((target: AnyClass<T>): void => {
@@ -13,7 +14,7 @@ function ClassReflect<T>(description?: string): ClassDecorator<T> {
   })
 }
 
-function MethodReflect<T>(static_: boolean, details: Partial<RegistryFunction<any>>): MethodDecorator<T> {
+function MethodReflect<T>(static_: boolean, details: DeepPartial<RegistryFunction<any>>): MethodDecorator<T> {
   return As((target: AnyClass<T>, propertyKey: DecoratorPropertyKey, descriptor: TypedPropertyDescriptor<T>): void => {
     RegistryUtils.registerMethod(target, static_, details, propertyKey, descriptor);
   })
@@ -25,7 +26,7 @@ function MethodReflect<T>(static_: boolean, details: Partial<RegistryFunction<an
 //   })
 // }
 
-function PropertyReflect<T>(static_: boolean, details: Partial<RegistryProperty<T>>): PropertyDecorator {
+function PropertyReflect<T>(static_: boolean, details: DeepPartial<RegistryProperty<T>>): PropertyDecorator {
   return As((target: AnyClass<T>, propertyKey: DecoratorPropertyKey): void => {
     RegistryUtils.registerProperty(target, static_, details, propertyKey);
   })

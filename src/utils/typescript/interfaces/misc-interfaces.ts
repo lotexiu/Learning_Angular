@@ -1,5 +1,4 @@
-﻿
-/**
+﻿/**
  * Type representing `null` or `never`.
  */
 type INever<T extends null|never = null> = T;
@@ -55,6 +54,24 @@ type IAnyClass<T=null> =
 
 type IAnyType = Function;
 
+/**
+ * Exclui de T os tipos que são atribuíveis a U.
+ * 
+ * @example
+ * type ExcludeExample = _Exclude<'a' | 'b' | 'c', 'a'>; // 'b' | 'c'
+ */
+type _IExclude<T, U> = Exclude<T, U>;
+
+/**
+ * Extrai de T os tipos que são atribuíveis a U.
+ * 
+ * @example
+ * type ExtractExample = _Extract<'a' | 'b' | 'c', 'a' | 'b'>; // 'a' | 'b'
+ */
+type _IExtract<T, U> = Extract<T, U>;
+
+type IIs<T,U> = _IExtract<T,U> extends never ? false : true;
+
 export { 
   INever as Never, 
   INullable as Nullable, 
@@ -66,4 +83,7 @@ export {
   IConstructor as Constructor,
   IAnyClass as AnyClass,
   IAnyType as AnyType,
+  _IExclude as Exclude,
+  _IExtract as Extract,
+  IIs as Is,
 }

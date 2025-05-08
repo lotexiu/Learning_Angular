@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { mathRandom } from '@ts-natives/math/math-utils';
+import { SVGCircle } from '@ts-utils/html/svg/models/shapes/circle';
 import { SVG } from '@ts-utils/html/svg/models/svg';
 
 interface Transition {
@@ -28,9 +29,10 @@ export class LoteFiltersComponent implements OnInit, OnDestroy {
 
   
   ngOnInit() {
-    const svg: SVG = new SVG().assign<SVG>({
+    const svg = new SVG().assign({
       defs: {
-        circles: []
+        circles: [new SVGCircle()],
+        // assign:()=> new SVGDefs()
       }
     })
     console.log(svg)

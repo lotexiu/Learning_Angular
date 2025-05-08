@@ -3,7 +3,7 @@ import { ClipboardUtils } from "../html/clipborad/clipboard-utils";
 import { HTMLUtils } from "../html/html-utils";
 import { ConsoleUtils } from "../natives/console/console-utils";
 import { mathDivide, MathUtils, mathMinus, mathMod, mathMultiply, mathSum } from "../natives/math/math-utils";
-import { GetTypeFromKey, BetterClassAssign } from "../natives/object/interfaces/object-interfaces";
+import { DeepPartial, GetTypeFromKey } from "../natives/object/interfaces/object-interfaces";
 import { ObjectUtils } from "../natives/object/object-utils";
 import { RegexUtils } from "../natives/regex/regex-utils";
 import { strCapitalize, strCapitalizeAll, StringUtils } from "../natives/string/string-utils";
@@ -13,7 +13,6 @@ import { ClassUtils } from "@ts-natives/class/class-utils";
 import { Class } from "@ts-natives/class/model/class";
 import { RegistryUtils } from "./registry/registry-utils";
 import { AnyClass, Constructor } from "@ts-interfaces/misc-interfaces";
-import { RegistryClass } from "./registry/model/registry-classes";
 
 
 class GlobalUtils  {
@@ -51,8 +50,8 @@ declare global {
   }
 
   interface Object {
-    assign<T extends object>(...values: Partial<BetterClassAssign<T>>[]): T;
-    copy(): this;
+    assign(...values: DeepPartial<this>[]): this;
+    copy(): any;
   }
 
 }
@@ -105,7 +104,7 @@ GlobalUtils.registerMethod(String, "capitalizeAll", function(this: string, split
 })
 
 GlobalUtils.registerMethod(Object, "assign", 
-  function<T extends object>(this: T, ...values: Partial<BetterClassAssign<T>>[]): T {
+  function(this: object, ...values: DeepPartial<object>[]): object {
     RegistryUtils.assignObject(this as any, ...values)
     return this
   }

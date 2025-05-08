@@ -1,14 +1,14 @@
 ﻿import { AnyClass } from "@ts-interfaces/misc-interfaces";
 import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
-import { BetterClassAssign, EntriesReturn } from "@ts-natives/object/interfaces/object-interfaces";
+import { DeepPartial, EntriesReturn } from "@ts-natives/object/interfaces/object-interfaces";
 
 class RegistryBaseInfo<T> {
   type?: AnyClass & T |string;
   description?: string;
   onAssign?: Function
 
-  assign(...values: Partial<BetterClassAssign<this>>[]): this {
-    values.forEach((value: Partial<BetterClassAssign<this>>): void => {
+  assign(...values: DeepPartial<this>[]): this {
+    values.forEach((value: DeepPartial<this>): void => {
       (Object.entries(value) as EntriesReturn<this>[])
       .forEach(([key, val]: EntriesReturn<this>): void => {
         this[key] = val;
@@ -32,7 +32,7 @@ class RegistryClassDetails<T> {
 
 class RegistryKey<T> extends RegistryBaseInfo<T> {
   name?: KeyOf<T>
-  default: any
+  default?: any
 }
 
 class RegistryFunction<T> extends RegistryKey<T> {

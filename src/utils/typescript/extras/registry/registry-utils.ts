@@ -1,9 +1,9 @@
 ﻿import { As } from "@ts-extras/generic-utils";
-import { BetterClassAssign, Object } from "@ts-natives/object/interfaces/object-interfaces";
+import { DeepPartial, Object } from "@ts-natives/object/interfaces/object-interfaces";
 import { ClassRegistry } from "./interfaces/registry-interfaces";
 import { RegistryClass, RegistryClassDetails, RegistryFunction, RegistryFunctionArg, RegistryProperty } from "./model/registry-classes";
 import { isAClassDeclaration } from "@ts-natives/object/object-utils";
-import { KeyOf, Partial } from "@ts-natives/object/interfaces/native-object-interfaces";
+import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { FunctionUtils } from "@ts-natives/functions/function-utils";
 import { DecoratorPropertyKey } from "./decorators/interfaces/decorators-interfaces";
 import { Function } from "@ts-interfaces/function-interfaces";
@@ -57,7 +57,7 @@ class RegistryUtils {
   static registerMethod<T>(
     class_: AnyClass<T>, 
     static_: boolean, 
-    details: Partial<RegistryFunction<T>>, 
+    details: DeepPartial<RegistryFunction<T>>, 
     propertyKey: DecoratorPropertyKey, 
     descriptor: TypedPropertyDescriptor<T>
   ): void {
@@ -68,7 +68,7 @@ class RegistryUtils {
   static registerProperty<T>(
     target: AnyClass<T>, 
     static_: boolean, 
-    details: Partial<RegistryProperty<T>>, 
+    details: DeepPartial<RegistryProperty<T>>, 
     propertyKey: DecoratorPropertyKey): void {
     const propertyDetails: RegistryProperty<T> = this.getProperty(target, static_, As(propertyKey));
     propertyDetails.assign(details);
@@ -195,10 +195,10 @@ class RegistryUtils {
     return symbols;
   }
 
-  static assignObject<T extends Object>(target: T, ...sources: Partial<BetterClassAssign<T>>[]): void {
+  static assignObject<T extends Object>(target: T, ...sources: DeepPartial<T>[]): void {
     let registry: RegistryClass<T> = this.registryClass(target.constructor as any) as any
     if (registry.instanceDetails) {
-      sources.forEach((source: Partial<BetterClassAssign<T>>): void => {
+      sources.forEach((source: DeepPartial<T>): void => {
         registry.instanceDetails.properties.forEach((property: RegistryProperty<T>): void => {
           if (property.name && property.name in source) {
             const value: any = source[property.name];
