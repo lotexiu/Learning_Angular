@@ -1,4 +1,6 @@
-﻿/**
+﻿import { Extract } from "@ts-natives/interfaces";
+
+/**
  * Makes all properties of T required.
  *
  * @example
@@ -53,7 +55,7 @@ type _IOmit<T, K extends keyof any> = Omit<T, K>;
  *
  * type Keys = KeyOf<Example>; // "id" | "name"
  */
-type IKeyOf<T=any> = keyof T;
+type IKeyOf<T=any, KeyType=null> = KeyType extends null ? keyof T : Extract<keyof T, KeyType>;
 
 /**
  * Makes all properties of T optional.

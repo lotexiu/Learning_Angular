@@ -19,11 +19,12 @@ class ObjectUtils {
   }
 
   static isNull<T>(value: Nullable<T>, ...customNullValues: any[]): value is Nullable<null> {
+    const negatedValues = [0, '', false] as typeof value[]
     const jsonNullValues: string[] = customNullValues.map((v: any): string=> json(v))
     return (
       jsonNullValues.includes(json(value)) ?
-        true as any :
-        ![0,'',false].includes(value as any) && !value as any
+        true :
+        !negatedValues.includes(value) && !value
     )
   }
 
@@ -51,14 +52,13 @@ class ObjectUtils {
   }
 
   static addPrefixToKeys<T extends Object, Prefix extends string>(value: T, prefix: Prefix): ConcatStrIntoKeys<T, Prefix> {
-    const obj = (value as any) as T & ConcatStrIntoKeys<T, Prefix>
-    (Object.getOwnPropertyNames(value) as KeyOf<T>[])
-      .forEach((key: KeyOf<T>): void => {
-        const newKey = `${prefix}${strCapitalize(key as any)}` as keyof ConcatStrIntoKeys<T, Prefix>
-        obj[newKey] = value[key] as any;
-        value[key] = null as any
+    const obj: any = {};
+    (Object.getOwnPropertyNames(value) as KeyOf<T, string>[])
+      .forEach((key: KeyOf<T, string>): void => {
+        const newKey = `${prefix}${strCapitalize(key)}`
+        obj[newKey] = value[key];
     })
-    return removeNullFields(obj) as any
+    return obj as ConcatStrIntoKeys<T, Prefix>;
   }
 
   static copyValue<T extends (AnyClass|AnyValue), Prefix extends Nullable<string, true> = null >(
@@ -77,7 +77,7 @@ class ObjectUtils {
     }
     
     if (isNull(prefixOnKeys, '')) {
-      return copiedValue as any
+      return copiedValue
     }
     copiedValue = addPrefixToKeys(copiedValue, prefixOnKeys)
     return copiedValue

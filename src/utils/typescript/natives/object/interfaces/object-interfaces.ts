@@ -1,8 +1,7 @@
-﻿import { Function, NativeFunction } from "@ts-natives/functions/interfaces/function-interfaces";
+﻿import { Function } from "@ts-natives/functions/interfaces/function-interfaces";
 import { Extends } from "@ts-interfaces/misc-interfaces";
 import { KeyOf, Pick } from "./native-object-interfaces";
 import { Pair } from "@ts-natives/array/interfaces/array-interfaces";
-import { ObjectUtils } from "../object-utils";
 
 type ICommonFields<T, U> = Pick<T, Extract<keyof T, keyof U>>;
 
