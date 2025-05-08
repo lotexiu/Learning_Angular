@@ -1,5 +1,5 @@
 import { Function } from "@ts-natives/functions/interfaces/function-interfaces";
-import { AnyClass, AnyType, AnyValue, Nullable } from "@ts-interfaces/misc-interfaces";
+import { AnyClass, AnyValue, Nullable } from "@ts-interfaces/misc-interfaces";
 import { strCapitalize } from "@ts-natives/string/string-utils";
 import { ConcatStrIntoKeys, CustomReturn, EntriesReturn, KeysOfType, Object, RemoveCicularReferences } from "./interfaces/object-interfaces";
 import { KeyOf } from "./interfaces/native-object-interfaces";

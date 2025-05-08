@@ -1,8 +1,7 @@
 ﻿import { ArrayType } from "@ts-natives/array/interfaces/array-interfaces";
 
 /**
- * Tipo que representa uma função com tipos de argumentos e tipo de retorno especificados.
- * 
+ * Represents a function type with specified argument and return types.
  * @example
  * type MyFunction = Function<[number, string], false, any, void>;
  * const fn: MyFunction = (num, str) => { console.log(num, str); };
@@ -17,11 +16,9 @@ type IFunction<
 type INativeFunction = Function
 
 /**
- * Tipo que altera o tipo de retorno de uma função.
- * 
- * @template Func - O tipo da função
- * @template NewReturnType - O novo tipo de retorno
- * 
+ * Changes the return type of a function type.
+ * @template Func - The function type
+ * @template NewReturnType - The new return type
  * @example
  * type OriginalFunction = (a: number, b: string) => boolean;
  * type ModifiedFunction = ModifyReturnType<OriginalFunction, void>; // (a: number, b: string) => void
@@ -30,34 +27,30 @@ type IModifyReturnType<Func extends (...args: any) => any, NewReturnType> =
   Func extends (...args: infer Args) => any ? (...args: Args) => NewReturnType : never;
 
 /**
- * Obtém os parâmetros de um tipo de função em uma tupla.
- * 
+ * Gets the parameters of a function type as a tuple.
  * @example
- * type ParametersExample = Parameters<(a: number, b: string) => void> //[a: number, b: string]
+ * type ParametersExample = Parameters<(a: number, b: string) => void>; //[a: number, b: string]
  */
 type _IParameters<T> = T extends (...args: infer P) => any ? P : never;
 
 /**
- * Obtém os parâmetros de um tipo de função construtora em uma tupla.
- * 
+ * Gets the parameters of a constructor function type as a tuple.
  * @example
- * type ConstructorParametersExample = _ConstructorParameters<new (a: number, b: string) => void>; // [number, string]
+ * type ConstructorParametersExample = ConstructorParameters<new (a: number, b: string) => void>; // [number, string]
  */
 type _IConstructorParameters<T extends abstract new (...args: any) => any> = ConstructorParameters<T>;
 
 /**
- * Obtém o tipo de retorno de um tipo de função.
- * 
+ * Gets the return type of a function type.
  * @example
- * type ReturnTypeExample = _ReturnType<() => string>; // string
+ * type ReturnTypeExample = ReturnType<() => string>; // string
  */
 type _IReturnType<T extends (...args: any) => any> = ReturnType<T>;
 
 /**
- * Obtém o tipo de retorno de um tipo de função construtora.
- * 
+ * Gets the instance type of a constructor function type.
  * @example
- * type InstanceTypeExample = _InstanceType<new () => { a: number }>; // { a: number }
+ * type InstanceTypeExample = InstanceType<new () => { a: number }>; // { a: number }
  */
 type _IInstanceType<T extends abstract new (...args: any) => any> = InstanceType<T>;
 

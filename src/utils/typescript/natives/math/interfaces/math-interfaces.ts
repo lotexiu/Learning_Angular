@@ -1,26 +1,56 @@
 import { ValidNumber, BasicDigit, _IReverse, _ICompare, NumDigit } from "@ts-natives/number/interfaces/number-interfaces";
 import { Never } from "src/utils/typescript/interfaces/misc-interfaces";
-  
+
+/**
+ * Type for multiplying or dividing by 10.
+ * @example
+ * type T = By10Type; // 'multiply' | 'divide'
+ */
 type IBy10Type = 'multiply'|'divide'
 
+/**
+ * List of possible comparison results: -1, 0, 1.
+ * @example
+ * type T = ListCompare; // -1 | 0 | 1
+ */
 type IListCompare = [-1, 0, 1]
 
 type ICompare = IListCompare[number]
 
 type IBolleanCompare = boolean|null;
 
+/**
+ * Converts a boolean/null to a comparison result (-1, 0, 1).
+ * @example
+ * type T = BooleanToCompare<true>; // 1
+ * type T2 = BooleanToCompare<false>; // 0
+ * type T3 = BooleanToCompare<null>; // -1
+ */
 type IBooleanToCompare<T extends IBolleanCompare = Never> = 
   T extends true ? 1 :
   T extends false ? 0 :
   -1
 ;
 
+/**
+ * Removes sign from a number or string, returning only the absolute value.
+ * @example
+ * type T = Abs<-5>; // 5
+ * type T2 = Abs<"-10">; // 10
+ */
 type IAbs<T extends (number|string)> =
   `${T}` extends `-${infer R}` ? ValidNumber<R> :
   `${T}` extends `+${infer R}` ? ValidNumber<R> :
   ValidNumber<T>
 ;
 
+/**
+ * Compares two digits and returns -1, 0, or 1.
+ * @example
+ * type T = DigitCompare<2, 3>; // -1
+ * type T2 = DigitCompare<5, 5>; // 0
+ * type T3 = DigitCompare<8, 2>; // 1
+ */
 type IDigitCompare<
   A extends BasicDigit,
   B extends BasicDigit
