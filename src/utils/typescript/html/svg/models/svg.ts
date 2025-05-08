@@ -11,7 +11,7 @@ import { SVGDefs } from "./core/defs";
 import { SVGText } from "./text/text";
 import { SVGPolyline } from "./shapes/polyline";
 import { SVGPath } from "./shapes/path";
-import { Function } from "@ts-interfaces/function-interfaces";
+import { Function } from "@ts-natives/functions/interfaces/function-interfaces";
 import { Nullable } from "@ts-interfaces/misc-interfaces";
 import { cLog } from "@ts-natives/console/console-utils";
 import { PropertyReflect } from "@ts-extras/registry/decorators/decorators";

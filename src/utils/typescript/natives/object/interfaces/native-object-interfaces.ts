@@ -1,61 +1,63 @@
 ﻿/**
- * Torna todas as propriedades de T obrigatórias.
- * 
+ * Makes all properties of T required.
+ *
  * @example
  * type RequiredExample = _Required<{ a?: number; b?: string }>; // { a: number; b: string }
  */
 type _IRequired<T> = Required<T>;
 
 /**
- * Torna todas as propriedades de T somente leitura.
- * 
+ * Makes all properties of T readonly.
+ *
  * @example
- * type ReadonlyExample = _Readonly<{ a: number; b: string }>; // { readonly a: number; readonly b: string }
+ * type ReadonlyExample = _Readonly<{ a: number; b?: string }>; // { readonly a: number; readonly b: string }
  */
 type _IReadonly<T> = Readonly<T>;
 
 /**
- * De T, seleciona um conjunto de propriedades cujas chaves estão na união K.
- * 
+ * From T, picks a set of properties whose keys are in the union K.
+ *
  * @example
  * type PickExample = _Pick<{ a: number; b: string }, 'a'>; // { a: number }
  */
-type _IPick<T, K extends keyof T> = Pick<T, K>;
+type _IPick<T, KeyType> = {
+  [K in keyof T as K extends KeyType ? K : never]: T[K]
+}
 
 /**
- * Constrói um tipo com um conjunto de propriedades K do tipo T.
- * 
+ * Constructs a type with a set of properties K of type T.
+ *
  * @example
  * type RecordExample = _Record<'a' | 'b', number>; // { a: number; b: number }
  */
 type _IRecord<K extends keyof any, T> = Record<K, T>;
 
 /**
- * Constrói um tipo com as propriedades de T, exceto aquelas no tipo K.
- * 
+ * Constructs a type with the properties of T except for those in type K.
+ *
  * @example
  * type OmitExample = _Omit<{ a: number; b: string }, 'a'>; // { b: string }
  */
 type _IOmit<T, K extends keyof any> = Omit<T, K>;
 
 /**
- * Tipo que retorna as chaves de um tipo como uma união de strings.
- * 
- * @template T - O tipo do objeto ou classe
- * 
+ * Type that returns the keys of a type as a union of strings.
+ *
+ * @template T - The type of the object or class
+ *
  * @example
  * interface Example {
  *   id: number;
  *   name: string;
  * }
- * 
+ *
  * type Keys = KeyOf<Example>; // "id" | "name"
  */
 type IKeyOf<T=any> = keyof T;
 
 /**
- * Torna todas as propriedades de T opcionais.
- * 
+ * Makes all properties of T optional.
+ *
  * @example
  * type PartialExample = _Partial<{ a: number; b: string }>; // { a?: number; b?: string }
  */

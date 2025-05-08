@@ -1,14 +1,31 @@
-﻿import { Function } from "@ts-interfaces/function-interfaces";
+﻿import { Function, NativeFunction } from "@ts-natives/functions/interfaces/function-interfaces";
 import { Extends } from "@ts-interfaces/misc-interfaces";
-import { KeyOf } from "./native-object-interfaces";
+import { KeyOf, Pick } from "./native-object-interfaces";
 import { Pair } from "@ts-natives/array/interfaces/array-interfaces";
+import { ObjectUtils } from "../object-utils";
 
 type ICommonFields<T, U> = Pick<T, Extract<keyof T, keyof U>>;
 
-type IObject<T=null> =  
-  T extends null ? 
-    Object :
-    Extends<T, Object>
+type IPrimitiveObject = {
+  [key: string|number]: any;
+  [key: symbol]: symbol;
+} & Object
+
+type _Object = Object & {[key: string|number]: any;} 
+  & INegate<[]>;
+
+type _StringKeys<T> = Extract<keyof T, string>;
+type INegate<T> = {
+  [K in _StringKeys<T>]: {
+    [P in _StringKeys<T>]?: P extends K ? never : any//|T[P]
+  }
+}[_StringKeys<T>];
+
+type IObject<T=_Object> =
+  T extends Function ? never :
+  T extends Array<any> ? never :
+  T extends object ? T :
+  never;
 
 /**
  * Usado para limitar os campos que podem ser criados em um objeto e seus tipos.
@@ -102,8 +119,6 @@ type IConcatStrIntoKeys<Base, Prefix extends string|null|undefined> = {
   ]: Base[Key];
 };
 
-
-
 /**
  * Extrai o tipo de uma chave específica de um objeto ou classe.
  * 
@@ -134,6 +149,7 @@ type IDeepPartial<T> =
 export {
   ICommonFields as CommonFields,
   IRemoveCicularReferences as RemoveCicularReferences,
+  IPrimitiveObject as PrimitiveObject,
   IObject as Object,
   IEntriesReturn as EntriesReturn,
   IGetTypeFromKey as GetTypeFromKey,

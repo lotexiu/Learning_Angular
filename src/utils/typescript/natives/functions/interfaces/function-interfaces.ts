@@ -14,6 +14,8 @@ type IFunction<
   InfType = any,
 > = (...args: ArrayType<Types, Inf, InfType>) => RType
 
+type INativeFunction = Function
+
 /**
  * Tipo que altera o tipo de retorno de uma função.
  * 
@@ -61,6 +63,7 @@ type _IInstanceType<T extends abstract new (...args: any) => any> = InstanceType
 
 export { 
   IFunction as Function, 
+  INativeFunction as NativeFunction,
   IModifyReturnType as ModifyReturnType, 
   _IParameters as Parameters, 
   _IReturnType as ReturnType, 

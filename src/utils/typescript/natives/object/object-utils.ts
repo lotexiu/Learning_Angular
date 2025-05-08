@@ -1,5 +1,5 @@
-import { Function } from "@ts-interfaces/function-interfaces";
-import { AnyClass, Nullable } from "@ts-interfaces/misc-interfaces";
+import { Function } from "@ts-natives/functions/interfaces/function-interfaces";
+import { AnyClass, AnyType, AnyValue, Nullable } from "@ts-interfaces/misc-interfaces";
 import { strCapitalize } from "@ts-natives/string/string-utils";
 import { ConcatStrIntoKeys, CustomReturn, EntriesReturn, KeysOfType, Object, RemoveCicularReferences } from "./interfaces/object-interfaces";
 import { KeyOf } from "./interfaces/native-object-interfaces";
@@ -39,7 +39,7 @@ class ObjectUtils {
     return result
   }
 
-  static makeObjectBasedOn<T extends Object>(
+  static makeObjectBasedOn<T extends (AnyClass|AnyValue)>(
     value: T
   ): T {
     const obj = {} as T
@@ -61,7 +61,7 @@ class ObjectUtils {
     return removeNullFields(obj) as any
   }
 
-  static copyValue<T extends (AnyClass|Object), Prefix extends Nullable<string, true> = null >(
+  static copyValue<T extends (AnyClass|AnyValue), Prefix extends Nullable<string, true> = null >(
     value:T, 
     prefixOnKeys?: Prefix,
   )

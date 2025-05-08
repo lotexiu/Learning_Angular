@@ -6,7 +6,7 @@ import { isAClassDeclaration } from "@ts-natives/object/object-utils";
 import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { FunctionUtils } from "@ts-natives/functions/function-utils";
 import { DecoratorPropertyKey } from "./decorators/interfaces/decorators-interfaces";
-import { Function } from "@ts-interfaces/function-interfaces";
+import { Function } from "@ts-natives/functions/interfaces/function-interfaces";
 import { AnyClass } from "@ts-interfaces/misc-interfaces";
 
 class RegistryUtils {
@@ -201,7 +201,7 @@ class RegistryUtils {
       sources.forEach((source: DeepPartial<T>): void => {
         registry.instanceDetails.properties.forEach((property: RegistryProperty<T>): void => {
           if (property.name && property.name in source) {
-            const value: any = source[property.name];
+            const value: any = source[property.name as KeyOf<DeepPartial<T>>];
             if (value !== undefined) {
               if (property.onAssign) {
                 target[property.name] = property.onAssign(value, registry.type);
