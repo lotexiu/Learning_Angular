@@ -22,7 +22,7 @@ export class Timer {
     } else if (!isNull(this._startTime)) {
       return Date.now()
     }
-    cLog({type:"warn"}, this.TIME_HASNT_STARTED);
+    this.log();
     return -1;
   }
 
@@ -48,7 +48,13 @@ export class Timer {
     if (!isNull(this._startTime) && !isNull(this.endTime) ) {
       return this.endTime - this._startTime;
     }
-    cLog({type:"warn"}, this.TIME_HASNT_STARTED);
+    this.log();
     return -1
+  }
+
+  private log() {
+    if (this.TIME_HASNT_STARTED){
+      cLog({type:"warn"}, this.TIME_HASNT_STARTED);
+    }
   }
 }
