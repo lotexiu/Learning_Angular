@@ -7,7 +7,7 @@ import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { FunctionUtils } from "@ts-natives/functions/function-utils";
 import { DecoratorPropertyKey } from "./decorators/interfaces/decorators-interfaces";
 import { Function } from "@ts-natives/functions/interfaces/function-interfaces";
-import { AnyClass } from "@ts-interfaces/misc-interfaces";
+import { AnyClass, Prototype } from "@ts-interfaces/misc-interfaces";
 
 class RegistryUtils {
   static classRegistry: ClassRegistry = {}
@@ -30,32 +30,38 @@ class RegistryUtils {
   }
   
   static registryClassByInstance<T>(instance: Object<T>, description?: string): void {
-    const class_: AnyClass<T> = instance.constructor as AnyClass<T>;
-    if (!this.classRegistry[class_.name]) {
-      this.registryClass(class_, description);
-    }
-    if (!this.classRegistry[class_.name].instanceDetails) {
-      const instanceDetails: RegistryClassDetails<T> = this.initRegistryClass(instance, description).instanceDetails
-      this.classRegistry[class_.name].instanceDetails = instanceDetails;
-    }
+    this.initIfNotExists(instance, description);
   }
 
-  static getOrAddRegistryClass<T>(classOrInstance: AnyClass<T>|Object<T>): RegistryClass<T> {
-    if (isAClassDeclaration(classOrInstance)) {
-      if (!this.classRegistry[As<AnyClass<T>>(classOrInstance).name]) {
-        this.registryClass(As<AnyClass<T>>(classOrInstance));
-      }
-      return this.classRegistry[As<AnyClass<T>>(classOrInstance).name]
+  static getOrAddRegistryClass<T>(data: AnyClass<T>|Prototype<T>|Object<T>): RegistryClass<T> {
+    return this.initIfNotExists(data);
+  }
+
+  static initIfNotExists<T>(
+    data: AnyClass<T>|Prototype<T>|Object<T>,
+    description?: string
+  ): RegistryClass<T> {
+    let class_: AnyClass<T>;
+    let objOrProto: Prototype<T>|Object<T>;
+    if (isAClassDeclaration(data)){
+      class_ = data;
+      objOrProto = data.prototype;
     } else {
-      if (!this.classRegistry[classOrInstance.constructor.name]) {
-        this.registryClassByInstance(classOrInstance);
-      }
-      return this.classRegistry[classOrInstance.constructor.name]
+      class_ = data.constructor as AnyClass<T>;
+      objOrProto = data;
     }
+    if (!this.classRegistry[class_.name]) {
+      this.registryClass(class_,description);
+    }
+    if (!this.classRegistry[class_.name].instanceDetails) {
+      const instanceDetails: RegistryClassDetails<T> = this.initRegistryClass(objOrProto,description).instanceDetails
+      this.classRegistry[class_.name].instanceDetails = instanceDetails;
+    }
+    return this.classRegistry[class_.name];
   }
   
   static registerMethod<T>(
-    class_: AnyClass<T>, 
+    class_: Prototype<T>, 
     static_: boolean, 
     details: DeepPartial<RegistryFunction<T>>, 
     propertyKey: DecoratorPropertyKey, 
@@ -66,15 +72,15 @@ class RegistryUtils {
   }
 
   static registerProperty<T>(
-    target: AnyClass<T>, 
+    data: Prototype<T>, 
     static_: boolean, 
     details: DeepPartial<RegistryProperty<T>>, 
     propertyKey: DecoratorPropertyKey): void {
-    const propertyDetails: RegistryProperty<T> = this.getProperty(target, static_, As(propertyKey));
+    const propertyDetails: RegistryProperty<T> = this.getProperty<T>(data, static_, As(propertyKey));
     propertyDetails.assign(details);
   }
 
-  static getMethod(class_: AnyClass<any>, static_: boolean, methodName: string): RegistryFunction<any> {
+  static getMethod<T>(class_: AnyClass<T>|Prototype<T>, static_: boolean, methodName: string): RegistryFunction<any> {
     const find: Function = (method: RegistryFunction<any>): boolean => method.name === methodName
 
     const registryClass: RegistryClass<any> = this.getOrAddRegistryClass(class_);
@@ -93,7 +99,7 @@ class RegistryUtils {
     }
   }
 
-  static getProperty<T>(target: AnyClass<T>, static_: boolean, propertyKey: any): RegistryProperty<T> {
+  static getProperty<T>(target: AnyClass<T>|Prototype<T>, static_: boolean, propertyKey: any): RegistryProperty<T> {
     const find: Function = (property: RegistryProperty<T>): boolean => property.name === propertyKey
     const registryClass: RegistryClass<T> = As(this.getOrAddRegistryClass(target));
     if (static_) {
@@ -111,35 +117,40 @@ class RegistryUtils {
     }
   }
 
-  private static initRegistryClass<T>(classOrInstance: AnyClass<T>|Object<T>, description?: string): RegistryClass<T> {
+  private static initRegistryClass<T>(
+    data: AnyClass<T>|Object<T>|Prototype<T>, 
+    description?: string
+  ): RegistryClass<T> {
     const registryClass = new RegistryClass<T>();
     let key: 'staticDetails'|'instanceDetails';
-    if (isAClassDeclaration(classOrInstance)) {
-      registryClass.Class = As(classOrInstance);
+    if (isAClassDeclaration(data)) {
+      registryClass.Class = As(data);
       key = 'staticDetails'
     } else {
-      registryClass.Class = classOrInstance.constructor as AnyClass<T> & T;
+      registryClass.Class = data.constructor as AnyClass<T> & T;
       key = 'instanceDetails'
     }
     registryClass.type = registryClass.Class;
     registryClass.description = description || `${registryClass.Class.name} class (Default)`;
     registryClass[key] = new RegistryClassDetails<T>()
-    registryClass[key].methods = this.initialMethodDetails(As(classOrInstance))
-    registryClass[key].properties = this.initialPropertyDetails(As(classOrInstance))
-    registryClass[key].symbols = this.initialSymbolDetails(As(classOrInstance));
+    registryClass[key].methods = this.initialMethodDetails(As(data))
+    registryClass[key].properties = this.initialPropertyDetails(As(data))
+    registryClass[key].symbols = this.initialSymbolDetails(As(data));
     return registryClass;
   }
 
-  private static initialMethodDetails<T>(classOrInstance: T): RegistryFunction<T>[] {
-    const keys: KeyOf<T>[] = As(Object.getOwnPropertyNames(classOrInstance))
+  private static initialMethodDetails<T>(data: T): RegistryFunction<T>[] {
+    const keys: KeyOf<T>[] = As(Object.getOwnPropertyNames(data))
     const methods: RegistryFunction<T>[] = keys
-    .filter((key: KeyOf<T>): boolean => typeof classOrInstance[key] === 'function')
+    .filter((key: KeyOf<T>): boolean => {
+      return typeof data[key] === 'function' && key !== 'constructor'
+    })
     .map((key: KeyOf<T>): RegistryFunction<T> => {
       const method: RegistryFunction<T> = new RegistryFunction<T>();
-      method.assign(FunctionUtils.functionsDetails(As(classOrInstance[key])))
+      method.assign(FunctionUtils.functionsDetails(As(data[key])))
       method.assign({
         description: `${String(method.name)} method (Default)`,
-        default: classOrInstance[key],
+        default: data[key],
         type: 'Function',
         returnType: undefined,
         args: As<KeyOf<T>[]>(method.args!).map((argName: KeyOf<T>): RegistryFunctionArg<T> => {

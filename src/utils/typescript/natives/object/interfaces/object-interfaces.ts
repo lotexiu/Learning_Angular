@@ -32,7 +32,7 @@ type INegate<T> = {
 type IObject<T=_Object> =
   T extends Function ? never :
   T extends Array<any> ? never :
-  T extends object ? T :
+  T extends object ? T & Object :
   never;
 
 /**

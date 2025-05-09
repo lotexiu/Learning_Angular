@@ -25,6 +25,10 @@ type IExtends<T, U, _nv extends INever=INever> = T extends U ? T&U : never;
 
 type IConstructor<T> = new (...args: any[]) => T;
 
+type IPrototype<T> = {
+  constructor: IConstructor<T>;
+} ;
+
 type IAnyClass<T=null> = 
   T extends null ?
     IConstructor<any> & Function & NewableFunction:
@@ -46,4 +50,5 @@ export {
   IAnyType as AnyType,
   IAnyValue as AnyValue,
   IIs as Is,
+  IPrototype as Prototype,
 }

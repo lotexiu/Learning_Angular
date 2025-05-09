@@ -3,19 +3,17 @@ import { As } from "@ts-extras/generic-utils";
 import { Partial } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { RegistryUtils } from "../registry-utils";
 import { RegistryFunction, RegistryProperty } from "../model/registry-classes";
-import { AnyClass } from "@ts-interfaces/misc-interfaces";
+import { AnyClass, Prototype } from "@ts-interfaces/misc-interfaces";
 import { DeepPartial } from "@ts-natives/object/interfaces/object-interfaces";
 
 function ClassReflect<T>(description?: string): ClassDecorator<T> {
   return As((target: AnyClass<T>): void => {
-    if (target && target.name) {
-      RegistryUtils.registryClass(target, description);
-    }
+    RegistryUtils.registryClass(target, description);
   })
 }
 
 function MethodReflect<T>(static_: boolean, details: DeepPartial<RegistryFunction<any>>): MethodDecorator<T> {
-  return As((target: AnyClass<T>, propertyKey: DecoratorPropertyKey, descriptor: TypedPropertyDescriptor<T>): void => {
+  return As((target: Prototype<T>, propertyKey: DecoratorPropertyKey, descriptor: TypedPropertyDescriptor<T>): void => {
     RegistryUtils.registerMethod(target, static_, details, propertyKey, descriptor);
   })
 }
@@ -27,7 +25,7 @@ function MethodReflect<T>(static_: boolean, details: DeepPartial<RegistryFunctio
 // }
 
 function PropertyReflect<T>(static_: boolean, details: DeepPartial<RegistryProperty<T>>): PropertyDecorator {
-  return As((target: AnyClass<T>, propertyKey: DecoratorPropertyKey): void => {
+  return As((target: Prototype<T>, propertyKey: DecoratorPropertyKey): void => {
     RegistryUtils.registerProperty(target, static_, details, propertyKey);
   })
 }
