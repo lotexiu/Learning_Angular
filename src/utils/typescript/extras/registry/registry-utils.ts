@@ -61,22 +61,22 @@ class RegistryUtils {
   }
   
   static registerMethod<T>(
-    class_: Prototype<T>, 
+    proto: Prototype<T>, 
     static_: boolean, 
     details: DeepPartial<RegistryFunction<T>>, 
     propertyKey: DecoratorPropertyKey, 
     descriptor: TypedPropertyDescriptor<T>
   ): void {
-    const methodDetails: RegistryFunction<T> = this.getMethod(class_, static_, As(propertyKey));
+    const methodDetails: RegistryFunction<T> = this.getMethod(proto, static_, As(propertyKey));
     methodDetails.assign(details);
   }
 
   static registerProperty<T>(
-    data: Prototype<T>, 
+    proto: Prototype<T>, 
     static_: boolean, 
     details: DeepPartial<RegistryProperty<T>>, 
     propertyKey: DecoratorPropertyKey): void {
-    const propertyDetails: RegistryProperty<T> = this.getProperty<T>(data, static_, As(propertyKey));
+    const propertyDetails: RegistryProperty<T> = this.getProperty<T>(proto, static_, As(propertyKey));
     propertyDetails.assign(details);
   }
 
