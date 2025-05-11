@@ -208,7 +208,7 @@ class RegistryUtils {
 
   static assignObject<T extends Object>(target: T, ...sources: DeepPartial<T>[]): void {
     let registry: RegistryClass<T> = this.registryClass(target.constructor as any) as any
-    if (registry.instanceDetails) {
+    if (target.constructor.name != 'Object' && registry.instanceDetails) {
       sources.forEach((source: DeepPartial<T>): void => {
         registry.instanceDetails.properties.forEach((property: RegistryProperty<T>): void => {
           if (property.name && property.name in source) {

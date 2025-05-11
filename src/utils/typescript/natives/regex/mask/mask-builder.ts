@@ -1,210 +1,107 @@
-﻿import { max } from "rxjs"
-import { cLog, isNull } from "src/utils/easy-use"
-import { maskKeys } from "./constants/mask-keys"
+﻿import { Nullable } from "@ts-interfaces/misc-interfaces";
+import { Class } from "@ts-natives/class/model/class";
+import { cLog } from "@ts-natives/console/console-utils";
+import { DeepPartial, Object } from "@ts-natives/object/interfaces/object-interfaces";
+import { isNull } from "@ts-natives/object/object-utils";
 
+type MinMax = Object<{
+  min: Nullable<number>;
+  max: Nullable<number>;
+}>
 
-interface MaskValue {
-  amount: number
-  maxAmount: number
-  optional: boolean
+abstract class BaseMask extends Class {
+  quantity: MinMax = {max:1, min:1} as MinMax;
+  optional: boolean = false;
+
+  protected quantityMask(): string {
+    const { min, max } = this.quantity;
+    if (this.optional) {
+      if (isNull(max, 0, 1)) return '?';
+      return `{0,${max}}`;
+    }
+    if (isNull(min) && isNull(max)) return '*';
+    if (min === max && !isNull(min)) {
+      if (isNull(min, 0, 1)) return '';
+      return `{${min}}`;
+    }
+    if (min === 1 && isNull(max, 0)) return '+';
+    if (!isNull(min, 0, 1) && isNull(max, 0, 1)) return `{${min},}`;
+    if (isNull(min, 0) && !isNull(max, 0, 1)) return `{0,${max}}`;
+    return `{${min ?? 0},${max ?? 1}}`;
+  }
+
+  abstract result(): string
+
+  mask(): string {
+    if (this.quantity.min === 0 && this.quantity.max === 0) return '';
+    return `(${this.result()})`+this.quantityMask()
+  }
 }
 
-interface MaskKeyValue<T> extends MaskValue {
-  value: string
-  set: (
-    value?: string,
-    amount?: number,
-    maxAmount?: number,
-    optional?: boolean,
-  ) => MaskBuilderValue<T>
-}
+class MaskBuilder extends BaseMask {
+  masks: (MaskGroup|Mask)[] = [];
 
-class MaskBuilderValue<T> implements MaskValue{
-  key: MaskKeyValue<T> = {
-    value: '',
-    amount: 1,
-    maxAmount: 1,
-    optional: false,
-    set:(
-      value: string = '',
-      amount: number = 1,
-      maxAmount: number = 1,
-      optional: boolean = false,
-    ) => {
-      this.key = {
-        value,
-        amount,
-        maxAmount,
-        optional,
-        set: this.key.set
-      }
-      return this
-    }
+  add(value: MaskGroup|Mask): void {
+    this.masks.push(value)
   }
 
-  amount: number = 1
-  maxAmount: number = 1
-  optional: boolean = false
-  lookType: '<!'|'<='|'=>'|'!>'|'' = ''
-
-  leftValues: MaskBuilderValue<this>[] = []
-  rightValues: MaskBuilderValue<this>[] = []
-
-  parent!: T
-
-  new(
-    side: 'left' | 'right',
-    matchAmount: number = 1,
-    maxAmount: number = 1,
-    optional: boolean = false,
-  ){
-    const group = new MaskBuilderValue<this>()
-    group.amount = matchAmount
-    group.maxAmount = maxAmount
-    group.optional = optional
-    group.parent = this
-    this[`${side}Values`].push(group)
-    return group
+  result(): string {
+    return this.masks.map((children:BaseMask): string => children.mask()).join('|')
   }
 
-  look(lookType: typeof this.lookType) {
-    this.lookType = lookType
-    return this
-  }
-
-  private bulidAmount(value: any): string {
-    let mask: string = '';
-    if (value.amount > 1 || value.amount >= 0 && value.maxAmount > 1) {
-      mask += `{${value.amount}`
-      if (value.maxAmount > 1) {
-        if (value.maxAmount == Infinity) {
-          mask += ','
-        } else {
-          mask += `,${value.maxAmount}`
-        }
-      }
-      mask += '}';
-    }
-    return mask;
-  }
-
-  private buildDetail(value: any) {
-    if (value.optional) {
-      return '?';
-    }
-    return ''
+  log(): void {
+    cLog(this.mask())
   }
   
+  static test(): void {
+    const maskBuilder = new MaskBuilder();
+    const configs: DeepPartial<Mask>[] = [
+      { value: 'normal', quantity: { min: 1, max: 2 } },
+      { value: 'optional', quantity: { min: undefined, max: 2 } },
+      { value: 'any', quantity: { min: undefined, max: undefined } },
+      { value: 'minimum', quantity: { min: 3, max: 0 } },
+      { value: 'at least', quantity: { min: 1, max: 0 } },
+    ];
+    configs.forEach((cfg: DeepPartial<Mask>): void => {
+      maskBuilder.add(new Mask().assign(cfg));
+    });
+    maskBuilder.log();
+  }
+}
 
-  build(withMask: boolean = false) {
-    if (this.key.value.startsWith('\\') && !withMask){
-      return ''
-    }
-    const keyMask = `${this.key.value}${this.bulidAmount(this.key)}`
-    const leftMask: string = this.leftValues.map(
-      (value: MaskBuilderValue<this>): string => value.build(withMask)).join('')
-    const rightMask: string = this.rightValues.map(
-      (value: MaskBuilderValue<this>): string => value.build(withMask)).join('')
+class MaskGroup extends BaseMask {
+  masks: (MaskGroup|Mask)[] = [];
+  leftValues: (MaskGroup|Mask)[] = [];
+  rightValues: (MaskGroup|Mask)[] = [];
+
+  result(): string {
     let mask: string = ''
-
-    const thisAmount: string = this.bulidAmount(this)
-    const thisDetails: string = this.buildDetail(this)
-    const keyDetails: string = this.buildDetail(this.key);
-
-    if (this.parent instanceof MaskBuilder) {
-      // mask += `(<!${keyMask})`
-      // mask += '^'
+    mask += this.leftValues.map((children:BaseMask): string => children.mask()).join('')
+    if (this.masks.length > 0 ) {
+      mask += `(${this.masks.map((children:BaseMask): string => children.mask()).join('|')})`
     }
-    mask += isNull(this.lookType,'') ? '' : `(${this.lookType}`
-    mask += isNull(thisDetails,'') ? '' : '('
-    mask += isNull(thisAmount,'') ? '' : `(`
-    mask += isNull(keyDetails,'') ? '' : '('
-    mask += `${leftMask}${keyMask}${rightMask}`
-    mask += isNull(keyDetails,'') ? '' : `)${keyDetails}` 
-    mask += isNull(thisAmount,'') ? '' : `)${thisAmount}`
-    mask += isNull(thisDetails,'') ? '' : `)${thisDetails}`
-    mask += isNull(this.lookType,'') ? '' : `)`
+    mask += this.rightValues.map((children:BaseMask): string => children.mask()).join('')
     return mask
-  }
-
-  regex(): string {
-    if (this.key.value.startsWith('\\')){
-      return ''
-    }
-
-    // (?<!\d{1,3})\d{1,3}(?!.$|(?<=\.\d{1,2}))
-    // (?<!\d{1,3})\d{1,3}(?!\d$|(?<=\.\d{1,2}))
-    
-    // (?<!\d{1,3})\d{1,3}(?![^.])
-    // console.log(this.build())
-
-    const reservedRegexKeys: string[] = ['.']
-    let regex: string = '';
-
-    // replace
-
-    // let escapedChar: boolean = false;
-    // [...this.build()].forEach((char)=>{
-    //   if (Object.hasOwn(maskKeys, char)) {
-    //   } else {
-    //     regex += char
-    //   }
-    // })
-
-    // for (const key  in maskKeys) {
-    //   const escapedKey: string = reservedRegexKeys.includes(key) ? `\\${key}` : key
-    //   const regexPattern = new RegExp(`(?<!\\\\)(?:${escapedKey})(?![^{]*})`, 'g');
-    //   regex = regex.replace(regexPattern, maskKeys[key as keyof typeof maskKeys])
-    // }
-    return regex
   }
 }
 
-class MaskBuilder {
-  values: MaskBuilderValue<this>[] = []
+class Mask extends BaseMask{
+  value: string = '';
+  leftValues: (MaskGroup|Mask)[] = [];
+  rightValues: (MaskGroup|Mask)[] = [];
 
-  new(
-    matchAmount: number = 1,
-    maxAmount: number = 1,
-    optional: boolean = false,
-  ){
-    const group = new MaskBuilderValue<this>()
-    group.amount = matchAmount
-    group.maxAmount = maxAmount
-    group.optional = optional
-    group.parent = this
-    this.values.push(group)
-    return group
-  }
-  
-  
-  build(withMask: boolean = false): string {
-    let mask = ''
-    this.values.forEach((value: MaskBuilderValue<this>, idx: number): void => {
-      mask += `${idx?'|':''}${value.build(withMask)}`
-    })
+  result(): string {
+    let mask: string = ''
+    mask += this.leftValues.map((children:BaseMask): string => children.mask()).join('')
+    mask += this.value
+    mask += this.rightValues.map((children:BaseMask): string => children.mask()).join('')
     return mask
-  }
-
-  regex() {
-    let regStr = ''
-    this.values.forEach((value: MaskBuilderValue<this>, idx: number): void => {
-      regStr += `${idx?'|':''}${value.regex()}`
-    })
-    return regStr
-  }
-
-  log(): any {
-    cLog('Building Mask')
-    let results: any[] = [
-      this,
-      this.build(true),
-      // this.regex()
-    ]
-    cLog({TimeDifference:true}, ...results)
   }
 }
 
 export {
-  MaskBuilder
+  MinMax,
+  MaskBuilder,
+  MaskGroup,
+  Mask
 }

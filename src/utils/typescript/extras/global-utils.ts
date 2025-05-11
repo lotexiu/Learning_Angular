@@ -43,6 +43,7 @@ declare global {
     sum(...plusValues:number[]): number
     minus(...minusValues:number[]): number
     mod(value: number): number
+    trunc(): number
   }
   interface String {
     capitalize(): string;
@@ -95,6 +96,9 @@ GlobalUtils.registerMethod(Number, "-", function(this: number, ...minusValues:nu
 GlobalUtils.registerMethod(Number, "%", function(this: number, value: number): number {
   return mathMod(this, value)
 })
+GlobalUtils.registerMethod(Number, "trunc", function(this: number): number {
+  return Math.trunc(this)
+})
 
 GlobalUtils.registerMethod(String, "capitalize", function(this: string): string {
   return strCapitalize(this)
@@ -122,7 +126,6 @@ const utilsClasses: AnyClass[] = [
   ObjectUtils,
   StringUtils,
   Timer,
-  Class,
   ClassUtils,
 ];
 utilsClasses.forEach((utilsClass: AnyClass): void => {
