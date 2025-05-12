@@ -1,5 +1,5 @@
 ﻿import { isNull } from "@ts-natives/object/object-utils"
-import { Mask, MaskBuilder, MaskGroup } from "./mask-builder"
+import { Mask, MaskBuilder, MaskGroup } from "./model/mask-builder"
 
 class MaskUtils {
   /**
@@ -68,6 +68,9 @@ class MaskUtils {
     }
     return builder
   }
+
+
+  static a(){}
 }
 
 export {

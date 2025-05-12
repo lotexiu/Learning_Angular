@@ -1,18 +1,9 @@
 import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
-import { ClipboardUtils } from "../html/clipborad/clipboard-utils";
-import { HTMLUtils } from "../html/html-utils";
-import { ConsoleUtils } from "../natives/console/console-utils";
-import { mathDivide, MathUtils, mathMinus, mathMod, mathMultiply, mathSum } from "../natives/math/math-utils";
 import { DeepPartial, GetTypeFromKey } from "../natives/object/interfaces/object-interfaces";
-import { ObjectUtils } from "../natives/object/object-utils";
-import { RegexUtils } from "../natives/regex/regex-utils";
-import { strCapitalize, strCapitalizeAll, StringUtils } from "../natives/string/string-utils";
-import { GenericUtils } from "./generic-utils";
-import { Timer } from "./timer/timer";
-import { ClassUtils } from "@ts-natives/class/class-utils";
-import { Class } from "@ts-natives/class/model/class";
+import { Constructor } from "@ts-interfaces/misc-interfaces";
+import { _String } from "@ts-natives/string/internal";
+import { _Math } from "@ts-natives/math/internal";
 import { RegistryUtils } from "./registry/registry-utils";
-import { AnyClass, Constructor } from "@ts-interfaces/misc-interfaces";
 
 
 class GlobalUtils  {
@@ -66,45 +57,45 @@ GlobalUtils.registerMethod(Number, "getDecimals", function(this: number): number
 })
 
 GlobalUtils.registerMethod(Number, "divide", function(this: number, ...divideValues:number[]): number {
-  return mathDivide(this, ...divideValues)
+  return _Math.divide(this, ...divideValues)
 })
 GlobalUtils.registerMethod(Number, "multiply", function(this: number, ...multiplyValues:number[]): number {
-  return mathMultiply(this, ...multiplyValues)
+  return _Math.multiply(this, ...multiplyValues)
 })
 GlobalUtils.registerMethod(Number, "sum", function(this: number, ...plusValues:number[]): number {
-  return mathSum(this, ...plusValues)
+  return _Math.sum(this, ...plusValues)
 })
 GlobalUtils.registerMethod(Number, "minus", function(this: number, ...minusValues:number[]): number {
-  return mathMinus(this, ...minusValues)
+  return _Math.minus(this, ...minusValues)
 })
 GlobalUtils.registerMethod(Number, "mod", function(this: number, value: number): number {
-  return mathMod(this, value)
+  return _Math.mod(this, value)
 })
 
 GlobalUtils.registerMethod(Number, "/", function(this: number, ...divideValues:number[]): number {
-  return mathDivide(this, ...divideValues)
+  return _Math.divide(this, ...divideValues)
 })
 GlobalUtils.registerMethod(Number, "*", function(this: number, ...multiplyValues:number[]): number {
-  return mathMultiply(this, ...multiplyValues)
+  return _Math.multiply(this, ...multiplyValues)
 })
 GlobalUtils.registerMethod(Number, "+", function(this: number, ...plusValues:number[]): number {
-  return mathSum(this, ...plusValues)
+  return _Math.sum(this, ...plusValues)
 })
 GlobalUtils.registerMethod(Number, "-", function(this: number, ...minusValues:number[]): number {
-  return mathMinus(this, ...minusValues)
+  return _Math.minus(this, ...minusValues)
 })
 GlobalUtils.registerMethod(Number, "%", function(this: number, value: number): number {
-  return mathMod(this, value)
+  return _Math.mod(this, value)
 })
 GlobalUtils.registerMethod(Number, "trunc", function(this: number): number {
   return Math.trunc(this)
 })
 
 GlobalUtils.registerMethod(String, "capitalize", function(this: string): string {
-  return strCapitalize(this)
+  return _String.capitalize(this)
 })
 GlobalUtils.registerMethod(String, "capitalizeAll", function(this: string, split: string): string {
-  return strCapitalizeAll(this, split)
+  return _String.capitalizeAll(this, split)
 })
 
 GlobalUtils.registerMethod(Object, "assign", 
@@ -114,21 +105,7 @@ GlobalUtils.registerMethod(Object, "assign",
   }
 )
 
-/* Registry Class */
-const utilsClasses: AnyClass[] = [
-  GlobalUtils,
-  ClipboardUtils,
-  HTMLUtils,
-  MathUtils,
-  RegexUtils,
-  ConsoleUtils,
-  GenericUtils,
-  ObjectUtils,
-  StringUtils,
-  Timer,
-  ClassUtils,
-];
-utilsClasses.forEach((utilsClass: AnyClass): void => {
-  RegistryUtils.getOrAddRegistryClass(utilsClass)
-})
+export {
+  GlobalUtils
+}
 

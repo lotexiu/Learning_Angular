@@ -5,7 +5,7 @@ import { MathUtils } from 'src/utils/typescript/natives/math/math-utils';
 import { ObjectUtils } from 'src/utils/typescript/natives/object/object-utils';
 import { LoteFiltersComponent } from './components/lote/svg/filters/lote-filters/lote-filters.component';
 import { basicImports } from '@ts-angular/imports/import';
-import { Mask, MaskBuilder, MaskGroup } from '@ts-natives/regex/mask/mask-builder';
+import { Mask, MaskBuilder, MaskGroup } from '@ts-natives/regex/mask/model/mask-builder';
 import { MaskUtils } from '@ts-natives/regex/mask/mask-utils';
 
 @Component({
@@ -28,8 +28,13 @@ export class AppComponent {
     private router: Router,
   // private modalService: LoteModalService,
   ) {
-    MaskBuilder.test()
-    MaskUtils.numberMask(5,10).log()
+    // const maskString: string = '000.000.000-00'
+    const maskString: string = '(00) 0?0000-0000'
+    const maskBuilder: MaskBuilder = MaskBuilder.from(maskString)
+    // maskBuilder.log()
+
+    // MaskBuilder.test()
+    // MaskUtils.numberMask(5,10).log()
   }
 
   ngOnInit(): void {

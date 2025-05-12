@@ -36,3 +36,14 @@
 - Funções utilitárias devem ser puras e reutilizáveis.
 - Sempre exportar utilitários de forma nomeada.
 - Adicionar exemplos de uso em JSDoc.
+
+# Regras para Utilitários (Padrão de Delegação)
+
+- Sempre que possível, funções utilitárias devem ser implementadas como funções nomeadas em arquivos internos (ex: `internal.ts`) dentro do domínio correspondente (ex: `math`, `string`, etc.).
+- Agrupe essas funções em um objeto (ex: `_Math`, `_String`) exportado pelo arquivo interno.
+- As classes utilitárias (ex: `MathUtils`, `StringUtils`) devem apenas delegar suas operações para as funções do objeto agrupador, mantendo a interface estática e centralizando a lógica nas funções nomeadas.
+- Esse padrão deve ser seguido para evitar dependências circulares, facilitar testes e promover reutilização de código.
+- Exemplo:
+  - Função nomeada em `internal.ts`: `function capitalize(str: string): string { ... }`
+  - Objeto agrupador: `export const _String = { capitalize, ... }`
+  - Classe delegando: `static capitalize(str: string): string { return _String.capitalize(str); }`

@@ -1,23 +1,34 @@
-﻿class FunctionUtils {
+﻿import { _Function } from "./internal";
+import { RegistryUtils } from "@ts-extras/registry/registry-utils";
 
+/**
+ * Utility class for function operations. All methods delegate to the internal _Function helpers.
+ */
+class FunctionUtils {
+  /**
+   * Returns details about a function, such as name, argument count, argument names, and return type (unknown).
+   * @param func - The function to analyze.
+   * @returns An object with function details.
+   * @example
+   * FunctionUtils.functionsDetails(function(a, b) { return a + b; })
+   */
   static functionsDetails(func: Function) {
-    const details: any = {
-      name: func.name,
-      totalMandatoryArgs: func.length,
-      args: FunctionUtils.getArgs(func),
-      returnType: "Unkown",
-    };
-    return details;
+    return _Function.functionsDetails(func);
   }
 
-
+  /**
+   * Returns the argument names of a function as an array of strings.
+   * @param func - The function to analyze.
+   * @returns Array of argument names.
+   * @example
+   * FunctionUtils.getArgs(function(a, b) { return a + b; }) // ["a", "b"]
+   */
   static getArgs(func: Function): string[] {
-    return func.toString()
-      .replace(/[\s\S]*(?<!\([\s\S]*)\(|(?<!\)[\s\S]*)\)[\s\S]*/g, '')
-      .split(',').map((arg: string): string => arg.trim())
-      .filter((arg: string): boolean => arg.length > 0);
+    return _Function.getArgs(func);
   }
 }
+
+RegistryUtils.getOrAddRegistryClass(FunctionUtils);
 
 export {
   FunctionUtils

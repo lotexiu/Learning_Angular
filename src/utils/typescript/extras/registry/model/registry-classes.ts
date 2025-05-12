@@ -3,7 +3,7 @@ import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { DeepPartial, EntriesReturn } from "@ts-natives/object/interfaces/object-interfaces";
 
 class RegistryBaseInfo<T> {
-  type?: AnyClass & T |string;
+  type?: AnyClass<T> | string;
   description?: string;
   onAssign?: Function
 
@@ -19,7 +19,7 @@ class RegistryBaseInfo<T> {
 }
 
 class RegistryClass<T> extends RegistryBaseInfo<T> {
-  Class!: AnyClass<T> & T;
+  Class!: AnyClass<T>;
   staticDetails!: RegistryClassDetails<T>;
   instanceDetails!: RegistryClassDetails<T>;
 }

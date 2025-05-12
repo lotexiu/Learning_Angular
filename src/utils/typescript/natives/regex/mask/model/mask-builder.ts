@@ -3,6 +3,7 @@ import { Class } from "@ts-natives/class/model/class";
 import { cLog } from "@ts-natives/console/console-utils";
 import { DeepPartial, Object } from "@ts-natives/object/interfaces/object-interfaces";
 import { isNull } from "@ts-natives/object/object-utils";
+import { MASK_KEYS } from "../constants/mask-keys";
 
 type MinMax = Object<{
   min: Nullable<number>;
@@ -51,6 +52,15 @@ class MaskBuilder extends BaseMask {
 
   log(): void {
     cLog(this.mask())
+  }
+
+  static from(mask: string): MaskBuilder {
+    console.log({}.assign)
+    const maskBuilder: MaskBuilder = new MaskBuilder();
+    console.log(MASK_KEYS)
+    // cLog(mask, MASK_KEYS);
+
+    return maskBuilder;
   }
   
   static test(): void {

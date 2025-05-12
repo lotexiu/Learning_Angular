@@ -1,5 +1,6 @@
-import { isNull } from "@ts-natives/object/object-utils"
-import { By10Type, Compare } from "./interfaces/math-interfaces"
+import { By10Type, Compare } from "./interfaces/math-interfaces";
+import { _Math } from "./internal";
+import { RegistryUtils } from "@ts-extras/registry/registry-utils";
 
 /**
  * A utility for mathematical operations.
@@ -11,8 +12,8 @@ class MathUtils {
    * @param type - The type of operation ("multiply" or "divide").
    * @returns The result of the operation.
    */
-  static by10(value: number, type: By10Type): number{
-    return type == "multiply" ? value * 10 : value / 10
+  static by10(value: number, type: By10Type): number {
+    return _Math.by10(value, type);
   }
 
   /**
@@ -23,8 +24,7 @@ class MathUtils {
    * MathUtils.getAvarage(1, 2, 3, 4); // returns 2.5
    */
   static getAvarage(...numbers: number[]): number {
-    const total: number = numbers.reduce((p: number, c: number): number => p + c)
-    return total / numbers.length
+    return _Math.getAvarage(...numbers);
   }
 
   /**
@@ -39,10 +39,7 @@ class MathUtils {
    * MathUtils.betweenMinMax(15, 1, 10); // returns 1
    */
   static betweenMinMax(value: number, min?: number, max?: number): Compare {
-    return (
-      !isNull(min) && value < min! ? -1 :
-      !isNull(max) && value > max! ? 1 : 0
-    )
+    return _Math.betweenMinMax(value, min, max);
   }
 
   /**
@@ -56,8 +53,8 @@ class MathUtils {
    * MathUtils.minMax(0, 1, 10); // returns 1
    * MathUtils.minMax(15, 1, 10); // returns 10
    */
-  static minMax(value: number, min: number, max: number): number{
-    return Math.min(Math.max(value,min),max)
+  static minMax(value: number, min: number, max: number): number {
+    return _Math.minMax(value, min, max);
   }  
 
   /**
@@ -68,11 +65,8 @@ class MathUtils {
    * @example
    * MathUtils.divide(100, 2, 5); // returns 10
    */
-  static divide(value: number, ...divideValues: number[]): number{
-    const {by10} = MathUtils
-    return [value, ...divideValues].reduce((p: number,c: number): number => 
-      by10(p,"multiply") / by10(c,"multiply")
-    )
+  static divide(value: number, ...divideValues: number[]): number {
+    return _Math.divide(value, ...divideValues);
   }
 
   /**
@@ -84,10 +78,7 @@ class MathUtils {
    * MathUtils.multiply(2, 3, 4); // returns 24
    */
   static multiply(value: number, ...multiplyValues: number[]): number {
-    const {by10} = MathUtils
-    return [value, ...multiplyValues].reduce((p: number,c: number): number => 
-      (by10(p,"multiply") * by10(c,"multiply")) / 100
-    )
+    return _Math.multiply(value, ...multiplyValues);
   }
 
   /**
@@ -100,10 +91,7 @@ class MathUtils {
    * MathUtils.sum(0.1,0.2); // returns exactly 0.3 instead of 0.300...4
    */
   static sum(value: number, ...plusValues: number[]): number {
-    const {by10} = MathUtils
-    return [value, ...plusValues].reduce((p: number,c: number): number => 
-      by10(by10(p,"multiply") + by10(c,"multiply"), "divide")
-    ) 
+    return _Math.sum(value, ...plusValues);
   }
 
   /**
@@ -115,10 +103,7 @@ class MathUtils {
    * MathUtils.minus(10, 2, 3); // returns 5
    */
   static minus(value: number, ...minusValues: number[]): number {
-    const {by10} = MathUtils
-    return [value, ...minusValues].reduce((p: number,c: number): number => 
-      by10(by10(p,"multiply") - by10(c,"multiply"), "divide")
-    ) 
+    return _Math.minus(value, ...minusValues);
   }
 
   /**
@@ -131,17 +116,15 @@ class MathUtils {
    * mod(-10, 3); // retorna 2 (comportamento correto para números negativos)
    */
   static mod(dividend: number, divisor: number): number {
-    const {by10} = MathUtils
-    return by10(by10(dividend, "multiply") % by10(divisor, "multiply"), "divide")
+    return _Math.mod(dividend, divisor);
   }
 
   static hasDecimals(value: number): boolean {
-    return value.toFixed(0) != value.toString()
+    return _Math.hasDecimals(value);
   }
 
-  static getDecimals(value: number): number|undefined {
-    let decimals: string = value.toString().split('.')[1]
-    return Number(decimals) || undefined
+  static getDecimals(value: number): number | undefined {
+    return _Math.getDecimals(value);
   }
 
   /**
@@ -153,16 +136,7 @@ class MathUtils {
    * MathUtils.random(1, 10); // returns a random number between 1 and 10
    */
   static random(min: number, max: number): number {
-    const withDecimal: boolean = min % 1 !== 0 || max % 1 !== 0
-    const decimalsSize: number = Math.max(
-      `${min}`.split(".")[1]?.length || 0,
-      `${max}`.split(".")[1]?.length || 0
-    )
-    if (withDecimal) {
-      return Number((Math.random() * (max - min) + min).toFixed(decimalsSize))
-    } else{
-      return Math.floor(Math.random() * (max - min) + min)
-    }
+    return _Math.random(min, max);
   }
 
   /**
@@ -174,13 +148,7 @@ class MathUtils {
    * MathUtils.interpolate(0.5, 0, 10); // returns 5
    */
   static interpolate(t: number, ...values: number[]): number {
-    const n: number = values.length ["-"] (1);
-    if (t >= 1) return values[n];
-    const i: number = Math.floor(t ["*"] (n));
-    const a: number = values[i];
-    const b: number = values[i ["+"] (1)];
-    const localT: number = (t ["-"] (i ["/"] (n))) ["*"] (n);
-    return MathUtils._interpolate(a, b, localT);
+    return _Math.interpolate(t, ...values);
   }
 
   /**
@@ -195,21 +163,11 @@ class MathUtils {
   }
 
   static pow(value: number, ...values: number[]): number {
-    return [value, ...values].reduce((p: number,c: number): number => 
-      Math.pow(p,c)
-    )
+    return _Math.pow(value, ...values);
   }
 
   static transition(factor: number, columns: number): number[] {
-    const {interpolate} = MathUtils
-    const value: number = interpolate(factor, 1, columns+1).minus(1)
-    const percentage: number = (1).minus(value.mod(1))
-    const idx: number = Math.floor(value) == columns ? 0 : Math.floor(value)
-    const nextIdx: number = idx+1 >= columns ? 0 : idx+1 
-    const array: number[] = new Array(columns).fill(0)
-    array[idx] = percentage
-    array[nextIdx] = (1).minus(percentage)
-    return array
+    return _Math.transition(factor, columns);
   }
 }
 
@@ -250,3 +208,5 @@ export {
   by10 as mathBy10,
   interpolate as mathInterpolate,
 }
+
+RegistryUtils.getOrAddRegistryClass(MathUtils);

@@ -1,34 +1,26 @@
-﻿class GenericUtils {
+﻿import { _Generic } from "./internal";
+import { RegistryUtils } from "@ts-extras/registry/registry-utils";
+
+class GenericUtils {
 
   static asyncSleep(ms: number): Promise<void> {
-    return new Promise((resolve: any) => setTimeout(resolve, ms));
+    return _Generic.asyncSleep(ms);
   }
 
   static sleep(ms: number): void {
-    const end = Date.now() + ms;
-    while (Date.now() < end) { }
+    return _Generic.sleep(ms);
   }
 
   static getCaller(level: number = 3): string {
-    let caller: string = (new Error().stack?.split('\n') || ['', ''])[level]
-      .replace(/[ ]+at _[A-Za-z]+\./, '');
-    if (caller.match(/[ ]+at .+/)) {
-      caller = `unknown (${caller.split('at ')[1]})`;
-    }
-    return caller;
+    return _Generic.getCaller(level);
   }
 
   static formatLogData(args: any[]): any[] {
-    let data: any[] = [];
-    args.forEach((arg: any) => {
-      data.push(arg);
-      data.push('\n');
-    });
-    return data;
+    return _Generic.formatLogData(args);
   }
 
-  static As<T=any>(value: any): T{
-    return value
+  static As<T=any>(value: any): T {
+    return _Generic.As<T>(value);
   }
   
 }
@@ -44,3 +36,5 @@ const {
 export {
   As
 }
+
+RegistryUtils.getOrAddRegistryClass(GenericUtils);

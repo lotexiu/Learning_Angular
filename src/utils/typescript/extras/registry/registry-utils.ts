@@ -1,13 +1,17 @@
-﻿import { As } from "@ts-extras/generic-utils";
-import { DeepPartial, Object } from "@ts-natives/object/interfaces/object-interfaces";
+﻿import { DeepPartial, Object } from "@ts-natives/object/interfaces/object-interfaces";
 import { ClassRegistry } from "./interfaces/registry-interfaces";
 import { RegistryClass, RegistryClassDetails, RegistryFunction, RegistryFunctionArg, RegistryProperty } from "./model/registry-classes";
-import { isAClassDeclaration } from "@ts-natives/object/object-utils";
 import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
-import { FunctionUtils } from "@ts-natives/functions/function-utils";
 import { DecoratorPropertyKey } from "./decorators/interfaces/decorators-interfaces";
 import { Function } from "@ts-natives/functions/interfaces/function-interfaces";
 import { AnyClass, Prototype } from "@ts-interfaces/misc-interfaces";
+import { _Generic } from "@ts-extras/internal";
+import { _Object } from "@ts-natives/object/internal";
+import { _Function } from "@ts-natives/functions/internal";
+
+const {As} = _Generic;
+const {isAClassDeclaration} = _Object;
+const {functionsDetails} = _Function;
 
 class RegistryUtils {
   static classRegistry: ClassRegistry = {}
@@ -67,7 +71,7 @@ class RegistryUtils {
     propertyKey: DecoratorPropertyKey, 
     descriptor: TypedPropertyDescriptor<T>
   ): void {
-    const methodDetails: RegistryFunction<T> = this.getMethod(proto, static_, As(propertyKey));
+    const methodDetails: RegistryFunction<T> = this.getMethod(proto, static_, propertyKey as string);
     methodDetails.assign(details);
   }
 
@@ -76,7 +80,7 @@ class RegistryUtils {
     static_: boolean, 
     details: DeepPartial<RegistryProperty<T>>, 
     propertyKey: DecoratorPropertyKey): void {
-    const propertyDetails: RegistryProperty<T> = this.getProperty<T>(proto, static_, As(propertyKey));
+    const propertyDetails: RegistryProperty<T> = this.getProperty<T>(proto, static_, propertyKey as string);
     propertyDetails.assign(details);
   }
 
@@ -101,7 +105,7 @@ class RegistryUtils {
 
   static getProperty<T>(target: AnyClass<T>|Prototype<T>, static_: boolean, propertyKey: any): RegistryProperty<T> {
     const find: Function = (property: RegistryProperty<T>): boolean => property.name === propertyKey
-    const registryClass: RegistryClass<T> = As(this.getOrAddRegistryClass(target));
+    const registryClass: RegistryClass<T> = this.getOrAddRegistryClass(target);
     if (static_) {
       const property: RegistryProperty<T> = registryClass.staticDetails.properties.find(find) || new RegistryProperty<T>().assign({name:propertyKey});
       if (!registryClass.staticDetails.properties.includes(property)) {
@@ -123,19 +127,19 @@ class RegistryUtils {
   ): RegistryClass<T> {
     const registryClass = new RegistryClass<T>();
     let key: 'staticDetails'|'instanceDetails';
-    if (isAClassDeclaration(data)) {
-      registryClass.Class = As(data);
+    if (isAClassDeclaration<T>(data)) {
+      registryClass.Class = data;
       key = 'staticDetails'
     } else {
-      registryClass.Class = data.constructor as AnyClass<T> & T;
+      registryClass.Class = data.constructor as AnyClass<T>;
       key = 'instanceDetails'
     }
     registryClass.type = registryClass.Class;
     registryClass.description = description || `${registryClass.Class.name} class (Default)`;
     registryClass[key] = new RegistryClassDetails<T>()
-    registryClass[key].methods = this.initialMethodDetails(As(data))
-    registryClass[key].properties = this.initialPropertyDetails(As(data))
-    registryClass[key].symbols = this.initialSymbolDetails(As(data));
+    registryClass[key].methods = this.initialMethodDetails<T>(data as T)
+    registryClass[key].properties = this.initialPropertyDetails<T>(data as T)
+    registryClass[key].symbols = this.initialSymbolDetails<T>(data as T);
     return registryClass;
   }
 
@@ -147,7 +151,7 @@ class RegistryUtils {
     })
     .map((key: KeyOf<T>): RegistryFunction<T> => {
       const method: RegistryFunction<T> = new RegistryFunction<T>();
-      method.assign(FunctionUtils.functionsDetails(As(data[key])))
+      method.assign(functionsDetails(data[key] as Function));
       method.assign({
         description: `${String(method.name)} method (Default)`,
         default: data[key],
@@ -232,7 +236,7 @@ class RegistryUtils {
     }
   }
 }
-RegistryUtils.getOrAddRegistryClass(RegistryUtils)
+RegistryUtils.getOrAddRegistryClass(RegistryUtils);
 
 export {
   RegistryUtils

@@ -1,37 +1,5 @@
-﻿const RegexPatterns = {
-  Digit: '\\d',
-  Letter: '[A-Za-z]',
-  LetterOrDigit: '[A-Za-z0-9]',
-  UppercaseLetter: '[A-Z]',
-  LowercaseLetter: '[a-z]',
-  SpecialChar: '[^A-Za-z0-9]',
-  Whitespace: '\\s',
-  Any: '[\\s\\S]',
-  Word: '\\w',
-  NotWord: '\\W',
-  NotDigit: '\\D',
-  NotWhitespace: '\\S',
-  Dot: '[.]',
-  Comma: '[,]',
-  /* LookAround */
-  PositiveLookahead: '?=',
-  NegativeLookahead: '?!',
-  PositiveLookbehind: '?<=',
-  NegativeLookbehind: '?<!',
-  /* ReservedKeys */
-  AnyExceptWhiteSpace: '.',
-  Escape: '\\',
-  Or: '|',
-  /* Others */
-  Number: '(\\d+)(?=[,.])(?!(\\d))',
-  Decimal: '(?<=[,.])(\\d+)(?!(?:.+)?[,.])',
-  DecimalSeparator: '[.,]',
-}
-
-const MaskRegexPatterns = {
-  Number: /(?<=\d)(?=(\d{3})+(?!\d))/g,
-  NumberWithDecimal: /(?<=\d)(?=(\d{3})+(?!\d)(?=[,.]))/g,
-}
+﻿import { _Regex } from "./internal";
+import { RegistryUtils } from "@ts-extras/registry/registry-utils";
 
 class RegexUtils {
   /**
@@ -40,23 +8,7 @@ class RegexUtils {
   * @returns The formatted phone number.
   */
   static formatPhone(phone: string) {
-    let phoneOnlyDigits = this.onlyDigits(phone).slice(0, 13)
-    let phoneSize = phoneOnlyDigits.length
-
-    function dynamicPhoneMask() {
-      let maskPart = phoneSize > 4 ? "-" : ""
-      return (
-        `${phoneOnlyDigits.slice(0, 4)}${maskPart}${phoneOnlyDigits.slice(4, 8)}`
-      )
-    }
-    return (
-      phoneSize < 9 ? dynamicPhoneMask() :
-      phoneSize == 9 ? phoneOnlyDigits.replace(/(\d{5})(\d{4})$/, '$1-$2') :
-      phoneSize == 10 ? phoneOnlyDigits.replace(/(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3') :
-      phoneSize == 11 ? phoneOnlyDigits.replace(/(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3') :
-      phoneSize == 12 ? phoneOnlyDigits.replace(/(\d{2})(\d{2})(\d{4})(\d{4})$/, '+$1 ($2) $3-$4') :
-      phoneOnlyDigits.replace(/(\d{2})(\d{2})(\d{5})(\d{4})$/, '+$1 ($2) $3-$4')
-    )
+    return _Regex.formatPhone(phone);
   }
 
   /**
@@ -65,12 +17,11 @@ class RegexUtils {
   * @returns True if the email is valid, false otherwise.
   */
   static isValidEmail(email: string): boolean {
-    const emailRegex: RegExp = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/;
-    return emailRegex.test(email);
+    return _Regex.isValidEmail(email);
   }
 
   static isValidCEP(cep: string): boolean {
-    return /^\d{8}$/.test(cep.replace(/[^\d]+/g, ""));
+    return _Regex.isValidCEP(cep);
   }
 
   /**
@@ -79,31 +30,15 @@ class RegexUtils {
   * @returns The string with only digits.
   */  
   static onlyDigits(value: string): string {
-    return value.replace(/\D/g, '')
+    return _Regex.onlyDigits(value);
   }
 
   static removeCharsExcept(text: string, allowedChars: string): string {
-    if (!text || !allowedChars) return '';    
-    /* Escapa caracteres especiais do regex */
-    const escapedChars: string = allowedChars.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');    
-    /* Cria padrão regex que corresponde a qualquer caractere que NÃO esteja na lista */
-    const pattern = new RegExp(`[^${escapedChars}]`, 'g');    
-    /* Substitui todos os caracteres não permitidos por string vazia */
-    return text.replace(pattern, '');
+    return _Regex.removeCharsExcept(text, allowedChars);
   }
 
   static inverseSeparator(separator: string): string {
-    return separator == '.' ? ',' : '.';
-  }
-
-  static formatNumber(value: string): string {
-    const decimalSeparator: string = value.includes('.') ? '.' : ',';
-    const [integerPart, decimalPart] = value.split(RegexPatterns.DecimalSeparator);
-    const formattedInteger = integerPart.replace(
-      /\B(?=(\d{3})+(?!\d))/g, 
-      this.inverseSeparator(decimalSeparator)
-    );    
-    return decimalPart ? `${formattedInteger}${decimalSeparator}${decimalPart}` : formattedInteger;
+    return _Regex.inverseSeparator(separator);
   }
 
   /**
@@ -113,14 +48,12 @@ class RegexUtils {
   * @returns The path with the specified number of levels removed.
   */
   static downPath(path: string, levels: number = 1): string {
-    const parts = path.split('/');
-    return parts.slice(0, -levels).join('/');
+    return _Regex.downPath(path, levels);
   }
 }
 
 export {
-  RegexPatterns,
-  MaskRegexPatterns,
+
   RegexUtils,
 }
 
@@ -130,7 +63,6 @@ const {
   formatPhone,
   onlyDigits,
   removeCharsExcept,
-  formatNumber,
   downPath,
 } = RegexUtils
 
@@ -139,6 +71,7 @@ export {
   formatPhone as regFormatPhone,
   onlyDigits as regOnlyDigits,
   removeCharsExcept as regRemoveCharsExcept,
-  formatNumber as regFormatNumber,
   downPath as regDownPath,
 }
+
+RegistryUtils.getOrAddRegistryClass(RegexUtils);

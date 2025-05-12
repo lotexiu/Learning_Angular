@@ -1,10 +1,5 @@
+import { RegexPattern } from "../interfaces/regex-pattern";
 import { RegexBasicLookArounds } from "./look-around";
-import { Quantifiers } from "./quantifiers";
-
-interface Pattern {
-  pattern: string;
-  mandatoryFlags?: string[];
-}
 
 const {
   NegativeLookahead,
@@ -12,13 +7,6 @@ const {
   PositiveLookahead,
   PositiveLookbehind,
 } = RegexBasicLookArounds
-
-const {
-  ZeroOrMore,
-  OneOrMore,
-  Optional,
-  Or,
-} = Quantifiers
 
 const RegexBasicPatterns = {
   /* Specific Characters Regex */
@@ -31,7 +19,7 @@ const RegexBasicPatterns = {
   AtSign: {
     pattern: '@',
   },
-  DecimalSeparetors: {
+  DecimalSeparators: {
     pattern: '[.,]',
   },
   /* Basic Regex */
@@ -56,7 +44,7 @@ const RegexBasicPatterns = {
   SpecialCharacters: {
     pattern: '[^A-Za-z0-9\\s]',
   },
-  AnyCharacter: {
+  AnyCharacters: {
     pattern: '[\\s\\S]',
   },
   MathOperators: {
@@ -108,13 +96,13 @@ const RegexBasicPatterns = {
     pattern: '\p{N}',
     mandatoryFlags: ['u'],
   },
-  AnySpecialCharacter: {
+  AnySpecialCharacters: {
     pattern: '\p{P}',
     mandatoryFlags: ['u'],
   },
 }
 
 export {
-  Pattern,
+  RegexPattern,
   RegexBasicPatterns,
 }
