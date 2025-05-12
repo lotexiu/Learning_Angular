@@ -1,5 +1,5 @@
-﻿import { isNull } from "@ts-natives/object/object-utils"
-import { Mask, MaskBuilder, MaskGroup } from "./model/mask-builder"
+﻿import { MaskBuilder } from "./model/mask-builder"
+import { _Mask } from "./internal"
 
 class MaskUtils {
   /**
@@ -14,63 +14,17 @@ class MaskUtils {
    * MaskUtils.numberMask(3, 2)
    */
   static numberMask(integerDigits?: number, fractionDigits?: number): MaskBuilder  {
-    function buildDecimalPart(groupAmount?: number): MaskGroup {
-      return new MaskGroup().assign({
-        optional: true,
-        rightValues: [
-          new Mask().assign({
-            value: '.000',
-            quantity: {min: !isNull(groupAmount) ? 0 : null, max: groupAmount},
-          }),
-          new Mask().assign({
-            value: '.',
-            rightValues: [
-              new Mask().assign({
-                value: '0',
-                quantity: {min:1, max: fractionDigits},
-              })
-            ]
-          })
-        ]
-      })
-    }
-
-    function buildIntegerPart(value: number): Mask {
-      return new Mask().assign({
-        value: '0',
-        quantity: {min: 1, max: value},
-      })
-    }
-
-    let builder: MaskBuilder = new MaskBuilder()
-    const defaultNumber: Mask = buildIntegerPart(3)
-
-    if (!isNull(integerDigits, 0)) {
-      const rest: number = integerDigits.trunc()["%"](3)
-      const groupAmount: number = integerDigits["/"](3).trunc()["-"](rest == 0 ? 1 : 0)
-
-      builder.add(new MaskGroup().assign({
-        masks: [defaultNumber],
-        rightValues: [buildDecimalPart(groupAmount == 1 ? 0 : groupAmount)]
-      }))
-
-      if (rest > 0) {
-        builder.add(new MaskGroup().assign({
-          masks: [buildIntegerPart(rest)],
-          rightValues: [buildDecimalPart(groupAmount)]
-        }))
-      }
-    } else {
-      builder.add(new MaskGroup().assign({
-        masks: [defaultNumber],
-        rightValues: [buildDecimalPart()]
-      }))
-    }
-    return builder
+    return _Mask.numberMask(integerDigits, fractionDigits)
   }
 
-
-  static a(){}
+  /**
+   * Checks for conflicts between mask keys.
+   * A conflict occurs when two keys exist such that one is a prefix of the other, but the longer key is not a direct repetition of the shorter key.
+   * For example, keys 'A' and 'AB' are in conflict, but 'L' and 'LL' are not (since 'LL' is a repetition of 'L').
+   */
+  static findMaskKeyConflicts(keys: string[]): void {
+    _Mask.findMaskKeyConflicts(keys)
+  }
 }
 
 export {

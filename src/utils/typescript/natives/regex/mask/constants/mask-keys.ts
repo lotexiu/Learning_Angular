@@ -2,7 +2,7 @@
 import { RegexBasicPatterns } from "../../constants/regex-patterns"
 import { MaskUtils } from "../mask-utils"
 import { MaskFunction, MaskKey, MaskParameter } from "../model/mask-key"
-
+import { _Mask } from '../internal'
 
 const any = new MaskKey({
   key: 'X',
@@ -88,7 +88,11 @@ const MASK_KEYS: MaskKey[] = [
   anySpecialCharacters,
   atSign,
   number
-]
+].sort((a: MaskKey, b: MaskKey): number => a.key.length - b.key.length)
+.reverse()
+
+const maskKeyStrings: string[] = MASK_KEYS.map((k: MaskKey): string => k.key)
+_Mask.findMaskKeyConflicts(maskKeyStrings)
 
 
 export {

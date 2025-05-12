@@ -50,6 +50,27 @@ class RegexUtils {
   static downPath(path: string, levels: number = 1): string {
     return _Regex.downPath(path, levels);
   }
+
+  /**
+   * Finds all indexes in the input string that most closely match the given pattern using regex.
+   * Returns the start indexes of all matches found.
+   * @param input - The string to search in.
+   * @param pattern - The regex pattern to search for (as string or RegExp).
+   * @param flags - Optional regex flags (e.g., 'gi').
+   * @returns Array of start indexes for each match found.
+   * @example
+   * // returns [0, 5]
+   * RegexUtils.findPatternIndexes('abcdeabc', 'abc')
+   * @example
+   * // returns [2]
+   * RegexUtils.findPatternIndexes('xxAbcxx', /abc/i)
+   * @example
+   * // returns [1, 4]
+   * RegexUtils.findPatternIndexes('a1a2a', /a\d/)
+   */
+  static findPatternIndexes(input: string, pattern: string | RegExp, flags?: string): number[] {
+    return _Regex.findPatternIndexes(input, pattern, flags);
+  }
 }
 
 export {
@@ -64,6 +85,7 @@ const {
   onlyDigits,
   removeCharsExcept,
   downPath,
+  findPatternIndexes,
 } = RegexUtils
 
 export {
@@ -72,6 +94,7 @@ export {
   onlyDigits as regOnlyDigits,
   removeCharsExcept as regRemoveCharsExcept,
   downPath as regDownPath,
+  findPatternIndexes as regFindPatternIndexes,
 }
 
 RegistryUtils.getOrAddRegistryClass(RegexUtils);

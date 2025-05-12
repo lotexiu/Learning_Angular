@@ -5,7 +5,7 @@ import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { DecoratorPropertyKey } from "./decorators/interfaces/decorators-interfaces";
 import { Function } from "@ts-natives/functions/interfaces/function-interfaces";
 import { AnyClass, Prototype } from "@ts-interfaces/misc-interfaces";
-import { _Generic } from "@ts-extras/internal";
+import { _Generic } from "@ts-extras/generic/internal";
 import { _Object } from "@ts-natives/object/internal";
 import { _Function } from "@ts-natives/functions/internal";
 

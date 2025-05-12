@@ -36,7 +36,7 @@ abstract class BaseMask extends Class {
   mask(): string {
     if (this.quantity.min === 0 && this.quantity.max === 0) return '';
     return `(${this.result()})`+this.quantityMask()
-  }
+  } 
 }
 
 class MaskBuilder extends BaseMask {
@@ -55,11 +55,9 @@ class MaskBuilder extends BaseMask {
   }
 
   static from(mask: string): MaskBuilder {
-    console.log({}.assign)
     const maskBuilder: MaskBuilder = new MaskBuilder();
     console.log(MASK_KEYS)
     // cLog(mask, MASK_KEYS);
-
     return maskBuilder;
   }
   

@@ -1,9 +1,9 @@
 import { KeyOf } from "@ts-natives/object/interfaces/native-object-interfaces";
-import { DeepPartial, GetTypeFromKey } from "../natives/object/interfaces/object-interfaces";
 import { Constructor } from "@ts-interfaces/misc-interfaces";
 import { _String } from "@ts-natives/string/internal";
 import { _Math } from "@ts-natives/math/internal";
-import { RegistryUtils } from "./registry/registry-utils";
+import { DeepPartial, GetTypeFromKey } from "@ts-natives/object/interfaces/object-interfaces";
+import { RegistryUtils } from "@ts-extras/registry/registry-utils";
 
 
 class GlobalUtils  {

@@ -47,3 +47,22 @@
   - Função nomeada em `internal.ts`: `function capitalize(str: string): string { ... }`
   - Objeto agrupador: `export const _String = { capitalize, ... }`
   - Classe delegando: `static capitalize(str: string): string { return _String.capitalize(str); }`
+
+# Regras para Utilitários (internal.ts)
+
+- Arquivos internal.ts devem conter apenas funções nomeadas internas e o objeto agrupador correspondente (ex: _Math, _String, _Mask).
+- Não exportar funções, tipos ou constantes individualmente em internal.ts; apenas o objeto agrupador deve ser exportado.
+- Todo acesso externo deve ser feito exclusivamente pelo objeto agrupador exportado.
+- Não adicionar documentação (JSDoc, docstrings, comentários explicativos) nesses arquivos; a documentação deve ser feita apenas nos arquivos públicos de utilitários.
+- O objetivo é centralizar a lógica, evitar poluição do escopo global e garantir o padrão de delegação do projeto.
+- Exemplo:
+  - Correto:
+    ```typescript
+    function capitalize(str: string): string { ... }
+    export const _String = { capitalize };
+    ```
+  - Incorreto:
+    ```typescript
+    export function capitalize(str: string): string { ... }
+    export const _String = { capitalize };
+    ```

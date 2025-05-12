@@ -1,6 +1,6 @@
 ﻿import { ColorUtils } from "@ts-extras/color/color-utils";
 import { Color } from "@ts-extras/color/interfaces/color-interface";
-import { GenericUtils } from "@ts-extras/generic-utils";
+import { GenericUtils } from "@ts-extras/generic/generic-utils";
 import { Timer } from "@ts-extras/timer/timer";
 import { Nullable } from "@ts-interfaces/misc-interfaces";
 import { isNull, copy } from "@ts-natives/object/object-utils";

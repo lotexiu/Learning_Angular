@@ -1,5 +1,5 @@
 ﻿import { ClassDecorator, DecoratorPropertyKey, MethodDecorator, PropertyDecorator } from "./interfaces/decorators-interfaces";
-import { As } from "@ts-extras/generic-utils";
+import { As } from "@ts-extras/generic/generic-utils";
 import { Partial } from "@ts-natives/object/interfaces/native-object-interfaces";
 import { RegistryUtils } from "../registry-utils";
 import { RegistryFunction, RegistryProperty } from "../model/registry-classes";
