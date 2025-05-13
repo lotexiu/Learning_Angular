@@ -7,6 +7,7 @@ import { LoteFiltersComponent } from './components/lote/svg/filters/lote-filters
 import { basicImports } from '@ts-angular/imports/import';
 import { Mask, MaskBuilder, MaskGroup } from '@ts-natives/regex/mask/model/mask-builder';
 import { MaskUtils } from '@ts-natives/regex/mask/mask-utils';
+import { cLog } from '@ts-natives/console/console-utils';
 
 @Component({
   selector: 'app-root',
@@ -29,10 +30,14 @@ export class AppComponent {
   // private modalService: LoteModalService,
   ) {
     // const maskString: string = '000.000.000-00'
-    const maskString: string = '(00) 0?0000-0000'
-    const maskBuilder: MaskBuilder = MaskBuilder.from(maskString)
-    // maskBuilder.log()
+    // const maskString: string = '(00) 0?0000-0000'
+    // cLog((MaskBuilder.from(maskString)))
 
+    cLog(MaskUtils.keyFinder)
+
+    // const maskBuilder: MaskBuilder = 
+    // maskBuilder.log()
+    
     // MaskBuilder.test()
     // MaskUtils.numberMask(5,10).log()
   }

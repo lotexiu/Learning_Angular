@@ -8,7 +8,6 @@ const any = new MaskKey({
   key: 'X',
   regex: RegexBasicPatterns['AnyCharacters']
 })
-
 const anyLetterOrDigit = new MaskKey({
   key: 'A',
   regex: RegexBasicPatterns['AnyLetterOrDigit']
@@ -51,7 +50,7 @@ const atSign = new MaskKey({
 })
 
 const number = new MaskKey({
-  key: 'N',
+  key: '0',
   parameters: [
     new MaskParameter({
       parameter: 'integerDigits',

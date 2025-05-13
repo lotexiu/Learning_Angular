@@ -1,7 +1,26 @@
-﻿import { _Regex } from "./internal";
+﻿import { isNull } from "@ts-natives/object/object-utils";
+import { _Regex } from "./internal";
 import { RegistryUtils } from "@ts-extras/registry/registry-utils";
 
 class RegexUtils {
+
+  static range(start?: number, end?: number): string {
+    if (isNull(start) && isNull(end)) return '*';
+    if (start === end && !isNull(start)) {
+      if (isNull(start, 0, 1)) return '';
+      return `{${start}}`;
+    }
+    if (start === 1 && isNull(end, 0)) return '+';
+    if (isNull(start,0) && end === 1) return '?';
+    if (!isNull(start, 0, 1) && isNull(end, 0, 1)) return `{${start},}`;
+    if (isNull(start, 0) && !isNull(end, 0, 1)) return `{0,${end}}`;
+    return `{${start ?? 0},${end ?? 1}}`;
+  }
+
+  static escapeRegexChars(value: string): string {
+    return _Regex.escapeRegexChars(value);
+  }
+
   /**
   * Formats a phone number according to the Brazilian standard.
   * @param phone - The input phone number as a string.

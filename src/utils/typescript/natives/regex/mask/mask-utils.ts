@@ -1,7 +1,23 @@
 ﻿import { MaskBuilder } from "./model/mask-builder"
 import { _Mask } from "./internal"
+import { MASK_KEYS } from "./constants/mask-keys"
+import { MaskKey } from "./model/mask-key"
+import { regexAmount } from "./constants/reserved-mask-keys";
+import { RegexUtils } from "../regex-utils";
 
 class MaskUtils {
+
+  static get keyFinder(): RegExp {
+    const keys: string = MASK_KEYS.map((maskKey: MaskKey): string =>RegexUtils.escapeRegexChars(maskKey.key)).join('|');
+    return new RegExp(
+    '(?<!\\\\)'+
+    `(${keys})`+
+    `(${regexAmount.regexKey})?`
+    ,'g')
+  }
+
+  
+
   /**
    * Builds a mask for numbers with grouping and optional decimal places.
    *

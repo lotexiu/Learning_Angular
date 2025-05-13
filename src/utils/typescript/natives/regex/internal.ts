@@ -46,23 +46,6 @@ function downPath(path: string, levels: number = 1): string {
   return parts.slice(0, -levels).join('/');
 }
 
-/**
- * Finds all indexes in the input string that most closely match the given pattern using regex.
- * Returns the start indexes of all matches found.
- * @param input - The string to search in.
- * @param pattern - The regex pattern to search for (as string or RegExp).
- * @param flags - Optional regex flags (e.g., 'gi').
- * @returns Array of start indexes for each match found.
- * @example
- * // returns [0, 5]
- * findPatternIndexes('abcdeabc', 'abc')
- * @example
- * // returns [2]
- * findPatternIndexes('xxAbcxx', /abc/i)
- * @example
- * // returns [1, 4]
- * findPatternIndexes('a1a2a', /a\d/)
- */
 function findPatternIndexes(input: string, pattern: string | RegExp, flags?: string): number[] {
   let regex: RegExp;
   if (pattern instanceof RegExp) {
@@ -84,6 +67,10 @@ function findPatternIndexes(input: string, pattern: string | RegExp, flags?: str
   return indexes;
 }
 
+function escapeRegexChars(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 export const _Regex = {
   formatPhone,
   isValidEmail,
@@ -93,4 +80,5 @@ export const _Regex = {
   inverseSeparator,
   downPath,
   findPatternIndexes,
+  escapeRegexChars
 };
